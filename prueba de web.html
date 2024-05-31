@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benito G. Quiñones - Arquitecto</title>
+    <style>
+        /* Estilos */
+        body {
+            font-family: 'Montserrat', sans-serif; /* Tipografía contemporánea */
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa; /* Color de fondo más claro */
+            color: #343a40; /* Color de texto más oscuro */
+        }
+        header {
+            background-color: #343a40; /* Color de fondo más oscuro */
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #343a40; /* Color de fondo más oscuro */
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff; /* Texto en color blanco */
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #fff;
+            margin: 0 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav a:hover {
+            background-color: #fff; /* Fondo blanco al pasar el ratón */
+            color: #343a40; /* Texto en color oscuro al pasar el ratón */
+        }
+        footer {
+            background-color: #343a40; /* Color de fondo más oscuro */
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            color: #fff; /* Texto en color blanco */
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .project {
+            position: relative;
+            width: 300px;
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff; /* Fondo blanco */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            text-align: center;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .project:hover {
+            transform: translateY(-5px); /* Efecto de elevación al pasar el ratón */
+        }
+        .project img {
+            width: 100%;
+            border-radius: 10px;
+            transition: transform 0.5s;
+        }
+        .project:hover img {
+            transform: scale(1.1); /* Efecto de agrandamiento al pasar el ratón */
+        }
+        .project .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .project:hover .overlay {
+            opacity: 1;
+        }
+        .project .overlay img {
+            width: 50px; /* Ajusta el tamaño del logo */
+            margin-bottom: 10px;
+        }
+        .project .overlay p {
+            margin: 0;
+            color: #fff; /* Texto en color blanco */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 style="color: #fff;">Benito G. Quiñones</h1> <!-- Color blanco para el nombre -->
+    <h2 style="color: #ccc;">Arquitecto</h2> <!-- Color gris claro para el subtitulo -->
+</header>
+
+<nav>
+    <a href="proyectos.html">Proyectos</a>
+    <a href="diseno.html">Diseño</a>
+    <a href="contacto.html">Contacto</a>
+</nav>
+
+<footer>
+    <p>&copy; 2024 Benito G. Quiñones - Todos los derechos reservados</p>
+</footer>
+
+</body>
+</html>
