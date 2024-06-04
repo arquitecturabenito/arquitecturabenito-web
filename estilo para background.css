@@ -1076,7 +1076,7 @@ nav {
   /* stylelint-disable function-url-quotes */
   background-image: url("imagenes/portada.png");
   /* stylelint-enable function-url-quotes */
-  background-position: top left;
+  background-position: top center;
   background-repeat: no-repeat;
   background-size: cover;
   -webkit-box-pack: center;
