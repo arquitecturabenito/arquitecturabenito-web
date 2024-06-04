@@ -1097,7 +1097,7 @@ nav {
     display: block;
     opacity: 0; }
   .masthead h1 {
-    color: #212121;
+    color: #afafaf;
     font-family: vcsm;
     font-size: 80px;
     font-style: normal;
@@ -1138,14 +1138,14 @@ nav {
   border-right-color: #212121; }
 
 .masthead-buttons {
-  padding-top: 30px;
+  padding-top: 90%;
   text-align: center; }
 
 .masthead-button-1 {
   border: 1px solid rgba(33, 33, 33, 0);
   border-radius: 5px;
-  color: #212121;
-  font-family: vcsm;
+  color: #cecece;
+  font-family: 'Times New Roman', Times, serif;
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
@@ -1164,7 +1164,7 @@ nav {
 .masthead-button-2 {
   border: 1px solid rgba(255, 255, 255, 0);
   border-radius: 5px;
-  color: #212121;
+  color: #a5a5a5;
   font-family: vcsm;
   font-size: 16px;
   font-style: normal;
