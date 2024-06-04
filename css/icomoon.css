@@ -858,13 +858,13 @@
 .icon-dribbble:before {
   content: "\e063";
 }
-.icon-home:before {
+.icon-index.html:before {
   content: "\e930";
 }
-.icon-home2:before {
+.icon-index.html2:before {
   content: "\e931";
 }
-.icon-home3:before {
+.icon-index.html3:before {
   content: "\e932";
 }
 .icon-office:before {
