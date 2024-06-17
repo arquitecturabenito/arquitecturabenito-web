@@ -1179,7 +1179,10 @@ nav {
         color: #686868;
         font-style: normal;
         font-weight: 600;
-        text-transform: uppercase; }
+        position: absolute;
+        background: none;
+    }
+     
     #btn1 {
         top: 40%;
         left: 10%;
@@ -1197,6 +1200,12 @@ nav {
         right: 10%;
         transform: translateY(-50%);
     }
+    #btn4 {
+      top: 95%;
+      left: 45%;
+      transform: translateY(-50%);
+     
+  }
 
 .masthead-button-2 {
   border: 1px solid rgba(255, 255, 255, 0);
