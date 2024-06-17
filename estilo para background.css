@@ -1185,12 +1185,14 @@ nav {
      
     #btn1 {
         top: 20%;
-        left: 46%;
+        left: 30%;
+        right: 30%;
     }
     
     #btn2 {
         top: 50%;
         left: 10%;
+       
         transform: translateY(-50%);
     }
     
@@ -1200,8 +1202,9 @@ nav {
         transform: translateY(-50%);
     }
     #btn4 {
-      top: 95%;
-      left: 45%;
+      top: 85%;
+      left: 30%;
+      right: 30%;
       transform: translateY(-50%);
      
   }
