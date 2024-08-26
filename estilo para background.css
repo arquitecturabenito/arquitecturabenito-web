@@ -1363,7 +1363,7 @@ nav {
     .hamburger i:last-child {
       margin-bottom: 0; }
 
-@media  
+@media  {
   nav {
     display: none;
     padding: 0;
@@ -1516,7 +1516,8 @@ nav {
   .site-footer {
     padding-left: 5%;
     padding-right: 5%;
-    width: 100%; } }
+    width: 100%; } 
+  }
 
 @media (max-width: 540px) {
   .close-responsive-click-area {
