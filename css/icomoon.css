@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'icomoon';
+  'Reenie Beanie': 'icomoon';
   src:  url('fonts/icomoon.eot?5j2n32');
   src:  url('fonts/icomoon.eot?5j2n32#iefix') format('embedded-opentype'),
     url('fonts/icomoon.ttf?5j2n32') format('truetype'),
@@ -11,7 +11,7 @@
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
+  'Reenie Beanie': 'icomoon' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;

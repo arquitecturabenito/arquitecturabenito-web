@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Reenie+Beanie&display=swap');
+
 .site-header:after, .logo-wrap:after {
   clear: both;
   content: '';
@@ -10,7 +12,7 @@
    *    user zoom.
    */
 html {
-  font-family: sans-serif;
+  font-family:'Reenie Beanie';
   /* 1 */
   -ms-text-size-adjust: 100%;
   /* 2 */
@@ -100,6 +102,11 @@ abbr[title] {
 /**
    * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
    */
+
+   e {
+    font-family: vcsm, cursive;
+    font-weight: bold}
+    /* font-size: 1.5rem */
 b,
 strong {
   font-weight: bold; }

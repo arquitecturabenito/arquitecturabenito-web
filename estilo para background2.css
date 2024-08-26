@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Reenie+Beanie&display=swap');
 .site-header:after, .logo-wrap:after {
   clear: both;
   content: '';
@@ -10,7 +11,7 @@
    *    user zoom.
    */
 html {
-  font-family: sans-serif;
+  font-family:'Reenie Beanie';
   /* 1 */
   -ms-text-size-adjust: 100%;
   /* 2 */
