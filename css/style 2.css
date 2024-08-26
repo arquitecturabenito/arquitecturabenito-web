@@ -10,7 +10,7 @@ body {
 }
 
 html {
-	'Reenie Beanie': 'Open Sans', sans-serif;
+	font-family: 'Reenie Beanie';
 }
 
 .btn {
@@ -51,7 +51,7 @@ h2 {
 }
 
 .cursive {
-	'Reenie Beanie': 'Reenie Beanie', cursive;
+	font-family: 'Reenie Beanie', cursive;
 	font-weight: bold;
 	font-size: 1.5rem;
 }
@@ -230,7 +230,7 @@ h2 {
 	top: 50%;
 	transform: translateY(-50%);
 	font-size: 50px;
-	'Reenie Beanie': 'Reenie Beanie', cursive;
+	font-family: 'Reenie Beanie', cursive;
 	font-weight: 400;
 	text-align: center;
 }
@@ -593,7 +593,7 @@ h2 {
 
 .stories-2-title {
 	font-size: 2.5rem;
-	'Reenie Beanie': 'Reenie Beanie', cursive;
+	font-family: 'Reenie Beanie', cursive;
 }
 
 .stories-2 {
