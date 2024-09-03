@@ -92,7 +92,7 @@ h2 {
 .navbar-brand:hover,
 .navbar-brand:visited {
 	text-decoration: none;
-	color: white;
+	color: rgb(0, 0, 0);
 }
 
 .container a {
@@ -166,7 +166,7 @@ h2 {
 }
 
 .button_container span {
-	background: #fff;
+	background: #000000;
 	border: none;
 	height: 2px;
 	width: 27px;
