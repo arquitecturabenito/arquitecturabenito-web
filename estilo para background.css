@@ -408,7 +408,7 @@ body {
   visibility: hidden; }
 
 html, .site-wrap {
-  background-color: #fff;
+  background-color: #ffffff;
   /* stylelint-disable function-url-quotes */
   background-image: url("");
   /* stylelint-enable function-url-quotes */
@@ -1773,6 +1773,37 @@ nav {
   .project-cover:nth-child(5n + 1) {
     clear: left;
     margin-left: 0; }
+
+    .contenedor {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: nowrap; /* Permite que los elementos se ajusten en varias líneas si es necesario */
+  }
+
+  /* Estilo para la imagen */
+  .contenedor img {
+      width: 500px; /* Ancho de la imagen */
+      margin-left: 20px; /* Espacio entre el texto y la imagen */
+      margin-right: 200px;
+  }
+
+  /* Estilo para el texto */
+  .texto {
+      flex: 1; /* El texto ocupará el espacio disponible restante */
+      max-width: 60%; /* Limita el ancho del texto */
+      font-size: 18px;
+      line-height: 1.6;
+      margin-left: 200px;
+  }
+
+  p {
+    margin-bottom: 80px; /* Añade espacio entre párrafos */
+}
+
+.salto {
+  margin-top: 100px; /* Añade un espacio en blanco de 50px arriba */
+}
 
 @media (max-width: 768px) {
   .project-cover .title {
