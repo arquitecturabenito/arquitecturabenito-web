@@ -123,7 +123,14 @@ dfn {
    */
 h1 {
   font-size: 2em;
-  margin: 0.67em 0; }
+  margin: 0.67em 0; 
+  color: #efefef;}
+
+.titulin {
+    font-size: 2em;
+    margin: 0.67em 0;
+  color: #efefef; }
+
 
 /**
    * Address styling not present in IE 8/9.
@@ -1081,7 +1088,7 @@ nav {
 
 .masthead {
   /* stylelint-disable function-url-quotes */
-  background-image: url("imagenes/fondo\ diseño.jpg");
+  background-image: url("imagenes/fondo\ diseño.png");
   /* stylelint-enable function-url-quotes */
   background-position: center;
   background-repeat: no-repeat;
