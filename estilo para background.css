@@ -1783,9 +1783,9 @@ nav {
 
   /* Estilo para la imagen */
   .contenedor img {
-      width: 500px; /* Ancho de la imagen */
-      margin-left: 20px; /* Espacio entre el texto y la imagen */
-      margin-right: 200px;
+      width: 30%; /* Ancho de la imagen */
+      margin-left: 10%; /* Espacio entre el texto y la imagen */
+      margin-right: 10%;
   }
 
   /* Estilo para el texto */
@@ -1794,7 +1794,7 @@ nav {
       max-width: 60%; /* Limita el ancho del texto */
       font-size: 18px;
       line-height: 1.6;
-      margin-left: 200px;
+      margin-left: 5%;
   }
 
   p {
