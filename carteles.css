@@ -1,0 +1,67 @@
+/* styles.css */
+
+/* Contenedor del mosaico */
+.mosaic {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr); /* 12 columnas que se expanden */
+    gap: 5px;                               /* Espacio entre imágenes */
+    padding: 10px;
+}
+
+/* Imágenes con proporciones específicas */
+
+.img1 {
+    grid-column: 1 / span 3; /* Ocupa 3 columnas */
+    grid-row: span 5;        /* Ocupa 4 filas */
+    aspect-ratio: 3 / 4;     /* Relación de aspecto de 4:3 */
+    width: 160%;
+    object-fit: cover;
+}
+
+.img2 {
+    grid-column:  6 / span 3;
+    grid-row: span 2;
+    aspect-ratio: 3 / 4;    /* Relación de aspecto de 16:9 */
+    width: 120%;
+    object-fit: cover;
+    margin-top: 30%;
+}
+
+.img3 {
+    grid-column: 4 / span 3;
+    grid-row: span 2;
+    aspect-ratio: 1 / 1;     /* Relación de aspecto de 1:1 (cuadrado) */
+    width: 140%;
+    object-fit: cover;
+    margin-top: 80%;
+}
+
+.img4 {
+    grid-column: 7 / span 3;
+    grid-row: span 1;
+    aspect-ratio: 4 / 6;     /* Relación de aspecto de 3:2 */
+    width: 140%;
+    object-fit: cover;
+}
+.img5 {
+    grid-column: 11 / span 3;
+    grid-row: span 1;
+    aspect-ratio: 27 / 40;     /* Relación de aspecto de 3:2 */
+    width: 130%;
+    object-fit: cover;
+    margin-top: 10%;
+}
+.img6 {
+    grid-column: 10 / span 3;
+    grid-row: span 5;
+    aspect-ratio: 28 / 40;     /* Relación de aspecto de 3:2 */
+    width: 150%;
+    object-fit: cover;
+}
+.img7 {
+    grid-column: 1 / span 1;
+    grid-row: span 1;
+    aspect-ratio: 25 / 40;     /* Relación de aspecto de 3:2 */
+    width: 350%;
+    object-fit: cover;
+}
