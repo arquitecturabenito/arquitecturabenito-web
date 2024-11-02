@@ -1,0 +1,24 @@
+/* Imagen separada con ancho limitado */
+.img-limitada {
+    width: 90vw;          /* Ancho máximo al 80% de la pantalla */
+    max-width: 90%;       /* Alternativa: usar el 80% del contenedor */
+    height: auto;         /* Mantiene la proporción de la imagen */
+    display: flex;                  /* Usa Flexbox para alinear en fila */
+    justify-content: flex-start;
+}
+
+.img-limitada2 {
+    width: 40vw;          /* Ancho máximo al 80% de la pantalla */
+    max-width: 40%;       /* Alternativa: usar el 80% del contenedor */
+    height: auto;         /* Mantiene la proporción de la imagen */
+    display: block;       /* Asegura que se comporta como un bloque */
+    margin: 20px auto;    /* Centra la imagen horizontalmente con margen superior de 20px */
+}
+
+/* Contenedor de la fila de imágenes */
+.image-row {
+    display: flex;              /* Usa Flexbox para alinear en fila */
+    justify-content: center;    /* Centra las imágenes horizontalmente */
+    gap: 10px;                  /* Espacio entre las imágenes */
+}
+
