@@ -1089,7 +1089,7 @@ nav {
   -o-justify-content: center;
   justify-content: center;
   -ms-flex-pack: center;
-  height: 90vh;
+  height: 60vh;
   margin-bottom: 0px;
   padding-left: 0%;
   padding-right: 0%; }
@@ -1124,7 +1124,7 @@ nav {
   position: fixed; }
 
 .masthead-placeholder {
-  height: 90vh; }
+  height: 50vh; }
 
 .masthead-contents {
   max-width: 800px; }
@@ -1211,12 +1211,12 @@ nav {
 @media (min-width: 541px) and (max-width: 768px) and (min-height: 921.6px) {
   .masthead,
   .masthead-placeholder {
-    height: 80vh; } }
+    height: 50vh; } }
 
 @media (max-width: 540px) and (min-height: 648px) {
   .masthead,
   .masthead-placeholder {
-    height: 80vh; } }
+    height: 50vh; } }
 
 @media (max-width: 540px) {
   .masthead {
