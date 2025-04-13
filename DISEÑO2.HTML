@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benito G.Quiñones Desing</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #efeeec; /* Color similar al fondo de Ryan Hentzen */
+      font-family: Arial, sans-serif;
+      color: #1e1e1e;
+      text-align: center;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      position: relative;
+    }
+
+    #clock {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* Tres columnas por defecto */
+    gap: 40px; /* Espaciado entre las cajas */
+    max-width:60%;
+    margin: 80px auto;
+    padding: 0 40px;
+  }
+
+  .project {
+    transition: transform 0.2s;
+    width: 100%;
+  }
+
+   .project img {
+    width: 80%;
+    border-radius: 0px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .project:hover {
+    transform: scale(1.05);
+  }
+
+  /* Patrón alternado: 3 cajas pequeñas en una fila */
+  .project:nth-child(6n+1),
+  .project:nth-child(6n+2)
+   {
+    grid-column: span 3; /* Cada caja ocupa 1 columna */
+  }
+
+  /* Patrón alternado: 2 cajas grandes en una fila */
+  .project:nth-child(6n+3),
+  .project:nth-child(6n+4),
+  .project:nth-child(6n+5) {
+    grid-column: span 2; /* Cada caja ocupa 2 columnas */
+  }
+
+  .project:nth-child(6n+6){
+    grid-column: span 2; /* Cada caja ocupa 1 columna */
+  }
+
+  .project:nth-child(6n+7)
+  {
+    grid-column: span 4; /* Cada caja ocupa 1 columna */
+  }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+    .grid {
+      gap: 40px; /* Reduce el espacio entre elementos en pantallas pequeñas */
+    }
+
+    .project {
+      max-width: 300px; /* Reduce el tamaño máximo de las cajas */
+    }
+    
+}
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html">ARQUITECTURA BENITO</a>
+  <div id="clock">00:00:00</div>
+  <a href="contacto.html">CONTACTO</a>
+</header>
+
+<h1>PRODUCT & GRAPHIC DESING </h1>
+
+<div class="grid">
+
+
+ 
+
+ 
+
+
+
+  <a class="project" href="minutos.html">
+    <img src="imagenes/minutos 0.png" alt="MINUTOS - juego de mesa">
+    <p>MINUTOS – juego de mesa</p>
+  </a>
+
+ 
+ 
+
+  <a class="project" href="mantenimiento.html">
+    <img src="imagenes/grabados.jpg" alt="SERIE DE GRABADOS">
+    <p>SERIE DE GRABADOS</p>
+
+  </a>
+  <a class="project" href="carteles.html">
+    <img src="imagenes/CARTELERIA GIF.gif" alt="Cartelería">
+    <p>CARTELERÍA</p>
+  </a>
+
+  
+  <a class="project" href="cmf.html">
+    <img src="imagenes/cmf portada.png" alt="CMF X WALKMAN">
+    <p>CMF X WALKMAN</p>
+  </a>
+
+  <a class="project" href="IA render.html">
+    <img src="imagenes/ia-gif.gif" alt="Cómo genero imágenes con IA">
+    <p>CÓMO GENERO IMÁGENES CON IA</p>
+  </a>
+  <a class="project" href="mantenimiento.html">
+    <img src="imagenes/lamp 01.png" alt="LAMP 01">
+    <p>LAMP 01</p>
+  </a>
+  <a class="project" href="mantenimiento.html">
+    <img src="imagenes/festanaterra-gif.gif" alt="FESTA NA TERRA">
+    <p>FESTA NA TERRA</p>
+  </a>
+
+</div>
+
+<footer>
+  © Arquitectura Benito, 2025
+</footer>
+
+<script>
+  // Reloj en tiempo real
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+  }
+
+  setInterval(updateClock, 1000);
+  updateClock();
+</script>
+
+</body>
+</html>

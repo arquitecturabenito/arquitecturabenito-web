@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantenimiento - Arquitectura Benito</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #efeeec; /* Fondo similar */
+      font-family: Arial, sans-serif;
+      color: #1e1e1e; /* Color uniforme para todo el texto */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh; /* Altura mínima para llenar la pantalla */
+    }
+
+    header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      box-sizing: border-box;
+    }
+
+    header a {
+      text-decoration: none;
+      color: inherit; /* Mantiene el color uniforme */
+    }
+
+    #clock {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5rem;
+      font-family: 'Courier New', monospace;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex: 1; /* Ocupa el espacio restante entre el header y el footer */
+    }
+
+    h1 {
+      font-size: 2.5rem; /* Título principal */
+      margin: 20px 0;
+      font-weight: bold;
+    }
+
+    p {
+      font-size: 1.2rem; /* Subtítulos */
+      margin: 10px 0 20px 0;
+      color: inherit; /* Color uniforme */
+    }
+
+    .button {
+      display: inline-block;
+      background-color: #1e1e1e; /* Fondo oscuro para contraste */
+      color: #efeeec; /* Texto claro */
+      font-size: 1rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .button:hover {
+      background-color: #333; /* Fondo más oscuro al pasar el cursor */
+    }
+
+    footer {
+      font-size: 0.9rem;
+      color: #777;
+      padding: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        font-size: 2rem; /* Ajusta el título en pantallas pequeñas */
+      }
+
+      p {
+        font-size: 1rem; /* Ajusta el texto secundario */
+      }
+
+      .button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html">ARQUITECTURA BENITO</a>
+    <div id="clock">00:00:00</div>
+    <a href="contacto.html">CONTACTO</a>
+  </header>
+
+  <main>
+    <h1>PÁGINA EN MANTENIMIENTO</h1>
+    <p>Page Under Maintenance</p>
+    <p>Seite in Wartung</p>
+    <a href="index.html" class="button">Volver al Inicio</a>
+  </main>
+
+  <footer>© Arquitectura Benito, 2025</footer>
+
+  <script>
+    // Reloj en tiempo real
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
