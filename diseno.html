@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Benito G.Quiñones Desing</title>
+  <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
   <style>
     body {
       margin: 0;
@@ -14,28 +16,46 @@
     }
 
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      position: relative;
-    }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-sizing: border-box;
+}
 
-    #clock {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+.logo-container {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.logo {
+  width: 40px; /* Ajusta el tamaño del logo */
+  height: auto; /* Mantiene la proporción */
+  margin-right: 10px; /* Espacio entre el logo y el texto */
+}
+
+.header-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+#clock {
+  flex: 1;
+  text-align: center;
   font-size: 1.5rem;
   font-family: 'Courier New', monospace;
 }
+
 
 .grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr); /* Tres columnas por defecto */
     gap: 40px; /* Espaciado entre las cajas */
     max-width:60%;
+
     margin: 80px auto;
     padding: 0 40px;
   }
@@ -101,12 +121,14 @@
   </style>
 </head>
 <body>
-
-<header>
-  <a href="index.html">ARQUITECTURA BENITO</a>
-  <div id="clock">00:00:00</div>
-  <a href="contacto.html">CONTACTO</a>
-</header>
+  <header>
+    <div class="logo-container">
+      <img src="imagenes/logo.png" alt="Logo" class="logo">
+      <a href="index.html" class="header-link">ARQUITECTURA BENITO</a>
+    </div>
+    <div id="clock">00:00:00</div>
+    <a href="contacto.html" class="header-link">CONTACTO</a>
+  </header>
 
 <h1>PRODUCT & GRAPHIC DESING </h1>
 
