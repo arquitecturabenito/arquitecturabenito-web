@@ -35,11 +35,15 @@
   width: 40px; /* Ajusta el tamaño del logo */
   height: auto; /* Mantiene la proporción */
   margin-right: 10px; /* Espacio entre el logo y el texto */
+  
 }
 
 .header-link {
   text-decoration: none;
   color: inherit;
+  display: flex;
+ 
+ 
 }
 
 #clock {
@@ -50,12 +54,17 @@
 }
 
 
+header a:last-child {
+  flex: 1;
+  text-align: right;
+  
+}
 .grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr); /* Tres columnas por defecto */
     gap: 40px; /* Espaciado entre las cajas */
     max-width:60%;
-
+ 
     margin: 80px auto;
     padding: 0 40px;
   }
@@ -124,10 +133,11 @@
   <header>
     <div class="logo-container">
       <img src="imagenes/logo.png" alt="Logo" class="logo">
-      <a href="index.html" class="header-link">ARQUITECTURA BENITO</a>
+       <a href="index.html" class="header-link">ARQUITECTURA BENITO</a> 
+  </div>
     </div>
     <div id="clock">00:00:00</div>
-    <a href="contacto.html" class="header-link">CONTACTO</a>
+    <a href="contacto.html" class="header">CONTACTO</a>
   </header>
 
 <h1>PRODUCT & GRAPHIC DESING </h1>
@@ -135,15 +145,10 @@
 <div class="grid">
 
 
- 
-
- 
-
-
 
   <a class="project" href="minutos.html">
     <img src="imagenes/minutos 0.png" alt="MINUTOS - juego de mesa">
-    <p>MINUTOS – juego de mesa</p>
+    <p>MINUTOS</p>
   </a>
 
  

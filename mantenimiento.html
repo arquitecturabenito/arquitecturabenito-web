@@ -4,42 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mantenimiento - Arquitectura Benito</title>
+  <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
   <style>
-    body {
+   body {
       margin: 0;
-      background-color: #efeeec; /* Fondo similar */
+      background-color: #efeeec; /* Color similar al fondo de Ryan Hentzen */
       font-family: Arial, sans-serif;
-      color: #1e1e1e; /* Color uniforme para todo el texto */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh; /* Altura mínima para llenar la pantalla */
+      color: #1e1e1e;
+      text-align: center;
     }
 
     header {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      box-sizing: border-box;
-    }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-sizing: border-box;
+}
 
-    header a {
-      text-decoration: none;
-      color: inherit; /* Mantiene el color uniforme */
-    }
+.logo-container {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
 
-    #clock {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 1.5rem;
-      font-family: 'Courier New', monospace;
-    }
+.logo {
+  width: 40px; /* Ajusta el tamaño del logo */
+  height: auto; /* Mantiene la proporción */
+  margin-right: 10px; /* Espacio entre el logo y el texto */
+}
 
+.header-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+ 
+ 
+}
+
+#clock {
+  flex: 1;
+  text-align: center;
+  font-size: 1.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+
+header a:last-child {
+  flex: 1;
+  text-align: right;
+  text-decoration: none;
+  color: inherit;
+}
     main {
       display: flex;
       flex-direction: column;
@@ -83,35 +101,31 @@
       color: #777;
       padding: 20px 0;
     }
-
+    
     @media (max-width: 768px) {
-      header {
+        header {
         flex-direction: column;
         align-items: center;
-      }
-
-      h1 {
-        font-size: 2rem; /* Ajusta el título en pantallas pequeñas */
-      }
-
-      p {
-        font-size: 1rem; /* Ajusta el texto secundario */
-      }
-
-      .button {
-        font-size: 0.9rem;
-        padding: 8px 16px;
-      }
+    .grid {
+      gap: 40px; /* Reduce el espacio entre elementos en pantallas pequeñas */
     }
+
+    .project {
+      max-width: 300px; /* Reduce el tamaño máximo de las cajas */
+    }  }  } 
+    
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html">ARQUITECTURA BENITO</a>
-    <div id="clock">00:00:00</div>
-    <a href="contacto.html">CONTACTO</a>
-  </header>
-
+    <header>
+        <div class="logo-container">
+          <img src="imagenes/logo.png" alt="Logo" class="logo">
+           <a href="index.html" class="header-link">ARQUITECTURA BENITO</a> 
+      </div>
+        </div>
+        <div id="clock">00:00:00</div>
+        <a href="contacto.html" class="header">CONTACTO</a>
+      </header>
   <main>
     <h1>PÁGINA EN MANTENIMIENTO</h1>
     <p>Page Under Maintenance</p>
