@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NetworkGraph from './components/NetworkGraph';
 import EyeIcon from './components/EyeIcon';
 import ArchitecturePage from './pages/ArchitecturePage';
@@ -18,6 +18,25 @@ interface ViewState {
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>({ page: 'home' });
+
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+
+    if (currentView.page === 'home') {
+      html.style.overflow = 'hidden';
+      body.style.overflow = 'hidden';
+    } else {
+      html.style.overflow = 'auto';
+      body.style.overflow = 'auto';
+    }
+
+    // Cleanup function to ensure styles are reset on component unmount
+    return () => {
+      html.style.overflow = 'auto';
+      body.style.overflow = 'auto';
+    };
+  }, [currentView.page]);
 
   const handleNodeClick = (node: NodeData) => {
     if (node.isProject && node.projectId) {
