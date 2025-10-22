@@ -32,10 +32,6 @@ const ArchitecturePage: React.FC<ArchitecturePageProps> = ({ onBack, onProjectCl
 
   return (
     <div className="w-full min-h-screen bg-white text-black animate-fade-in overflow-y-auto">
-      <div style={{position: 'fixed', top: 0, left: 0, background: 'red', color: 'white', padding: '10px', zIndex: 9999, fontSize: '16px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px'}}>
-        <span>TEST 1: ARCHITECTURE PAGE</span>
-        <img src="/imagenes/PASEO%201%20PORTADA%201.png" alt="Test Image 1" style={{height: '40px', border: '1px solid white'}} />
-      </div>
       {/* Masthead Section */}
       <div 
         className="relative h-[80vh] md:h-screen flex items-center justify-center bg-cover bg-center" 

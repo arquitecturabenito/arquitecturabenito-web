@@ -8,10 +8,6 @@ interface ContactPageProps {
 const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
   return (
     <div className="w-full h-screen bg-black text-gray-300 animate-fade-in flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      <div style={{position: 'fixed', top: 0, left: 0, background: 'green', color: 'white', padding: '10px', zIndex: 9999, fontSize: '16px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px'}}>
-        <span>TEST 3: CONTACT PAGE</span>
-        <img src="/imagenes/curvas%20portada%201.png" alt="Test Image 3" style={{height: '40px', border: '1px solid white'}} />
-      </div>
       
       {/* Background Eye Icon */}
       <div className="absolute inset-0 z-0 flex items-center justify-center opacity-5 pointer-events-none">
