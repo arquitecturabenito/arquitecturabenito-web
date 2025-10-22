@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import NetworkGraph from './components/NetworkGraph';
-import EyeIcon from './components/EyeIcon';
-import ArchitecturePage from './pages/ArchitecturePage';
-import ProjectDetailPage from './pages/ProjectDetailPage';
-import DesignPage from './pages/DesignPage';
-import ContactPage from './pages/ContactPage';
+import { NetworkGraph } from './components/NetworkGraph';
+import { EyeIcon } from './components/EyeIcon';
+import { HomeButton } from './components/HomeButton';
+import { ArchitecturePage } from './pages/ArchitecturePage';
+import { DesignPage } from './pages/DesignPage';
+import { ContactPage } from './pages/ContactPage';
+import { ProjectDetailPage } from './pages/ProjectDetailPage';
 import { allProjectsData } from './data/projects';
-import { NodeData } from './types';
-import HomeButton from './components/HomeButton';
+import { D3Node } from './types';
 
-type Page = 'home' | 'architecture' | 'design' | 'contact' | 'project';
-interface ViewState {
-  page: Page;
-  projectId?: string;
-  previousPage?: Page;
-}
+type ViewState =
+  | { page: 'home' }
+  | { page: 'architecture' }
+  | { page: 'design' }
+  | { page: 'contact' }
+  | { page: 'project'; projectId: string; previousPage: 'architecture' | 'design' | 'home' };
 
-const App: React.FC = () => {
+export const App = () => {
   const [currentView, setCurrentView] = useState<ViewState>({ page: 'home' });
 
   useEffect(() => {
@@ -31,18 +31,17 @@ const App: React.FC = () => {
       body.style.overflow = 'auto';
     }
 
-    // Cleanup function to ensure styles are reset on component unmount
     return () => {
       html.style.overflow = 'auto';
       body.style.overflow = 'auto';
     };
   }, [currentView.page]);
 
-  const handleNodeClick = (node: NodeData) => {
+  const handleNodeClick = (node: D3Node) => {
     if (node.isProject && node.projectId) {
       const project = allProjectsData.find(p => p.id === node.projectId);
       const previousPage = project?.category === 'design' ? 'design' : 'architecture';
-      setCurrentView({ page: 'project', projectId: node.projectId, previousPage });
+      setCurrentView({ page: 'project', projectId: node.projectId, previousPage: previousPage || 'home' });
       return;
     }
 
@@ -60,9 +59,9 @@ const App: React.FC = () => {
         break;
     }
   };
-  
+
   const handleProjectClick = (projectId: string) => {
-    const previousPage = currentView.page as Page;
+    const previousPage = currentView.page === 'architecture' || currentView.page === 'design' ? currentView.page : 'home';
     setCurrentView({ page: 'project', projectId, previousPage });
   };
 
@@ -73,7 +72,7 @@ const App: React.FC = () => {
       setCurrentView({ page: 'home' });
     }
   };
-  
+
   const handleGoHome = () => {
     setCurrentView({ page: 'home' });
   };
@@ -101,11 +100,11 @@ const App: React.FC = () => {
       case 'contact':
         return <ContactPage onBack={handleBack} />;
       case 'project':
-        return <ProjectDetailPage projectId={currentView.projectId!} onBack={handleBack} />;
+        return <ProjectDetailPage projectId={currentView.projectId} onBack={handleBack} />;
       default:
         return null;
     }
-  }
+  };
 
   return (
     <div className="bg-black w-full h-full">
@@ -114,5 +113,3 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-export default App;
