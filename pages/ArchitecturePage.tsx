@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { allProjectsData } from '../data/projects';
 
 interface ArchitecturePageProps {
@@ -6,102 +6,149 @@ interface ArchitecturePageProps {
   onProjectClick: (projectId: string) => void;
 }
 
-// Reusable scroll arrow component defined locally
-const ScrollDownArrow: React.FC<{ onClick: () => void }> = ({ onClick }) => {
-  return (
-    <button 
-      onClick={onClick}
-      className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce p-2 transition-opacity hover:opacity-70"
-      aria-label="Desplazarse hacia abajo"
-    >
-      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-      </svg>
-    </button>
-  );
+const architectureProjects = allProjectsData.filter(p => p.category === 'architecture');
+const coverSlide = {
+  id: 'cover',
+  type: 'cover',
+  image: '/imagenes/portada2.png',
+  title: 'Arquitectura'
 };
+const slides = [coverSlide, ...architectureProjects.map(p => ({ ...p, type: 'project' }))];
 
 const ArchitecturePage: React.FC<ArchitecturePageProps> = ({ onBack, onProjectClick }) => {
-  const architectureProjects = allProjectsData.filter(p => p.category === 'architecture');
-  const mainContentRef = useRef<HTMLElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const mainContainerRef = useRef<HTMLDivElement>(null);
+  const slideRefs = useRef<(HTMLElement | null)[]>([]);
 
-  const handleScrollDown = () => {
-    mainContentRef.current?.scrollIntoView({ behavior: 'smooth' });
+  useEffect(() => {
+    slideRefs.current = slideRefs.current.slice(0, slides.length);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const intersectingEntry = entries.find((entry) => entry.isIntersecting);
+        if (intersectingEntry) {
+          const index = slideRefs.current.indexOf(intersectingEntry.target as HTMLElement);
+          if (index !== -1) {
+            setActiveIndex(index);
+          }
+        }
+      },
+      { root: mainContainerRef.current, threshold: 0.5 }
+    );
+
+    const currentRefs = slideRefs.current;
+    currentRefs.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => {
+      currentRefs.forEach((ref) => {
+        if (ref) observer.unobserve(ref);
+      });
+      observer.disconnect();
+    };
+  }, []);
+  
+  const scrollToSlide = (index: number) => {
+    slideRefs.current[index]?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    });
+  };
+
+  const handlePrev = () => {
+    if (activeIndex > 0) {
+      scrollToSlide(activeIndex - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (activeIndex < slides.length - 1) {
+      scrollToSlide(activeIndex + 1);
+    }
   };
 
   return (
-    <div className="w-full min-h-screen bg-white text-black animate-fade-in overflow-y-auto">
-      {/* Masthead Section */}
-      <div 
-        className="relative h-[80vh] md:h-screen flex items-center justify-center bg-cover bg-center" 
-        style={{ backgroundImage: "url('/imagenes/portada2.png')" }}
-      >
-        <div className="absolute inset-0 bg-black opacity-30"></div>
-        <div className="relative z-10 text-center text-white p-4">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-wider uppercase">UNA ARQUITECTURA PARA JUGAR</h1>
-          <a href="#" className="mt-4 inline-block text-sm uppercase tracking-widest border-b border-white pb-1">
-            más sobre benito
-          </a>
+    <div className="w-full h-screen bg-black text-white animate-fade-in overflow-hidden relative">
+      <header className="fixed top-0 left-0 z-30 w-full p-6 sm:p-8 flex justify-between items-center">
+        <div 
+          className="text-md sm:text-lg font-bold tracking-wider cursor-pointer hover:opacity-75 transition-opacity"
+          onClick={onBack}
+          aria-label="Volver a la constelación"
+        >
+          ARQUITECTURA BENITO
         </div>
-        <ScrollDownArrow onClick={handleScrollDown} />
-      </div>
-      
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-30 w-full bg-white bg-opacity-90 backdrop-blur-md shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between items-center py-4">
-                  <div 
-                    className="text-md sm:text-lg font-bold tracking-wider cursor-pointer hover:opacity-75 transition-opacity"
-                    onClick={onBack}
-                    aria-label="Volver a la página principal"
-                  >
-                      ARQUITECTURA BENITO
-                  </div>
-              </div>
-          </div>
+        <div className="flex items-center space-x-2">
+          {slides.map((slide, index) => (
+            <button
+              key={slide.id}
+              onClick={() => scrollToSlide(index)}
+              aria-label={`Ir al proyecto ${slide.title}`}
+              className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${activeIndex === index ? 'bg-white border-white scale-125' : 'bg-transparent border-gray-500 hover:border-white'}`}
+            />
+          ))}
+        </div>
       </header>
+      
+      {/* Navigation Buttons */}
+      <button 
+        onClick={handlePrev} 
+        aria-label="Proyecto anterior"
+        className={`fixed top-1/2 -translate-y-1/2 left-4 z-30 w-12 h-12 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center transition-opacity duration-300 hover:bg-black/50 disabled:opacity-0`}
+        disabled={activeIndex === 0}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+      </button>
 
-      {/* Main Content */}
-      <main ref={mainContentRef} className="w-full">
-        <section className="project-covers py-12 px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
-                {architectureProjects.map((project) => (
-                    <div 
-                      key={project.id}
-                      onClick={() => onProjectClick(project.id)}
-                      className="group relative block aspect-square overflow-hidden bg-gray-200 cursor-pointer"
-                      aria-label={`Ver proyecto ${project.title}`}
-                    >
-                      {/* Normal Image */}
-                      <img
-                        src={project.normalImage}
-                        alt={project.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out group-hover:opacity-0"
-                      />
-                      {/* Rollover Image */}
-                      <img
-                        src={"imagenes/portada2.png"
-                        }
-                        alt={`${project.title} - rollover view`}
-                        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
-                      />
-                      {/* Project Title Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center p-4">
-                         <div className="absolute top-4 left-4 text-black font-semibold text-lg flex items-center -rotate-90 origin-top-left">
-                            <span className="text-2xl font-thin mr-2">+</span>
-                            <span className="tracking-widest uppercase text-sm whitespace-nowrap">{project.title}</span>
-                         </div>
-                      </div>
-                    </div>
-                ))}
+      <button 
+        onClick={handleNext} 
+        aria-label="Siguiente proyecto"
+        className={`fixed top-1/2 -translate-y-1/2 right-4 z-30 w-12 h-12 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center transition-opacity duration-300 hover:bg-black/50 disabled:opacity-0`}
+        disabled={activeIndex === slides.length - 1}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+      </button>
+
+      <main ref={mainContainerRef} className="w-full h-full flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory">
+        {slides.map((slide, index) => (
+          <section
+            key={slide.id}
+            ref={el => { slideRefs.current[index] = el; }}
+            onClick={() => slide.type === 'project' && onProjectClick(slide.id)}
+            className={`w-full h-full flex-shrink-0 snap-center relative flex items-center justify-center bg-cover bg-center group ${slide.type === 'project' ? 'cursor-pointer' : ''}`}
+            // FIX: Use 'in' operator for type guarding on a union type.
+            style={{ backgroundImage: `url('${'image' in slide ? slide.image : (slide as any).normalImage}')` }}
+          >
+            <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-all duration-500"></div>
+            
+            <div className="relative z-10 text-center text-white p-4 transform group-hover:scale-105 transition-transform duration-500">
+              <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-wider uppercase" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                {slide.title}
+              </h2>
+              {slide.type === 'project' && (
+                <p className="mt-4 text-sm uppercase tracking-widest border-b border-white pb-1 inline-block">
+                  Ver Proyecto
+                </p>
+              )}
             </div>
-        </section>
+            
+            {/* Project counter */}
+            <div className="absolute bottom-8 right-8 z-10 text-white font-mono text-sm">
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <span className="mx-2">/</span>
+                <span>{String(slides.length).padStart(2, '0')}</span>
+            </div>
+          </section>
+        ))}
       </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-100 text-gray-600 text-center p-6 text-xs">
-          © 2024 Benito G. Quiñones - Todos los derechos reservados - arquitectuabenito@gmail.com
+      
+      <footer className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-500 z-10">
+          © 2024 Benito G. Quiñones
       </footer>
+
     </div>
   );
 };
