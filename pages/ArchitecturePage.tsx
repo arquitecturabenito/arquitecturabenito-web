@@ -35,7 +35,7 @@ const ArchitecturePage: React.FC<ArchitecturePageProps> = ({ onBack, onProjectCl
       {/* Masthead Section */}
       <div 
         className="relative h-[80vh] md:h-screen flex items-center justify-center bg-cover bg-center" 
-        style={{ backgroundImage: "url('imagenes/portada2.png')" }}
+        style={{ backgroundImage: "url('/imagenes/portada2.png')" }}
       >
         <div className="absolute inset-0 bg-black opacity-30"></div>
         <div className="relative z-10 text-center text-white p-4">
