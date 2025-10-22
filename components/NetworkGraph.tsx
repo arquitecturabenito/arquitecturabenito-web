@@ -1,59 +1,87 @@
 import React, { useEffect, useRef } from 'react';
+import * as d3 from 'd3';
 import { NodeData, LinkData } from '../types';
-import EyeIcon from './EyeIcon';
+import { allProjectsData } from '../data/projects';
 
-declare const d3: any;
+interface NetworkGraphProps {
+  onNodeClick: (node: NodeData) => void;
+}
 
-const nodesData: NodeData[] = [
-  { id: 'ARQUITECTURA', group: 1, isCentral: true, isNavLink: true },
-  { id: 'DISEÑO', group: 2, isNavLink: true },
-  { id: 'CONTACTO', group: 2, isNavLink: true },
-  { id: 'DOCENCIA', group: 2 },
-  { id: 'TRABAJO', group: 2 },
-  { id: 'INVESTIGACIÓN', group: 2 },
-  { id: 'EXPRESION ARTISTICA', group: 2 },
-  { id: 'Fotografía de la luz', group: 3 },
-  { id: 'I+D', group: 3 },
-  { id: 'Interiorismo', group: 3 },
-];
-
-const linksData: LinkData[] = [
-  { source: 'ARQUITECTURA', target: 'DISEÑO', value: 1 },
-  { source: 'ARQUITECTURA', target: 'CONTACTO', value: 1 },
-  { source: 'ARQUITECTURA', target: 'DOCENCIA', value: 1 },
-  { source: 'ARQUITECTURA', target: 'TRABAJO', value: 1 },
-  { source: 'ARQUITECTURA', target: 'INVESTIGACIÓN', value: 1 },
-  { source: 'ARQUITECTURA', target: 'EXPRESION ARTISTICA', value: 1 },
-  { source: 'INVESTIGACIÓN', target: 'I+D', value: 2 },
-  { source: 'EXPRESION ARTISTICA', target: 'Fotografía de la luz', value: 2 },
-  { source: 'EXPRESION ARTISTICA', target: 'Interiorismo', value: 2 },
-];
-
-const NetworkGraph: React.FC = () => {
-  const svgRef = useRef<SVGSVGElement | null>(null);
+const NetworkGraph: React.FC<NetworkGraphProps> = ({ onNodeClick }) => {
+  const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
+    if (!svgRef.current) return;
+    
+    const isMobile = window.innerWidth < 768;
+
+    const baseNodes: NodeData[] = [
+      { id: 'CENTRAL_HUB', group: 0, isCentral: true, fx: 0, fy: 0 },
+      { id: 'ARQUITECTURA', group: 1, isNavLink: true },
+      { id: 'DISEÑO', group: 2, isNavLink: true },
+      { id: 'CONTACTO', group: 2, isNavLink: true },
+      { id: 'DOCENCIA', group: 2 },
+      { id: 'TRABAJO', group: 2 },
+      { id: 'INVESTIGACIÓN', group: 2 },
+      { id: 'EXPRESION ARTISTICA', group: 2 },
+      { id: 'Fotografía de la luz', group: 3 },
+      { id: 'I+D', group: 3 },
+      { id: 'Interiorismo', group: 3 },
+    ];
+
+    const baseLinks: (Omit<LinkData, 'source' | 'target'> & { source: string; target: string })[] = [
+      { source: 'CENTRAL_HUB', target: 'ARQUITECTURA', value: 1 },
+      { source: 'CENTRAL_HUB', target: 'DISEÑO', value: 1 },
+      { source: 'CENTRAL_HUB', target: 'CONTACTO', value: 1 },
+      { source: 'ARQUITECTURA', target: 'DOCENCIA', value: 1 },
+      { source: 'ARQUITECTURA', target: 'TRABAJO', value: 1 },
+      { source: 'ARQUITECTURA', target: 'INVESTIGACIÓN', value: 1 },
+      { source: 'ARQUITECTURA', target: 'EXPRESION ARTISTICA', value: 1 },
+      { source: 'INVESTIGACIÓN', target: 'I+D', value: 2 },
+      { source: 'EXPRESION ARTISTICA', target: 'Fotografía de la luz', value: 2 },
+      { source: 'EXPRESION ARTISTICA', target: 'Interiorismo', value: 2 },
+    ];
+
+    const projectNodes: NodeData[] = allProjectsData.map(p => ({
+      id: p.title,
+      group: 4, 
+      isNavLink: true,
+      isProject: true,
+      projectId: p.id,
+    }));
+
+    const projectLinks: (Omit<LinkData, 'source' | 'target'> & { source: string; target: string })[] = allProjectsData.map(p => ({
+      source: p.category === 'architecture' ? 'ARQUITECTURA' : 'DISEÑO',
+      target: p.title,
+      value: 5,
+    }));
+    
+    const nodesData: NodeData[] = [...baseNodes, ...projectNodes];
+    const linksData: (Omit<LinkData, 'source' | 'target'> & { source: string; target: string })[] = [...baseLinks, ...projectLinks];
+
+    // Filter out the central hub for rendering
+    const visibleNodes = nodesData.filter(n => n.id !== 'CENTRAL_HUB');
+
     const width = window.innerWidth;
     const height = window.innerHeight;
     
-    if (!svgRef.current) return;
-
     const svg = d3.select(svgRef.current)
       .attr('width', width)
       .attr('height', height)
       .attr('viewBox', [-width / 2, -height / 2, width, height]);
 
-    svg.selectAll("*").remove(); // Clear previous renders
+    svg.selectAll("*").remove(); 
 
-    const simulation = d3.forceSimulation(nodesData)
-      .force('link', d3.forceLink(linksData).id((d: NodeData) => d.id).distance(150))
-      .force('charge', d3.forceManyBody().strength(-200))
-      .force('center', d3.forceCenter(0, 0));
+    const simulation = d3.forceSimulation<NodeData>(nodesData)
+      .force('link', d3.forceLink<NodeData, LinkData>(linksData).id(d => d.id).distance(d => isMobile ? (d.value === 5 ? 60 : 100) : (d.value === 5 ? 100 : 180)))
+      .force('charge', d3.forceManyBody().strength(isMobile ? -120 : -180))
+      .force('center', d3.forceCenter(0, 0))
+      .alphaDecay(0.01); // Slower decay for more persistent movement
 
     const outerCircle = svg.append('circle')
       .attr('cx', 0)
       .attr('cy', 0)
-      .attr('r', Math.min(width, height) / 2 - 50)
+      .attr('r', Math.min(width, height) / 2 - 40)
       .attr('stroke', 'rgba(255, 255, 255, 0.1)')
       .attr('stroke-width', 1)
       .attr('fill', 'none');
@@ -64,70 +92,66 @@ const NetworkGraph: React.FC = () => {
       .selectAll('line')
       .data(linksData)
       .join('line')
-      .attr('stroke-width', (d: LinkData) => Math.sqrt(d.value));
+      .attr('stroke-width', d => d.value === 5 ? 0.5 : Math.sqrt(d.value));
 
     const node = svg.append('g')
       .selectAll('g')
-      .data(nodesData)
+      .data(visibleNodes)
       .join('g')
-      .style('cursor', (d: NodeData) => d.isNavLink ? 'pointer' : 'default')
-      .on('click', (event: any, d: NodeData) => {
+      .style('cursor', d => d.isNavLink ? 'pointer' : 'default')
+      .on('click', (event, d) => {
           if (!d.isNavLink) return;
           event.stopPropagation();
-          switch (d.id) {
-            case 'ARQUITECTURA':
-              window.location.href = '/arquitectura.html';
-              break;
-            case 'DISEÑO':
-              window.location.href = '/diseno.html';
-              break;
-            case 'CONTACTO':
-              window.location.href = '/contacto.html';
-              break;
-          }
+          onNodeClick(d);
       })
-      .call(d3.drag()
-          .on('start', (event: any, d: NodeData) => {
+      .call(d3.drag<SVGGElement, NodeData>()
+          .on('start', (event, d) => {
               if (!event.active) simulation.alphaTarget(0.3).restart();
               d.fx = d.x;
               d.fy = d.y;
           })
-          .on('drag', (event: any, d: NodeData) => {
+          .on('drag', (event, d) => {
               d.fx = event.x;
               d.fy = event.y;
           })
-          .on('end', (event: any, d: NodeData) => {
+          .on('end', (event, d) => {
               if (!event.active) simulation.alphaTarget(0);
               d.fx = null;
               d.fy = null;
           }));
 
-    node.on('mouseover', function(event: any, d: NodeData) {
+    const getNodeColor = (d: NodeData) => {
+      if (d.isNavLink && !d.isProject) return '#fff';
+      if (d.isProject) return '#aaa';
+      return '#777';
+    };
+
+    node.on('mouseover', function(event, d) {
       if (d.isNavLink) {
         d3.select(this).select('text').attr('fill', '#00ffff');
-        d3.select(this).select('circle').attr('fill', '#00ffff').attr('r', 7);
+        d3.select(this).select('circle').attr('fill', '#00ffff').attr('r', d.isNavLink && !d.isProject ? 10 : (d.isProject ? 5 : 6));
       }
-    }).on('mouseout', function(event: any, d: NodeData) {
+    }).on('mouseout', function(event, d) {
       if (d.isNavLink) {
-        d3.select(this).select('text').attr('fill', '#fff');
-        d3.select(this).select('circle').attr('fill', '#999').attr('r', 5);
+        d3.select(this).select('text').attr('fill', getNodeColor(d));
+        d3.select(this).select('circle').attr('fill', '#999').attr('r', d.isNavLink && !d.isProject ? 8 : (d.isProject ? 3 : 5));
       }
     });
           
     node.append('circle')
-        .attr('r', 5)
+        .attr('r', d => d.isNavLink && !d.isProject ? 8 : (d.isProject ? 3 : 5))
         .attr('fill', '#999')
         .attr('stroke', '#fff')
         .attr('stroke-width', 1.5);
     
     node.append('text')
-        .text((d: NodeData) => d.id)
+        .text(d => d.id)
         .attr('x', 12)
         .attr('y', 4)
-        .attr('fill', (d: NodeData) => d.isNavLink ? '#fff' : '#ccc')
-        .style('font-size', (d: NodeData) => {
-          if (d.isCentral) return '1.5rem';
-          if (d.isNavLink) return '1.1rem';
+        .attr('fill', getNodeColor)
+        .style('font-size', d => {
+          if (d.isNavLink && !d.isProject) return isMobile ? '1.1rem' : '1.4rem';
+          if (d.isProject) return isMobile ? '0.75rem' : '0.8rem';
           return '0.8rem';
         })
         .style('text-transform', 'uppercase')
@@ -135,40 +159,27 @@ const NetworkGraph: React.FC = () => {
 
     simulation.on('tick', () => {
       link
-        .attr('x1', (d: any) => d.source.x)
-        .attr('y1', (d: any) => d.source.y)
-        .attr('x2', (d: any) => d.target.x)
-        .attr('y2', (d: any) => d.target.y);
+        .attr('x1', d => (d.source as unknown as NodeData).x!)
+        .attr('y1', d => (d.source as unknown as NodeData).y!)
+        .attr('x2', d => (d.target as unknown as NodeData).x!)
+        .attr('y2', d => (d.target as unknown as NodeData).y!);
 
       node
-        .attr('transform', (d: NodeData) => `translate(${d.x}, ${d.y})`);
+        .attr('transform', d => `translate(${d.x}, ${d.y})`);
     });
-
-    const handleResize = () => {
-        const newWidth = window.innerWidth;
-        const newHeight = window.innerHeight;
-        svg.attr('width', newWidth).attr('height', newHeight).attr('viewBox', [-newWidth / 2, -newHeight / 2, newWidth, newHeight]);
-        outerCircle.attr('r', Math.min(newWidth, newHeight) / 2 - 50);
-        simulation.force('center', d3.forceCenter(0, 0)).alpha(0.3).restart();
-    };
-
-    window.addEventListener('resize', handleResize);
+    
+    // Periodically "reheat" the simulation to keep it moving
+    const interval = d3.interval(() => {
+        simulation.alpha(0.05).restart();
+    }, 5000);
 
     return () => {
         simulation.stop();
-        window.removeEventListener('resize', handleResize);
+        interval.stop();
     };
+  }, [onNodeClick]);
 
-  }, []);
-
-  return (
-    <div className="w-full h-full flex items-center justify-center">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
-          <EyeIcon />
-        </div>
-        <svg ref={svgRef} className="z-10"></svg>
-    </div>
-  );
+  return <svg ref={svgRef} className="w-full h-full" />;
 };
 
 export default NetworkGraph;

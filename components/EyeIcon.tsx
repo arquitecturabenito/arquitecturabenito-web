@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const EyeIcon: React.FC = () => {
@@ -13,19 +12,13 @@ const EyeIcon: React.FC = () => {
           </feMerge>
         </filter>
       </defs>
-      
-      {/* Background Petals */}
       <g opacity="0.15">
         <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(45)"/>
         <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(-45)"/>
       </g>
-      
-      {/* Central Diamond Shape */}
       <g>
         <path d="M 0 -70 L 70 0 L 0 70 L -70 0 Z" fill="#333333" stroke="gray" strokeWidth="0.5"/>
       </g>
-      
-      {/* Eye circles */}
       <g filter="url(#glow)">
         <circle cx="0" cy="0" r="45" fill="#555555" />
         <circle cx="0" cy="0" r="30" fill="#888888" />
