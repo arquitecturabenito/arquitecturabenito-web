@@ -25,6 +25,10 @@ const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ projectId, onBack
 
   return (
     <div className="w-full min-h-screen bg-white text-black animate-fade-in overflow-y-auto">
+      <div style={{position: 'fixed', top: 0, left: 0, background: 'purple', color: 'white', padding: '10px', zIndex: 9999, fontSize: '16px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px'}}>
+        <span>TEST 4: PROJECT DETAIL PAGE</span>
+        <img src="/imagenes/render%20ia%20portada%201.png" alt="Test Image 4" style={{height: '40px', border: '1px solid white'}} />
+      </div>
       <header className="sticky top-0 z-30 w-full bg-white bg-opacity-90 backdrop-blur-md">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <button

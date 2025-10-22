@@ -13,6 +13,10 @@ const DesignPage: React.FC<DesignPageProps> = ({ onProjectClick, onBack }) => {
 
   return (
     <div className="w-full h-screen bg-black text-white animate-fade-in relative">
+      <div style={{position: 'fixed', top: 0, left: 0, background: 'blue', color: 'white', padding: '10px', zIndex: 9999, fontSize: '16px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px'}}>
+        <span>TEST 2: DESIGN PAGE</span>
+        <img src="/imagenes/diseño_silla_1.png" alt="Test Image 2" style={{height: '40px', border: '1px solid white'}} />
+      </div>
       <button
         onClick={onBack}
         className="absolute top-6 left-6 z-30 text-sm uppercase tracking-widest text-gray-400 hover:text-white transition-colors duration-300"
