@@ -80,7 +80,8 @@ const ArchitecturePage: React.FC<ArchitecturePageProps> = ({ onBack, onProjectCl
                       />
                       {/* Rollover Image */}
                       <img
-                        src={project.rolloverImage}
+                        src={"imagenes/portada2.png"
+                        }
                         alt={`${project.title} - rollover view`}
                         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
                       />
