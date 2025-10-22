@@ -1,244 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Benito G.Quiñones Desing</title>
-  <link rel="icon" href="imagenes/favicon.ico" type="image/x-icon">
-  <style>
-    body {
-      margin: 0;
-      background-color: #efeeec; /* Color similar al fondo de Ryan Hentzen */
-      font-family: Arial, sans-serif;
-      color: #1e1e1e;
-      text-align: center;
-    }
-
-    header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  font-weight: bold;
-  font-size: 1.2rem;
-  box-sizing: border-box;
-}
-
-.logo-container {
-  display: flex;
-  align-items: center;
-  flex: 1;
-}
-
-.logo {
-  width: 40px; /* Ajusta el tamaño del logo */
-  height: auto; /* Mantiene la proporción */
-  margin-right: 10px; /* Espacio entre el logo y el texto */
-  
-}
-
-.header-link {
-  text-decoration: none;
-  color: inherit;
-  display: flex;
- 
- 
-}
-
-#clock {
-  flex: 1;
-  text-align: center;
-  font-size: 1.5rem;
-  font-family: 'Courier New', monospace;
-}
-
-
-header a:last-child {
-  flex: 1;
-  text-align: right;
-  
-}
-.grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr); /* Tres columnas por defecto */
-    gap: 40px; /* Espaciado entre las cajas */
-    max-width:60%;
- 
-    margin: 80px auto;
-    padding: 0 40px;
-  }
-
-  .project {
-    transition: transform 0.2s;
-    width: 100%;
-  }
-
-   .project img {
-    width: 80%;
-    border-radius: 0px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .project:hover {
-    transform: scale(1.05);
-  }
-
-  /* Patrón alternado: 3 cajas pequeñas en una fila */
-  .project:nth-child(6n+1),
-  .project:nth-child(6n+2)
-   {
-    grid-column: span 3; /* Cada caja ocupa 1 columna */
-  }
-
-  /* Patrón alternado: 2 cajas grandes en una fila */
-  .project:nth-child(6n+3),
-  .project:nth-child(6n+4),
-  .project:nth-child(6n+5) {
-    grid-column: span 2; /* Cada caja ocupa 2 columnas */
-  }
-
-  .project:nth-child(6n+6){
-    grid-column: span 4; /* Cada caja ocupa 1 columna */
-  }
-
-  .project:nth-child(6n+7)
-  {
-    grid-column: span 2; /* Cada caja ocupa 1 columna */
-  }
-
-  .project:nth-child(7n+8){
-    grid-column: span 2; /* Cada caja ocupa 1 columna */
-  }
-
-  .project:nth-child(6n+9)
-  {
-    grid-column: span 4; /* Cada caja ocupa 1 columna */
-  }
-  .project:nth-child(6n+10)
-  {
-    grid-column: span 3; /* Cada caja ocupa 1 columna */
-  }
-
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    footer {
-      margin-top: 60px;
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 768px) {
-    .grid {
-      gap: 40px; /* Reduce el espacio entre elementos en pantallas pequeñas */
-    }
-
-    .project {
-      max-width: 300px; /* Reduce el tamaño máximo de las cajas */
-    }
-    
-}
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diseño - Benito</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Cormorant Garamond', serif;
+      }
+      @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .animate-fade-in {
+        animation: fade-in 0.5s ease-in-out;
+      }
+    </style>
 </head>
-<body>
-  <header>
-    <div class="logo-container">
-      <img src="imagenes/logo.png" alt="Logo" class="logo">
-       <a href="index.html" class="header-link">ARQUITECTURA BENITO</a> 
-  </div>
+<body class="bg-black text-gray-300">
+    <div class="w-full min-h-screen overflow-auto p-8 relative animate-fade-in">
+        <div class="absolute top-8 left-8 z-20">
+            <a href="/" class="text-zinc-400 hover:text-white transition-colors duration-300 font-mono tracking-widest text-sm uppercase flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                <span>Volver</span>
+            </a>
+        </div>
+        <div class="max-w-5xl mx-auto relative z-10">
+            <div class="text-center mb-12 mt-24">
+              <h2 class="text-4xl font-light tracking-[0.3em] text-zinc-200 uppercase">Proyectos de Diseño</h2>
+              <div class="w-48 h-[1px] bg-zinc-800 mx-auto mt-4 mb-6"></div>
+              <p class="text-zinc-400 mt-2 max-w-2xl mx-auto tracking-wider">Conceptos, visualizaciones y exploraciones de diseño de interiores y de producto.</p>
+            </div>
+            
+            <!-- COMIENZA A AÑADIR TUS PROYECTOS AQUÍ -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Ejemplo de un proyecto -->
+                <div class="border border-zinc-800 p-6 hover:bg-zinc-900/50 hover:border-zinc-700 transition-all duration-300 cursor-pointer">
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="text-xl text-zinc-200 tracking-wider">Nombre del Proyecto de Diseño</h3>
+                        <span class="text-xs text-zinc-500 font-mono">2024</span>
+                    </div>
+                    <p class="text-sm text-zinc-400 mt-2">Categoría (Ej. Interiorismo, Mobiliario)</p>
+                </div>
+                <!-- Fin del ejemplo -->
+
+                <!-- Añade más proyectos como el de arriba -->
+
+            </div>
+            <!-- TERMINA DE AÑADIR TUS PROYECTOS AQUÍ -->
+
+        </div>
     </div>
-    <div id="clock">00:00:00</div>
-    <a href="contacto.html" class="header">CONTACTO</a>
-  </header>
-
-<h1>PRODUCT & GRAPHIC DESING </h1>
-
-<div class="grid">
- 
-  <a class="project" href="minutos.html">
-    <img src="imagenes/minutos 0.png" alt="MINUTOS - juego de mesa">
-    <p>MINUTOS</p>
-  </a>
-
- 
- 
-
-  <a class="project" href="mantenimiento.html">
-    <img src="imagenes/grabados.jpg" alt="SERIE DE GRABADOS">
-    <p>SERIE DE GRABADOS</p>
-
-  </a>
-  <a class="project" href="carteles.html">
-    <img src="imagenes/CARTELERIA GIF.gif" alt="Cartelería">
-    <p>CARTELERÍA</p>
-  </a>
-
-  
-  <a class="project" href="cmf.html">
-    <img src="imagenes/cmf portada.png" alt="CMF X WALKMAN">
-    <p>CMF X WALKMAN</p>
-  </a>
-
-  <a class="project" href="IA render.html">
-    <img src="imagenes/ia-gif.gif" alt="Cómo genero imágenes con IA">
-    <p>CÓMO GENERO IMÁGENES CON IA</p>
-  </a> 
-
-    <a class="project" href="ONEIROS LAMP.html">
-      <img src="imagenes/oneiros 1.png" alt="ONEIROS 01">
-      <p>ONEIROS LAMP</p>
-    </a>
-
-  
-    
-  </a>
-  <a class="project" href="mantenimiento.html">
-    <img src="imagenes/lamp 01.png" alt="LAMP 01">
-    <p>LAMP 01</p>
-  </a> 
-
-  <a class="project" href="estuche.html">
-    <img src="imagenes/estuche (2).jpg" alt="Estuche">
-    <p>ESTUCHE</p>
-  </a>
-  <a class="project" href="mantenimiento.html">
-    <img src="imagenes/festanaterra-gif.gif" alt="FESTA NA TERRA">
-    <p>FESTA NA TERRA</p>
-  </a>
-
-
-
-</a>
-<a class="project" href="mantenimiento.html">
-  <img src="imagenes/cronologia 1.jpg" alt="cronología">
-  <p>CRONOLOGÍA DE UN ADIOS</p>
-</a>
-
-
-
-
-</div>
-
-<footer>
-  © Arquitectura Benito, 2025
-</footer>
-
-<script>
-  // Reloj en tiempo real
-  function updateClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const s = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById('clock').textContent = `${h}:${m}:${s}`;
-  }
-
-  setInterval(updateClock, 1000);
-  updateClock();
-</script>
-
 </body>
 </html>
