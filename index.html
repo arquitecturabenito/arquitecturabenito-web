@@ -25,15 +25,25 @@
       .animate-fade-in {
         animation: fade-in 0.5s ease-in-out;
       }
+      
+      @keyframes dash-flow {
+        to {
+          stroke-dashoffset: -16;
+        }
+      }
+
+      .animated-link {
+        stroke-dasharray: 4 4;
+        animation: dash-flow 1.5s linear infinite;
+      }
     </style>
   <script type="importmap">
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client",
-    "d3": "https://aistudiocdn.com/d3@^7.9.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "d3": "https://aistudiocdn.com/d3@^7.9.0"
   }
 }
 </script>
@@ -41,6 +51,7 @@
 </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+    <script type="module" src="/index.tsx?v=8"></script>
+  <script type="module" src="/index.tsx"></script>
+</body>
 </html>

@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { NetworkGraph } from './components/NetworkGraph';
-import { EyeIcon } from './components/EyeIcon';
-import { HomeButton } from './components/HomeButton';
-import { ArchitecturePage } from './pages/ArchitecturePage';
-import { DesignPage } from './pages/DesignPage';
-import { ContactPage } from './pages/ContactPage';
-import { ProjectDetailPage } from './pages/ProjectDetailPage';
-import { allProjectsData } from './data/projects';
-import { D3Node } from './types';
+import NetworkGraph from './components/NetworkGraph';
+import EyeIcon from './components/EyeIcon';
+import ArchitecturePage from './pages/ArchitecturePage';
+import DesignPage from './pages/DesignPage';
+import ContactPage from './pages/ContactPage';
+import { NodeData } from './types';
+import HomeButton from './components/HomeButton';
 
-type ViewState =
-  | { page: 'home' }
-  | { page: 'architecture' }
-  | { page: 'design' }
-  | { page: 'contact' }
-  | { page: 'project'; projectId: string; previousPage: 'architecture' | 'design' | 'home' };
+type Page = 'home' | 'architecture' | 'design' | 'contact';
+interface ViewState {
+  page: Page;
+}
 
-export const App = () => {
+const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>({ page: 'home' });
 
   useEffect(() => {
@@ -31,17 +27,16 @@ export const App = () => {
       body.style.overflow = 'auto';
     }
 
+    // Cleanup function to ensure styles are reset on component unmount
     return () => {
       html.style.overflow = 'auto';
       body.style.overflow = 'auto';
     };
   }, [currentView.page]);
 
-  const handleNodeClick = (node: D3Node) => {
+  const handleNodeClick = (node: NodeData) => {
     if (node.isProject && node.projectId) {
-      const project = allProjectsData.find(p => p.id === node.projectId);
-      const previousPage = project?.category === 'design' ? 'design' : 'architecture';
-      setCurrentView({ page: 'project', projectId: node.projectId, previousPage: previousPage || 'home' });
+      window.location.href = `/${node.projectId}.html`;
       return;
     }
 
@@ -59,20 +54,7 @@ export const App = () => {
         break;
     }
   };
-
-  const handleProjectClick = (projectId: string) => {
-    const previousPage = currentView.page === 'architecture' || currentView.page === 'design' ? currentView.page : 'home';
-    setCurrentView({ page: 'project', projectId, previousPage });
-  };
-
-  const handleBack = () => {
-    if (currentView.page === 'project' && currentView.previousPage) {
-      setCurrentView({ page: currentView.previousPage });
-    } else {
-      setCurrentView({ page: 'home' });
-    }
-  };
-
+  
   const handleGoHome = () => {
     setCurrentView({ page: 'home' });
   };
@@ -94,17 +76,15 @@ export const App = () => {
           </div>
         );
       case 'architecture':
-        return <ArchitecturePage onBack={handleBack} onProjectClick={handleProjectClick} />;
+        return <ArchitecturePage onBack={handleGoHome} />;
       case 'design':
-        return <DesignPage onBack={handleBack} onProjectClick={handleProjectClick} />;
+        return <DesignPage onBack={handleGoHome} />;
       case 'contact':
-        return <ContactPage onBack={handleBack} />;
-      case 'project':
-        return <ProjectDetailPage projectId={currentView.projectId} onBack={handleBack} />;
+        return <ContactPage onBack={handleGoHome} />;
       default:
         return null;
     }
-  };
+  }
 
   return (
     <div className="bg-black w-full h-full">
@@ -113,3 +93,5 @@ export const App = () => {
     </div>
   );
 };
+
+export default App;

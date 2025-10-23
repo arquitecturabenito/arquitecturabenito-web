@@ -1,28 +1,21 @@
-export interface Project {
+import * as d3 from 'd3';
+
+// FIX: Explicitly add d3-force simulation properties to the NodeData interface.
+// These properties are added by the d3 simulation, and explicitly defining them
+// here resolves TypeScript errors.
+export interface NodeData extends d3.SimulationNodeDatum {
   id: string;
-  category: 'architecture' | 'design';
-  title: string;
-  normalImage: string;
-  rolloverImage: string;
-  description: string;
-  images: string[];
+  group: number;
+  isCentral?: boolean;
+  isNavLink?: boolean;
+  isProject?: boolean;
+  projectId?: string;
+  x?: number;
+  y?: number;
+  fx?: number | null;
+  fy?: number | null;
 }
 
-export interface D3Node {
-    id: string;
-    group: number;
-    isCentral?: boolean;
-    isNavLink?: boolean;
-    isProject?: boolean;
-    projectId?: string;
-    fx?: number | null;
-    fy?: number | null;
-    x?: number;
-    y?: number;
-}
-
-export interface D3Link {
-    source: string | D3Node;
-    target: string | D3Node;
-    value: number;
+export interface LinkData extends d3.SimulationLinkDatum<NodeData> {
+  value: number;
 }

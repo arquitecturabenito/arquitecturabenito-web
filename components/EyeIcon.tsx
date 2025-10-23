@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const EyeIcon = () => {
+const EyeIcon: React.FC = () => {
   return (
     <svg width="200" height="200" viewBox="-100 -100 200 200">
       <defs>
@@ -13,11 +13,11 @@ export const EyeIcon = () => {
         </filter>
       </defs>
       <g opacity="0.15">
-        <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(45)" />
-        <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(-45)" />
+        <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(45)"/>
+        <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(-45)"/>
       </g>
       <g>
-        <path d="M 0 -70 L 70 0 L 0 70 L -70 0 Z" fill="#333333" stroke="gray" strokeWidth="0.5" />
+        <path d="M 0 -70 L 70 0 L 0 70 L -70 0 Z" fill="#333333" stroke="gray" strokeWidth="0.5"/>
       </g>
       <g filter="url(#glow)">
         <circle cx="0" cy="0" r="45" fill="#555555" />
@@ -28,3 +28,5 @@ export const EyeIcon = () => {
     </svg>
   );
 };
+
+export default EyeIcon;
