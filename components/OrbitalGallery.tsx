@@ -2,9 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { Project } from '../data/projects';
 
-// FIX: Explicitly add d3-force simulation properties to the OrbitalNode interface.
-// These properties are used for positioning and are either set manually or by the
-// d3 simulation, and explicitly defining them here resolves TypeScript errors.
 interface OrbitalNode extends d3.SimulationNodeDatum {
   id: string;
   isCentral?: boolean;
@@ -95,7 +92,7 @@ const OrbitalGallery: React.FC<OrbitalGalleryProps> = ({ projects }) => {
       .attr('transform', d => `translate(${d.x || 0}, ${d.y || 0})`)
       .on('click', (event, d) => {
         if (d.project) {
-          window.location.href = `/${d.project.id}.html`;
+          window.location.href = `/projects/${d.project.id}.html`;
         }
       });
 

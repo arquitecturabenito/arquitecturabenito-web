@@ -96,7 +96,6 @@ const ArchitecturePage: React.FC<ArchitecturePageProps> = ({ onBack }) => {
         </div>
       </header>
       
-      {/* Navigation Buttons */}
       <button 
         onClick={handlePrev} 
         aria-label="Proyecto anterior"
@@ -126,7 +125,7 @@ const ArchitecturePage: React.FC<ArchitecturePageProps> = ({ onBack }) => {
             style: { backgroundImage: `url('${isProject ? slide.normalImage : slide.image}')` }
           };
           if(isProject) {
-            props.href = `/${slide.id}.html`;
+            props.href = `/projects/${slide.id}.html`;
           }
 
           return (
@@ -144,7 +143,6 @@ const ArchitecturePage: React.FC<ArchitecturePageProps> = ({ onBack }) => {
                 )}
               </div>
               
-              {/* Project counter */}
               <div className="absolute bottom-8 right-8 z-10 text-white font-mono text-sm">
                   <span>{String(index + 1).padStart(2, '0')}</span>
                   <span className="mx-2">/</span>

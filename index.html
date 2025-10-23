@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="es">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Arquitectura Benito</title>
@@ -8,12 +8,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
     <style>
       html, body, #root {
         margin: 0;
         padding: 0;
         width: 100%;
         height: 100%;
+        background-color: #000;
       }
       body {
         font-family: 'Cormorant Garamond', serif;
@@ -37,21 +44,486 @@
         animation: dash-flow 1.5s linear infinite;
       }
     </style>
-  <script type="importmap">
+<script type="importmap">
 {
   "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
     "d3": "https://aistudiocdn.com/d3@^7.9.0"
   }
 }
 </script>
 <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
+<body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx?v=8"></script>
-  <script type="module" src="/index.tsx"></script>
+
+    <script type="text/babel">
+      // DATA STORE
+      const allProjectsData = [
+        // ARCHITECTURE
+        { id: 'el-escorial', category: 'architecture', title: 'COCINA MONACAL DE EL ESCORIAL', normalImage: '/imagenes/projects/el-escorial/main.png', rolloverImage: '/imagenes/projects/el-escorial/main-rollover.png', description: 'El objetivo del estudio se resume en formular una hipótesis objetiva de cómo era la cocina del monasterio de El Escorial en su construcción, así como la formulación de hipótesis sobre su evolución a lo largo del tiempo. Para ello, la primera fase de la investigación se trató de un análisis de documentación centrada en casos similares. Se ha tratado recrear mediante un dibujo en perspectiva del espacio (similar a los grabados de Scappi) el ambiente en la cocina. Para ello se han tenido en cuenta los estudios sobre los objetos presentes en la cocina de la época así como los métodos de cocina más empleados, que se han deducido a partir de los escritos de Banchetti. Se trata de representar el espacio como lo que fue, un lugar ajetreado con un gran flujo constante de gente y alimentos, ya que conllevaba muchos recursos abastecer al monasterio de comida suficiente para la cantidad estimada de monjes que requerían esta cocina.', images: ['/imagenes/projects/el-escorial/1.png', '/imagenes/projects/el-escorial/2.png'], pdf: '/pdfs/portfolio-benito-quinones.pdf' },
+        { id: 'paseo-dehesa', category: 'architecture', title: 'PASEO DEHESA', normalImage: '/imagenes/projects/paseo-dehesa/main.png', rolloverImage: '/imagenes/projects/paseo-dehesa/main-rollover.png', description: 'Este es un ejemplo de descripción para el proyecto Paseo Dehesa. Aquí puedes detallar los objetivos, el proceso de diseño, los materiales utilizados y cualquier otra información relevante sobre la obra.', images: ['/imagenes/projects/paseo-dehesa/1.png', '/imagenes/projects/paseo-dehesa/2.png', '/imagenes/projects/paseo-dehesa/3.png'], pdf: '/pdfs/portfolio-benito-quinones.pdf' },
+        { id: 'coleccion-de-curvas', category: 'architecture', title: 'COLECCIÓN DE CURVAS', normalImage: '/imagenes/projects/coleccion-de-curvas/main.png', rolloverImage: '/imagenes/projects/coleccion-de-curvas/main-rollover.png', description: 'El proyecto “Colección de curvas” busca dibujar un paisaje de usos, unas oficinas que sean paisaje y una experiencia para el día a día.', images: ['/imagenes/projects/coleccion-de-curvas/1.png', '/imagenes/projects/coleccion-de-curvas/2.png', '/imagenes/projects/coleccion-de-curvas/3.png', '/imagenes/projects/coleccion-de-curvas/4.png'], pdf: '/pdfs/portfolio-benito-quinones.pdf' },
+        { id: 'food-city', category: 'architecture', title: 'FOOD CITY PRATO', normalImage: '/imagenes/projects/food-city/main.png', rolloverImage: '/imagenes/projects/food-city/main-rollover.png', description: 'Propuesta urbanística para la revitalización de una zona industrial en Prato, Italia. El proyecto concibe un nuevo centro neurálgico centrado en la gastronomía y la cultura.', images: ['/imagenes/projects/food-city/1.png', '/imagenes/projects/food-city/2.png'], pdf: '/pdfs/portfolio-benito-quinones.pdf' },
+        { id: 'deja-navigue', category: 'architecture', title: 'DEJA NAVIGUÉ', normalImage: '/imagenes/projects/deja-navigue/main.png', rolloverImage: '/imagenes/projects/deja-navigue/main-rollover.png', description: 'Este proyecto comprende la construcción de un teatro multifuncional en Hamburgo, Alemania, diseñado para eventos de teatro, música y danza.', images: ['/imagenes/projects/deja-navigue/1.png', '/imagenes/projects/deja-navigue/2.png'], pdf: '/pdfs/portfolio-benito-quinones.pdf' },
+        { id: 'modulus-matrix', category: 'architecture', title: 'MODULUS MATRIX', normalImage: '/imagenes/projects/modulus-matrix/main.png', rolloverImage: '/imagenes/projects/modulus-matrix/main-rollover.png', description: 'Redibujo del edificio de 85 viviendas de Peris+Toral en Cornellà de Llobregat, detallando su proceso constructivo en madera laminada cruzada (CLT).', images: ['/imagenes/projects/modulus-matrix/1.png', '/imagenes/projects/modulus-matrix/2.png'], pdf: '/pdfs/portfolio-benito-quinones.pdf' },
+        // DESIGN
+        { id: 'ia-render', category: 'design', title: 'RENDERIZADO IA', normalImage: '/imagenes/projects/ia-render/main.png', rolloverImage: '/imagenes/projects/ia-render/main-rollover.png', description: 'Una exploración conceptual sobre cómo las herramientas de inteligencia artificial pueden expandir los horizontes del diseño arquitectónico.', images: ['/imagenes/projects/ia-render/1.png', '/imagenes/projects/ia-render/2.png', '/imagenes/projects/ia-render/3.png', '/imagenes/projects/ia-render/4.png'], pdf: '/pdfs/portfolio-benito-quinones.pdf' },
+        { id: 'arboles-y-telas', category: 'design', title: 'ÁRBOLES Y TELAS', normalImage: '/imagenes/projects/arboles-y-telas/main.png', rolloverImage: '/imagenes/projects/arboles-y-telas/main-rollover.png', description: 'Pabellón efímero diseñado para un festival de arte. La estructura, ligera y permeable, se integra con el paisaje natural circundante.', images: ['/imagenes/projects/arboles-y-telas/1.png', '/imagenes/projects/arboles-y-telas/2.png'], pdf: '/pdfs/portfolio-benito-quinones.pdf' },
+        { id: 'silla-equilibrio', category: 'design', title: 'SILLA EQUILIBRIO', normalImage: '/imagenes/projects/silla-equilibrio/main.png', rolloverImage: '/imagenes/projects/silla-equilibrio/main-rollover.png', description: 'Diseño conceptual de una silla que juega con las leyes de la física para crear una pieza escultural y funcional.', images: ['/imagenes/projects/silla-equilibrio/1.png', '/imagenes/projects/silla-equilibrio/2.png'], pdf: '/pdfs/portfolio-benito-quinones.pdf' },
+        { id: 'lampara-luz-calida', category: 'design', title: 'LÁMPARA LUZ CÁLIDA', normalImage: '/imagenes/projects/lampara-luz-calida/main.png', rolloverImage: '/imagenes/projects/lampara-luz-calida/main-rollover.png', description: 'Una lámpara diseñada para crear ambientes íntimos y acogedores. Su forma orgánica y el uso de materiales naturales tamizan la luz.', images: ['/imagenes/projects/lampara-luz-calida/1.png', '/imagenes/projects/lampara-luz-calida/2.png'], pdf: '/pdfs/portfolio-benito-quinones.pdf' }
+      ];
+
+      // COMPONENTS
+      const EyeIcon = () => (
+        <svg width="200" height="200" viewBox="-100 -100 200 200">
+          <defs>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <g opacity="0.15">
+            <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(45)"/>
+            <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(-45)"/>
+          </g>
+          <g>
+            <path d="M 0 -70 L 70 0 L 0 70 L -70 0 Z" fill="#333333" stroke="gray" strokeWidth="0.5"/>
+          </g>
+          <g filter="url(#glow)">
+            <circle cx="0" cy="0" r="45" fill="#555555" />
+            <circle cx="0" cy="0" r="30" fill="#888888" />
+            <circle cx="0" cy="0" r="15" fill="#CCCCCC" />
+            <circle cx="0" cy="0" r="7" fill="white" />
+          </g>
+        </svg>
+      );
+
+      const HomeButton = ({ onClick }) => (
+        <button
+            onClick={onClick}
+            className="fixed top-4 right-4 z-50 w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center text-white backdrop-blur-sm border border-gray-700 transition-all duration-300 hover:bg-opacity-75 hover:border-gray-500 hover:scale-110"
+            aria-label="Volver al inicio"
+        >
+            <svg width="24" height="24" viewBox="-50 -50 100 100">
+                <g opacity="0.6">
+                    <path d="M 0 -40 C 20 -20, 20 20, 0 40 C -20 20, -20 -20, 0 -40 Z" fill="white" transform="rotate(45)"/>
+                    <path d="M 0 -40 C 20 -20, 20 20, 0 40 C -20 20, -20 -20, 0 -40 Z" fill="white" transform="rotate(-45)"/>
+                </g>
+                <g>
+                    <circle cx="0" cy="0" r="10" fill="white" />
+                </g>
+            </svg>
+        </button>
+      );
+
+      const NetworkGraph = ({ onNodeClick }) => {
+        const svgRef = React.useRef(null);
+
+        React.useEffect(() => {
+          if (!svgRef.current) return;
+          
+          const isMobile = window.innerWidth < 768;
+
+          const baseNodes = [
+            { id: 'CENTRAL_HUB', group: 0, isCentral: true, fx: 0, fy: 0 },
+            { id: 'ARQUITECTURA', group: 1, isNavLink: true },
+            { id: 'DISEÑO', group: 2, isNavLink: true },
+            { id: 'CONTACTO', group: 2, isNavLink: true },
+            { id: 'DOCENCIA', group: 2 }, { id: 'TRABAJO', group: 2 }, { id: 'INVESTIGACIÓN', group: 2 }, { id: 'EXPRESION ARTISTICA', group: 2 }, { id: 'Fotografía de la luz', group: 3 }, { id: 'I+D', group: 3 }, { id: 'Interiorismo', group: 3 },
+          ];
+
+          const baseLinks = [
+            { source: 'CENTRAL_HUB', target: 'ARQUITECTURA', value: 1 }, { source: 'CENTRAL_HUB', target: 'DISEÑO', value: 1 }, { source: 'CENTRAL_HUB', target: 'CONTACTO', value: 1 }, { source: 'ARQUITECTURA', target: 'DOCENCIA', value: 1 }, { source: 'ARQUITECTURA', target: 'TRABAJO', value: 1 }, { source: 'ARQUITECTURA', target: 'INVESTIGACIÓN', value: 1 }, { source: 'ARQUITECTURA', target: 'EXPRESION ARTISTICA', value: 1 }, { source: 'INVESTIGACIÓN', target: 'I+D', value: 2 }, { source: 'EXPRESION ARTISTICA', target: 'Fotografía de la luz', value: 2 }, { source: 'EXPRESION ARTISTICA', target: 'Interiorismo', value: 2 },
+          ];
+
+          const projectNodes = allProjectsData.map(p => ({ id: p.title, group: 4, isNavLink: true, isProject: true, projectId: p.id }));
+          const projectLinks = allProjectsData.map(p => ({ source: p.category === 'architecture' ? 'ARQUITECTURA' : 'DISEÑO', target: p.title, value: 5 }));
+          
+          const nodesData = [...baseNodes, ...projectNodes];
+          const linksData = [...baseLinks, ...projectLinks];
+          const visibleNodes = nodesData.filter(n => n.id !== 'CENTRAL_HUB');
+
+          const width = window.innerWidth;
+          const height = window.innerHeight;
+          
+          const svg = d3.select(svgRef.current)
+            .attr('width', width)
+            .attr('height', height)
+            .attr('viewBox', [-width / 2, -height / 2, width, height]);
+
+          svg.selectAll("*").remove(); 
+
+          const simulation = d3.forceSimulation(nodesData)
+            .force('link', d3.forceLink(linksData).id(d => d.id).distance(d => isMobile ? (d.value === 5 ? 60 : 100) : (d.value === 5 ? 100 : 180)))
+            .force('charge', d3.forceManyBody().strength(isMobile ? -120 : -180))
+            .force('center', d3.forceCenter(0, 0))
+            .alphaDecay(0.01);
+
+          svg.append('circle').attr('cx', 0).attr('cy', 0).attr('r', Math.min(width, height) / 2 - 40).attr('stroke', 'rgba(255, 255, 255, 0.1)').attr('stroke-width', 1).attr('fill', 'none');
+
+          const link = svg.append('g').attr('stroke', '#666').attr('stroke-opacity', 0.6).selectAll('line').data(linksData).join('line').attr('class', 'animated-link').attr('stroke-width', d => d.value === 5 ? 0.5 : Math.sqrt(d.value));
+
+          const node = svg.append('g').selectAll('g').data(visibleNodes).join('g')
+            .style('cursor', d => d.isNavLink ? 'pointer' : 'default')
+            .on('click', (event, d) => {
+                if (!d.isNavLink) return;
+                event.stopPropagation();
+                onNodeClick(d);
+            })
+            .call(d3.drag()
+                .on('start', (event, d) => { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+                .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
+                .on('end', (event, d) => { if (!event.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }));
+
+          const getNodeColor = (d) => d.isNavLink && !d.isProject ? '#fff' : (d.isProject ? '#aaa' : '#777');
+
+          node.on('mouseover', function(event, d) {
+            if (d.isNavLink) {
+              d3.select(this).select('text').attr('fill', '#00ffff');
+              d3.select(this).select('circle').attr('fill', '#00ffff').attr('r', d.isNavLink && !d.isProject ? 10 : (d.isProject ? 5 : 6));
+            }
+          }).on('mouseout', function(event, d) {
+            if (d.isNavLink) {
+              d3.select(this).select('text').attr('fill', getNodeColor(d));
+              d3.select(this).select('circle').attr('fill', '#999').attr('r', d.isNavLink && !d.isProject ? 8 : (d.isProject ? 3 : 5));
+            }
+          });
+                
+          node.append('circle').attr('r', d => d.isNavLink && !d.isProject ? 8 : (d.isProject ? 3 : 5)).attr('fill', '#999').attr('stroke', '#fff').attr('stroke-width', 1.5);
+          
+          node.append('text').text(d => d.id).attr('x', 12).attr('y', 4).attr('fill', getNodeColor)
+            .style('font-size', d => d.isNavLink && !d.isProject ? (isMobile ? '1.1rem' : '1.4rem') : (d.isProject ? (isMobile ? '0.75rem' : '0.8rem') : '0.8rem'))
+            .style('text-transform', 'uppercase').style('letter-spacing', '0.1em');
+
+          simulation.on('tick', () => {
+            link.attr('x1', d => d.source.x || 0).attr('y1', d => d.source.y || 0).attr('x2', d => d.target.x || 0).attr('y2', d => d.target.y || 0);
+            node.attr('transform', d => `translate(${d.x || 0}, ${d.y || 0})`);
+          });
+          
+          const interval = d3.interval(() => simulation.alpha(0.05).restart(), 5000);
+          return () => { simulation.stop(); interval.stop(); };
+        }, [onNodeClick]);
+
+        return <svg ref={svgRef} className="w-full h-full" />;
+      };
+
+      const ArchitecturePage = ({ onBack, onProjectClick }) => {
+        const architectureProjects = allProjectsData.filter(p => p.category === 'architecture');
+        const coverSlide = { id: 'cover', type: 'cover', image: architectureProjects.length > 0 ? architectureProjects[0].normalImage : '', title: 'Arquitectura' };
+        const slides = [coverSlide, ...architectureProjects.map(p => ({ ...p, type: 'project' }))];
+        
+        const [activeIndex, setActiveIndex] = React.useState(0);
+        const mainContainerRef = React.useRef(null);
+        const slideRefs = React.useRef([]);
+
+        React.useEffect(() => { slideRefs.current = slideRefs.current.slice(0, slides.length); }, []);
+
+        React.useEffect(() => {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              const intersectingEntry = entries.find((entry) => entry.isIntersecting);
+              if (intersectingEntry) {
+                const index = slideRefs.current.indexOf(intersectingEntry.target);
+                if (index !== -1) setActiveIndex(index);
+              }
+            },
+            { root: mainContainerRef.current, threshold: 0.5 }
+          );
+          const currentRefs = slideRefs.current;
+          currentRefs.forEach((ref) => { if (ref) observer.observe(ref); });
+          return () => { currentRefs.forEach((ref) => { if (ref) observer.unobserve(ref); }); observer.disconnect(); };
+        }, []);
+        
+        const scrollToSlide = (index) => slideRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        const handlePrev = () => { if (activeIndex > 0) scrollToSlide(activeIndex - 1); };
+        const handleNext = () => { if (activeIndex < slides.length - 1) scrollToSlide(activeIndex + 1); };
+
+        return (
+          <div className="w-full h-screen bg-black text-white animate-fade-in overflow-hidden relative">
+            <header className="fixed top-0 left-0 z-30 w-full p-6 sm:p-8 flex justify-between items-center">
+              <div className="text-md sm:text-lg font-bold tracking-wider cursor-pointer hover:opacity-75 transition-opacity" onClick={onBack}>ARQUITECTURA BENITO</div>
+              <div className="flex items-center space-x-2">
+                {slides.map((slide, index) => <button key={slide.id} onClick={() => scrollToSlide(index)} className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${activeIndex === index ? 'bg-white border-white scale-125' : 'bg-transparent border-gray-500 hover:border-white'}`} />)}
+              </div>
+            </header>
+            <button onClick={handlePrev} disabled={activeIndex === 0} className="fixed top-1/2 -translate-y-1/2 left-4 z-30 w-12 h-12 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center transition-opacity duration-300 hover:bg-black/50 disabled:opacity-0"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg></button>
+            <button onClick={handleNext} disabled={activeIndex === slides.length - 1} className="fixed top-1/2 -translate-y-1/2 right-4 z-30 w-12 h-12 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center transition-opacity duration-300 hover:bg-black/50 disabled:opacity-0"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></button>
+            <main ref={mainContainerRef} className="w-full h-full flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory">
+              {slides.map((slide, index) => (
+                <section
+                  key={slide.id}
+                  ref={el => slideRefs.current[index] = el}
+                  className={`w-full h-full flex-shrink-0 snap-center relative flex items-center justify-center bg-cover bg-center group ${slide.type === 'project' ? 'cursor-pointer' : ''}`}
+                  style={{ backgroundImage: `url('${slide.type === 'project' ? slide.normalImage : slide.image}')` }}
+                  onClick={() => slide.type === 'project' && onProjectClick(slide.id)}
+                >
+                  <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-all duration-500"></div>
+                  <div className="relative z-10 text-center text-white p-4 transform group-hover:scale-105 transition-transform duration-500">
+                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-wider uppercase" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{slide.title}</h2>
+                    {slide.type === 'project' && <p className="mt-4 text-sm uppercase tracking-widest border-b border-white pb-1 inline-block">Ver Proyecto</p>}
+                  </div>
+                  <div className="absolute bottom-8 right-8 z-10 text-white font-mono text-sm"><span>{String(index + 1).padStart(2, '0')}</span><span className="mx-2">/</span><span>{String(slides.length).padStart(2, '0')}</span></div>
+                </section>
+              ))}
+            </main>
+            <footer className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-500 z-10">© 2024 Benito G. Quiñones</footer>
+          </div>
+        );
+      };
+
+      const OrbitalGallery = ({ projects, onProjectClick }) => {
+        const svgRef = React.useRef(null);
+        const timerRef = React.useRef(null);
+
+        React.useEffect(() => {
+          if (!svgRef.current || projects.length === 0) return;
+          if (timerRef.current) timerRef.current.stop();
+
+          const width = window.innerWidth, height = window.innerHeight, isMobile = width < 768;
+          const orbitRadius = isMobile ? Math.min(width, height) / 3.5 : Math.min(width, height) / 3;
+          const imageSize = isMobile ? 90 : 140;
+
+          const nodes = projects.map((p, i) => {
+              const angle = (i / projects.length) * 2 * Math.PI;
+              return { id: p.id, project: p, angle: angle, speed: 0.005, x: orbitRadius * Math.cos(angle), y: orbitRadius * Math.sin(angle) };
+          });
+
+          const svg = d3.select(svgRef.current).attr('width', width).attr('height', height).attr('viewBox', [-width / 2, -height / 2, width, height]);
+          svg.selectAll('*').remove();
+          
+          const defs = svg.append('defs');
+          const glowFilter = defs.append('filter').attr('id', 'glow-filter-sharp').attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
+          glowFilter.append('feGaussianBlur').attr('stdDeviation', '3.5').attr('result', 'coloredBlur');
+          const feMerge = glowFilter.append('feMerge');
+          feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+          feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+          projects.forEach(p => defs.append('clipPath').attr('id', `clip-${p.id}`).append('circle').attr('r', imageSize / 2));
+
+          svg.append('text').attr('text-anchor', 'middle').attr('dominant-baseline', 'middle').attr('fill', 'white').style('font-size', isMobile ? '3rem' : '5rem').style('font-family', "'Cormorant Garamond', serif").style('letter-spacing', '0.2em').style('text-transform', 'uppercase').style('filter', 'url(#glow-filter-sharp)').text('Diseño');
+
+          const node = svg.append('g').selectAll('g').data(nodes).join('g').style('cursor', 'pointer').attr('transform', d => `translate(${d.x || 0}, ${d.y || 0})`).on('click', (event, d) => d.project && onProjectClick(d.project.id));
+          
+          const projectGroup = node.append('g');
+          projectGroup.append('circle').attr('r', imageSize / 2 + 3).attr('fill', 'none').attr('stroke', 'rgba(255, 255, 255, 0.3)').attr('stroke-width', 1).style('transition', 'stroke 0.3s ease');
+          projectGroup.append('image').attr('class', 'normal-image').attr('href', d => d.project?.normalImage || '').attr('x', -imageSize / 2).attr('y', -imageSize / 2).attr('width', imageSize).attr('height', imageSize).attr('clip-path', d => `url(#clip-${d.id})`).style('transition', 'opacity 0.5s ease');
+          projectGroup.append('image').attr('class', 'rollover-image').attr('href', d => d.project?.rolloverImage || '').attr('x', -imageSize / 2).attr('y', -imageSize / 2).attr('width', imageSize).attr('height', imageSize).attr('clip-path', d => `url(#clip-${d.id})`).style('opacity', 0).style('transition', 'opacity 0.5s ease');
+          projectGroup.append('text').text(d => d.project?.title || '').attr('text-anchor', 'middle').attr('y', imageSize / 2 + 20).attr('fill', 'white').style('font-size', '0.8rem').style('text-transform', 'uppercase').style('letter-spacing', '0.1em').style('opacity', 0).style('transition', 'opacity 0.3s ease');
+
+          node.on('mouseover', function() {
+              const sel = d3.select(this);
+              sel.select('g').transition().duration(300).attr('transform', 'scale(1.1)');
+              sel.select('.normal-image').transition().duration(500).style('opacity', 0);
+              sel.select('.rollover-image').transition().duration(500).style('opacity', 1);
+              sel.select('circle').transition().duration(300).attr('stroke', 'rgba(0, 255, 255, 0.8)');
+              sel.select('text').transition().duration(300).style('opacity', 1);
+          }).on('mouseout', function() {
+              const sel = d3.select(this);
+              sel.select('g').transition().duration(300).attr('transform', 'scale(1)');
+              sel.select('.normal-image').transition().duration(500).style('opacity', 1);
+              sel.select('.rollover-image').transition().duration(500).style('opacity', 0);
+              sel.select('circle').transition().duration(300).attr('stroke', 'rgba(255, 255, 255, 0.3)');
+              sel.select('text').transition().duration(300).style('opacity', 0);
+          });
+
+          const simulation = d3.forceSimulation(nodes).force('collide', d3.forceCollide(imageSize / 2 + 10).strength(0.5)).stop();
+
+          timerRef.current = d3.timer(() => {
+              nodes.forEach(d => {
+                  if (d.angle !== undefined && d.speed !== undefined) { d.angle += d.speed; d.x = orbitRadius * Math.cos(d.angle); d.y = orbitRadius * Math.sin(d.angle); }
+              });
+              for (let i = 0; i < 5; ++i) simulation.tick();
+              node.attr('transform', d => `translate(${d.x || 0}, ${d.y || 0})`);
+          });
+
+          return () => timerRef.current && timerRef.current.stop();
+        }, [projects, onProjectClick]);
+
+        return <svg ref={svgRef} className="w-full h-full" />;
+      };
+
+      const DesignPage = ({ onBack, onProjectClick }) => {
+        const designProjects = allProjectsData.filter(p => p.category === 'design');
+        return (
+          <div className="w-full h-screen bg-black text-white animate-fade-in relative">
+            <button onClick={onBack} className="absolute top-6 left-6 z-30 text-sm uppercase tracking-widest text-gray-400 hover:text-white transition-colors duration-300">&larr; Volver</button>
+            <OrbitalGallery projects={designProjects} onProjectClick={onProjectClick} />
+            <footer className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-500 z-10">© 2024 Benito G. Quiñones</footer>
+          </div>
+        );
+      };
+
+      const ContactPage = ({ onBack }) => {
+        const CVSection = ({ title, children }) => ( <div className="mb-8"><h3 className="text-xl font-bold uppercase tracking-widest text-white border-b border-gray-700 pb-2 mb-4">{title}</h3><div className="text-gray-400">{children}</div></div> );
+        const CVEntry = ({ title, period, place }) => ( <div className="mb-3"><p className="font-bold text-gray-200">{title}</p><p className="text-sm">{period}</p><p className="text-sm text-gray-500">{place}</p></div> );
+        const PublicationEntry = ({ title, details }) => ( <div className="mb-3"><p className="font-bold text-gray-200">{title}</p><p className="text-sm text-gray-500">{details}</p></div> );
+
+        return (
+          <div className="w-full min-h-screen bg-black text-gray-300 animate-fade-in flex flex-col items-center justify-center p-4 relative overflow-auto">
+            <div className="absolute top-0 left-0 right-0 bottom-0 z-0 flex items-center justify-center opacity-5 pointer-events-none"><div className="scale-[2.5] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><EyeIcon /></div></div>
+            <button onClick={onBack} className="absolute top-6 left-6 text-sm uppercase tracking-widest text-gray-400 hover:text-white transition-colors duration-300 z-20">&larr; Volver a Constelación</button>
+            <div className="w-full max-w-4xl mx-auto z-10 relative mt-24 mb-12 px-4">
+              <div className="text-center mb-16">
+                <h1 className="text-5xl md:text-7xl font-bold tracking-wider uppercase text-white mb-6">CONTACTO</h1>
+                <p className="text-base md:text-lg text-gray-400 mb-10 max-w-xl mx-auto">Para colaboraciones, consultas sobre proyectos o cualquier otra pregunta, por favor, póngase en contacto a través del siguiente correo electrónico.</p>
+                <a href="mailto:arquitectuabenito@gmail.com" className="inline-block text-base md:text-lg font-bold text-white border-2 border-white px-8 py-3 tracking-widest uppercase transition-colors duration-300 hover:bg-white hover:text-black">arquitectuabenito@gmail.com</a>
+              </div>
+              <div className="grid md:grid-cols-2 gap-x-12">
+                <div>
+                  <CVSection title="Experiencia"><CVEntry title="Becario de profesor de Hª de la arquitectura y el urbanismo" period="Septiembre 2024 - Diciembre 2024" place="ETSAMadrid (3er curso)" /><CVEntry title="Becario de profesor de Hª del arte y la arquitectura" period="Enero 2024 - Mayo 2024" place="ETSAMadrid (1er curso)" /><CVEntry title="Contrato en estudio Chapnik Giessen" period="Julio 2023 - Septiembre 2023" place="Madrid (Dep. Renders)" /><CVEntry title="Prácticas de reportaje arquitectónico para CAPA" period="Enero 2022" place="Madrid" /><CVEntry title="Prácticas de reportaje para Cosentino" period="Agosto 2021" place="Madrid" /><CVEntry title="Gestión de un voluntariado para la limpieza de playas" period="2019 y 2020" place="Mar Menor, Murcia" /></CVSection>
+                  <CVSection title="Logros"><CVEntry title="Meta XR Lab, fundador y presidente" period="2021 - Actualmente" place="" /><CVEntry title="1er premio en el concurso de fotografía: moda y arquitectura" period="2021" place="CEMEX" /></CVSection>
+                  <CVSection title="Formación y Cursos"><CVEntry title="IV Congreso de la AHAU - Ciudad y naturaleza" period="25 y 26 Octubre 2024" place="Monasterio de El Escorial, Madrid" /><CVEntry title="Ciclo formativo Artificial Architectures(AA)" period="13, 14 y 15 Noviembre 2024" place="ETSAM, UPM" /><CVEntry title="Seminario - Workshop BIP Erasmus+ FoodCity" period="Enero 2024 - Febrero 2024" place="Prato/Florence" /><CVEntry title="SIHMA I - Seminario de Investigación" period="Septiembre 2023 - Febrero 2024" place="UPM" /><CVEntry title="V Seminarios de Accesibilidad" period="17 Noviembre 2023" place="" /><CVEntry title="Curso de Rhinoceros 7" period="ETSAM 2021" place="" /></CVSection>
+                </div>
+                <div><CVSection title="Publicaciones"><PublicationEntry title="Maquetas de luz: «Light painting» arquitectónico" details="(2025), Madrid" /><PublicationEntry title="El monasterio de El Escorial: una historia medioambiental" details="(2024), Madrid, con Eduardo Prieto" /><PublicationEntry title="V de Vigueta n°11" details="(2023) Artículo ilustrado" /><PublicationEntry title="Estableciendo “puentes” entre la Universidad y el tejido social madrileño" details="(2023), ETSAM, UPM, Madrid" /></CVSection></div>
+              </div>
+            </div>
+            <footer className="relative text-xs text-gray-500 z-10 text-center py-4">© 2024 Benito G. Quiñones</footer>
+          </div>
+        );
+      };
+
+      const ProjectDetailPage = ({ project, onBack }) => {
+        React.useEffect(() => {
+          window.scrollTo(0, 0);
+        }, [project]);
+
+        return (
+          <div className="w-full min-h-screen bg-white text-black animate-fade-in overflow-y-auto">
+            <header className="sticky top-0 z-30 w-full bg-white bg-opacity-90 backdrop-blur-md">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                  <button onClick={onBack} className="text-sm uppercase tracking-widest hover:opacity-70 transition-opacity">
+                      &larr; Volver
+                  </button>
+                </div>
+            </header>
+            <main className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">{project.title}</h1>
+              <p className="text-lg text-gray-700 mb-8 leading-relaxed">{project.description}</p>
+              {project.pdf && (
+                <div className="mb-12">
+                  <a href={project.pdf} target="_blank" rel="noopener noreferrer" className="inline-block text-base font-bold text-black border-2 border-black px-8 py-3 tracking-widest uppercase transition-colors duration-300 hover:bg-black hover:text-white">
+                      Descargar Portfolio
+                  </a>
+                </div>
+              )}
+              <div className="space-y-4 sm:space-y-8">
+                {project.images.map((img, index) => (
+                  <img key={index} src={img} alt={`${project.title} - Imagen ${index + 1}`} className="w-full h-auto object-cover"/>
+                ))}
+              </div>
+            </main>
+            <footer className="bg-gray-100 text-gray-600 text-center p-6 text-xs mt-12">
+              © 2024 Benito G. Quiñones - Todos los derechos reservados - arquitectuabenito@gmail.com
+            </footer>
+          </div>
+        );
+      };
+
+
+      // MAIN APP
+      const App = () => {
+        const [view, setView] = React.useState({ page: 'home', projectId: null });
+
+        React.useEffect(() => {
+          const html = document.documentElement;
+          const body = document.body;
+          const isProjectPage = view.page === 'project';
+          
+          if (view.page === 'home') {
+            html.style.overflow = 'hidden'; body.style.overflow = 'hidden';
+          } else {
+            html.style.overflow = 'auto'; body.style.overflow = 'auto';
+          }
+          
+          html.style.backgroundColor = isProjectPage ? '#fff' : '#000';
+          body.style.backgroundColor = isProjectPage ? '#fff' : '#000';
+
+          return () => {
+            html.style.overflow = 'auto'; body.style.overflow = 'auto';
+            html.style.backgroundColor = '#000'; body.style.backgroundColor = '#000';
+          };
+        }, [view.page]);
+
+        const handleNodeClick = (node) => {
+          if (node.isProject && node.projectId) {
+            setView({ page: 'project', projectId: node.projectId });
+            return;
+          }
+          switch (node.id) {
+            case 'ARQUITECTURA': setView({ page: 'architecture', projectId: null }); break;
+            case 'DISEÑO': setView({ page: 'design', projectId: null }); break;
+            case 'CONTACTO': setView({ page: 'contact', projectId: null }); break;
+          }
+        };
+        
+        const handleProjectClick = (projectId) => {
+          setView({ page: 'project', projectId });
+        };
+
+        const handleGoHome = () => setView({ page: 'home', projectId: null });
+        const handleGoBack = () => {
+          // A simple back logic, can be improved
+          if(view.page === 'project') {
+             const project = allProjectsData.find(p => p.id === view.projectId);
+             if (project) {
+                setView({ page: project.category, projectId: null });
+             } else {
+                handleGoHome();
+             }
+          } else {
+            handleGoHome();
+          }
+        };
+
+        const renderContent = () => {
+          switch (view.page) {
+            case 'home':
+              return (
+                <div className="w-full h-full flex items-center justify-center relative">
+                  <div className="central-eye absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"><EyeIcon /></div>
+                  <div className="absolute top-0 left-0 w-full h-full z-10"><NetworkGraph onNodeClick={handleNodeClick} /></div>
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-gray-500 z-20">Portfolio d3 benito</div>
+                </div>
+              );
+            case 'architecture':
+              return <ArchitecturePage onBack={handleGoHome} onProjectClick={handleProjectClick} />;
+            case 'design':
+              return <DesignPage onBack={handleGoHome} onProjectClick={handleProjectClick} />;
+            case 'contact':
+              return <ContactPage onBack={handleGoHome} />;
+            case 'project':
+              const project = allProjectsData.find(p => p.id === view.projectId);
+              if (!project) {
+                handleGoHome();
+                return null;
+              }
+              return <ProjectDetailPage project={project} onBack={handleGoHome} />; // Always goes home for simplicity
+            default:
+              return null;
+          }
+        }
+
+        return (
+          <div className="bg-black w-full h-full">
+            {view.page !== 'home' && view.page !== 'project' && <HomeButton onClick={handleGoHome} />}
+            {renderContent()}
+          </div>
+        );
+      };
+
+      const rootElement = document.getElementById('root');
+      if (rootElement) {
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(<App />);
+      }
+
+    </script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>

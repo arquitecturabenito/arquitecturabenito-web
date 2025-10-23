@@ -27,7 +27,6 @@ const App: React.FC = () => {
       body.style.overflow = 'auto';
     }
 
-    // Cleanup function to ensure styles are reset on component unmount
     return () => {
       html.style.overflow = 'auto';
       body.style.overflow = 'auto';
@@ -36,7 +35,7 @@ const App: React.FC = () => {
 
   const handleNodeClick = (node: NodeData) => {
     if (node.isProject && node.projectId) {
-      window.location.href = `/${node.projectId}.html`;
+      window.location.href = `/projects/${node.projectId}.html`;
       return;
     }
 

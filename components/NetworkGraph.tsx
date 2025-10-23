@@ -29,8 +29,6 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ onNodeClick }) => {
       { id: 'Interiorismo', group: 3 },
     ];
 
-    // FIX: Use LinkData[] type for links. This type allows source and target to be a string (initially)
-    // or a NodeData object (after d3 simulation processes it), resolving cast errors.
     const baseLinks: LinkData[] = [
       { source: 'CENTRAL_HUB', target: 'ARQUITECTURA', value: 1 },
       { source: 'CENTRAL_HUB', target: 'DISEÑO', value: 1 },
@@ -52,8 +50,6 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ onNodeClick }) => {
       projectId: p.id,
     }));
 
-    // FIX: Use LinkData[] type for links. This type allows source and target to be a string (initially)
-    // or a NodeData object (after d3 simulation processes it), resolving cast errors.
     const projectLinks: LinkData[] = allProjectsData.map(p => ({
       source: p.category === 'architecture' ? 'ARQUITECTURA' : 'DISEÑO',
       target: p.title,
@@ -61,11 +57,8 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ onNodeClick }) => {
     }));
     
     const nodesData: NodeData[] = [...baseNodes, ...projectNodes];
-    // FIX: Use LinkData[] type for links. This type allows source and target to be a string (initially)
-    // or a NodeData object (after d3 simulation processes it), resolving cast errors.
     const linksData: LinkData[] = [...baseLinks, ...projectLinks];
 
-    // Filter out the central hub for rendering
     const visibleNodes = nodesData.filter(n => n.id !== 'CENTRAL_HUB');
 
     const width = window.innerWidth;
@@ -82,7 +75,7 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ onNodeClick }) => {
       .force('link', d3.forceLink<NodeData, LinkData>(linksData).id(d => d.id).distance(d => isMobile ? (d.value === 5 ? 60 : 100) : (d.value === 5 ? 100 : 180)))
       .force('charge', d3.forceManyBody().strength(isMobile ? -120 : -180))
       .force('center', d3.forceCenter(0, 0))
-      .alphaDecay(0.01); // Slower decay for more persistent movement
+      .alphaDecay(0.01);
 
     const outerCircle = svg.append('circle')
       .attr('cx', 0)
@@ -175,7 +168,6 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ onNodeClick }) => {
         .attr('transform', d => `translate(${d.x || 0}, ${d.y || 0})`);
     });
     
-    // Periodically "reheat" the simulation to keep it moving
     const interval = d3.interval(() => {
         simulation.alpha(0.05).restart();
     }, 5000);
