@@ -81,7 +81,6 @@
         { id: 'el-escorial', category: 'architecture', title: 'COCINA MONACAL DE EL ESCORIAL', normalImage: 'imagenes/elescorial-main.png', rolloverImage: 'imagenes/elescorial-main-rollover.png', description: 'El objetivo del estudio se resume en formular una hipótesis objetiva de cómo era la cocina del monasterio de El Escorial en su construcción, así como la formulación de hipótesis sobre su evolución a lo largo del tiempo. Para ello, la primera fase de la investigación se trató de un análisis de documentación centrada en casos similares. Se ha tratado recrear mediante un dibujo en perspectiva del espacio (similar a los grabados de Scappi) el ambiente en la cocina. Para ello se han tenido en cuenta los estudios sobre los objetos presentes en la cocina de la época así como los métodos de cocina más empleados, que se han deducido a partir de los escritos de Banchetti. Se trata de representar el espacio como lo que fue, un lugar ajetreado con un gran flujo constante de gente y alimentos, ya que conllevaba muchos recursos abastecer al monasterio de comida suficiente para la cantidad estimada de monjes que requerían esta cocina.', images: ['imagenes/elescorial-1.png', 'imagenes/elescorial-2.png'], pdf: 'pdfs/portfolio-benito-quinones.pdf' },
         { id: 'ia-render', category: 'architecture', title: 'RENDERIZADO IA', normalImage: 'imagenes/iarender-main.png', rolloverImage: 'imagenes/iarender-main-rollover.png', description: 'Una exploración conceptual sobre cómo las herramientas de inteligencia artificial pueden expandir los horizontes del diseño arquitectónico. Este proyecto no representa una construcción física, sino un manifiesto visual de las posibilidades estéticas y formales que emergen al colaborar con algoritmos generativos.', images: ['imagenes/iarender-1.png', 'imagenes/iarender-2.png', 'imagenes/iarender-3.png', 'imagenes/iarender-4.png'], pdf: 'pdfs/portfolio-benito-quinones.pdf' },
         { id: 'coleccion-de-curvas', category: 'architecture', title: 'COLECCIÓN DE CURVAS', normalImage: 'imagenes/colecciondecurvas-main.png', rolloverImage: 'imagenes/colecciondecurvas-main-rollover.png', description: 'El proyecto “Colección de curvas” busca dibujar un paisaje de usos, unas oficinas que sean paisaje y una experiencia para el día a día. Crear una vorágine de estancias delimitadas entre sí mediante espacios verdes, terrazas y callejones. El objetivo es proyectar unas oficinas que mejoren la calidad del trabajo o hagan de este una parte cómoda de la rutina. Para lograr todo esto, buscamos combinar una serie de espacios, con formas de habitarlos flexibles a la par que específicas. Este proyecto comienza siendo una geometría desordenada de planos trazados a mano alzada. Posteriormente, se le impone una geometría basada en circunferencias de cinco radios distintos y tangencias entre ellas. Para ordenar las geometrías, se disponen de forma ordenada y atendiendo a los usos que estas albergarán. Una vez distribuidas en la parcela, se le superpone una retícula de pilares.', images: ['imagenes/colecciondecurvas-1.png', 'imagenes/colecciondecurvas-2.png', 'imagenes/colecciondecurvas-3.png', 'imagenes/colecciondecurvas-4.png'], pdf: 'pdfs/portfolio-benito-quinones.pdf' },
-        { id: 'deja-navigue', category: 'architecture', title: 'DEJA NAVIGUÉ', normalImage: 'imagenes/dejanavigue-main.png', rolloverImage: 'imagenes/dejanavigue-main-rollover.png', description: 'Este proyecto comprende la construcción de un teatro multifuncional en Hamburgo, Alemania, diseñado para eventos de teatro, música y danza. Ubicado cerca del río Elba y el puerto histórico, el edificio se integrará en el entorno cultural y de ocio de la ciudad. Alzándose sobre el horizonte marítimo “Dejanavigué” busca albergar un espacio de culto al drama, la música y el teatro. Un lugar de encuentros, de intercambio de miradas, un espacio público sobre el cual sucede la magia de la interpretación. El gran bloque conjuga dos léxicos completamente diferenciados. El primero, construido por grandes cerchas desde las que cuelgan forjados de chapa colaborante. Así, es como el proyecto construye un espacio abierto a la ciudad, una gran plaza cubierta. En el corazón del prisma, un cuerpo de hormigón disonante, masivo e imponente alberga la ópera, el escenario principal.', images: ['imagenes/dejanavigue-1.png', 'imagenes/dejanavigue-2.png'], pdf: 'pdfs/portfolio-benito-quinones.pdf' },
         { id: 'arboles-y-telas', category: 'architecture', title: 'ÁRBOLES Y TELAS', normalImage: 'imagenes/arbolesytelas-main.png', rolloverImage: 'imagenes/arbolesytelas-main-rollover.png', description: 'Pabellón efímero diseñado para un festival de arte. La estructura, ligera y permeable, se integra con el paisaje natural circundante. El juego de sombras proyectado por las telas tensadas y los árboles crea un espacio dinámico y cambiante que invita a la contemplación.', images: ['imagenes/arbolesytelas-1.png', 'imagenes/arbolesytelas-2.png'], pdf: 'pdfs/portfolio-benito-quinones.pdf' },
         
         // DESIGN
@@ -100,32 +99,54 @@
 
 
       // COMPONENTS
-      const EyeIcon = () => (
-        <svg width="200" height="200" viewBox="-100 -100 200 200">
-          <defs>
-            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
-              <feMerge>
-                <feMergeNode in="coloredBlur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          <g opacity="0.15">
-            <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(45)"/>
-            <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(-45)"/>
-          </g>
-          <g>
-            <path d="M 0 -70 L 70 0 L 0 70 L -70 0 Z" fill="#333333" stroke="gray" strokeWidth="0.5"/>
-          </g>
-          <g filter="url(#glow)">
-            <circle cx="0" cy="0" r="45" fill="#555555" />
-            <circle cx="0" cy="0" r="30" fill="#888888" />
-            <circle cx="0" cy="0" r="15" fill="#CCCCCC" />
-            <circle cx="0" cy="0" r="7" fill="white" />
-          </g>
-        </svg>
-      );
+      const EyeIcon = ({ mousePosition }) => {
+        const [pupilTransform, setPupilTransform] = React.useState('translate(0, 0)');
+
+        React.useEffect(() => {
+            if (!mousePosition) return;
+
+            const maxPupilOffset = 15;
+            const { x, y } = mousePosition;
+
+            const angle = Math.atan2(y, x);
+            
+            const screenHypot = Math.sqrt(window.innerWidth * window.innerWidth + window.innerHeight * window.innerHeight) / 2;
+            const mouseHypot = Math.sqrt(x * x + y * y);
+            const normalizedDistance = Math.min(mouseHypot, screenHypot);
+            
+            const pupilX = Math.cos(angle) * maxPupilOffset * (normalizedDistance / screenHypot);
+            const pupilY = Math.sin(angle) * maxPupilOffset * (normalizedDistance / screenHypot);
+            
+            setPupilTransform(`translate(${pupilX}, ${pupilY})`);
+        }, [mousePosition]);
+
+        return (
+            <svg width="200" height="200" viewBox="-100 -100 200 200">
+              <defs>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <g opacity="0.15">
+                <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(45)"/>
+                <path d="M 0 -80 C 40 -40, 40 40, 0 80 C -40 40, -40 -40, 0 -80 Z" fill="white" transform="rotate(-45)"/>
+              </g>
+              <g>
+                <path d="M 0 -70 L 70 0 L 0 70 L -70 0 Z" fill="#333333" stroke="gray" strokeWidth="0.5"/>
+              </g>
+              <g filter="url(#glow)" transform={pupilTransform} style={{ transition: 'transform 0.2s ease-out' }}>
+                <circle cx="0" cy="0" r="45" fill="#555555" />
+                <circle cx="0" cy="0" r="30" fill="#888888" />
+                <circle cx="0" cy="0" r="15" fill="#CCCCCC" />
+                <circle cx="0" cy="0" r="7" fill="white" />
+              </g>
+            </svg>
+        );
+      };
 
       const HomeButton = ({ onClick }) => (
         <button
@@ -158,15 +179,19 @@
           );
       };
 
-      const NetworkGraph = ({ onNodeClick }) => {
+      const NetworkGraph = ({ onNodeClick, filter }) => {
         const svgRef = React.useRef(null);
+        const simulationRef = React.useRef(null);
 
         React.useEffect(() => {
           if (!svgRef.current) return;
           
           const isMobile = window.innerWidth < 768;
-
-          const baseNodes = [
+          const width = window.innerWidth;
+          const height = window.innerHeight;
+          
+          // --- Data Filtering Logic ---
+          const baseNodesRaw = [
             { id: 'CENTRAL_HUB', group: 0, isCentral: true, fx: 0, fy: 0 },
             { id: 'ARQUITECTURA', group: 1, isNavLink: true },
             { id: 'DISEÑO', group: 2, isNavLink: true },
@@ -175,7 +200,7 @@
             { id: 'DOCENCIA', group: 2 }, { id: 'TRABAJO', group: 2 }, { id: 'INVESTIGACIÓN', group: 2 }, { id: 'EXPRESION ARTISTICA', group: 2 }, { id: 'Fotografía de la luz', group: 3 }, { id: 'I+D', group: 3 }, { id: 'Interiorismo', group: 3 },
           ];
 
-          const baseLinks = [
+          const baseLinksRaw = [
             { source: 'CENTRAL_HUB', target: 'ARQUITECTURA', value: 1 }, { source: 'CENTRAL_HUB', target: 'DISEÑO', value: 1 }, { source: 'CENTRAL_HUB', target: 'ESCENOGRAFÍAS', value: 1 }, { source: 'CENTRAL_HUB', target: 'CONTACTO', value: 1 }, { source: 'ARQUITECTURA', target: 'DOCENCIA', value: 1 }, { source: 'ARQUITECTURA', target: 'TRABAJO', value: 1 }, { source: 'ARQUITECTURA', target: 'INVESTIGACIÓN', value: 1 }, { source: 'ARQUITECTURA', target: 'EXPRESION ARTISTICA', value: 1 }, { source: 'INVESTIGACIÓN', target: 'I+D', value: 2 }, { source: 'EXPRESION ARTISTICA', target: 'Fotografía de la luz', value: 2 }, { source: 'EXPRESION ARTISTICA', target: 'Interiorismo', value: 2 },
           ];
 
@@ -187,17 +212,43 @@
               default: return 'DISEÑO';
             }
           };
-
-          const projectNodes = allProjectsData.map(p => ({ id: p.title, group: 4, isNavLink: true, isProject: true, projectId: p.id }));
-          const projectLinks = allProjectsData.map(p => ({ source: getSourceNode(p.category), target: p.title, value: 5 }));
           
-          const nodesData = [...baseNodes, ...projectNodes];
-          const linksData = [...baseLinks, ...projectLinks];
+          let nodesData = [];
+          let linksData = [];
+
+          if (filter === 'all') {
+              const shouldHideProjects = isMobile;
+              nodesData = [...baseNodesRaw];
+              linksData = [...baseLinksRaw];
+              if (!shouldHideProjects) {
+                  const projectNodes = allProjectsData.map(p => ({ id: p.title, group: 4, isNavLink: true, isProject: true, projectId: p.id }));
+                  const projectLinks = allProjectsData.map(p => ({ source: getSourceNode(p.category), target: p.title, value: 5 }));
+                  nodesData.push(...projectNodes);
+                  linksData.push(...projectLinks);
+              }
+          } else {
+              const categoryMap = { 'architecture': 'ARQUITECTURA', 'design': 'DISEÑO', 'escenografias': 'ESCENOGRAFÍAS' };
+              const categoryName = categoryMap[filter];
+              if (categoryName) {
+                  const categoryProjects = allProjectsData.filter(p => p.category === filter);
+                  const projectNodes = categoryProjects.map(p => ({ id: p.title, group: 4, isNavLink: true, isProject: true, projectId: p.id }));
+                  const projectLinks = categoryProjects.map(p => ({ source: categoryName, target: p.title, value: 5 }));
+
+                  nodesData = [
+                      { id: 'CENTRAL_HUB', group: 0, isCentral: true, fx: 0, fy: 0 },
+                      { id: categoryName, group: 1, isNavLink: true },
+                      ...projectNodes
+                  ];
+                  linksData = [
+                      { source: 'CENTRAL_HUB', target: categoryName, value: 1 },
+                      ...projectLinks
+                  ];
+              }
+          }
+          // --- End Data Filtering ---
+          
           const visibleNodes = nodesData.filter(n => n.id !== 'CENTRAL_HUB');
 
-          const width = window.innerWidth;
-          const height = window.innerHeight;
-          
           const svg = d3.select(svgRef.current)
             .attr('width', width)
             .attr('height', height)
@@ -205,11 +256,16 @@
 
           svg.selectAll("*").remove(); 
 
+          if (simulationRef.current) {
+            simulationRef.current.stop();
+          }
+
           const simulation = d3.forceSimulation(nodesData)
             .force('link', d3.forceLink(linksData).id(d => d.id).distance(d => isMobile ? (d.value === 5 ? 60 : 100) : (d.value === 5 ? 100 : 180)))
             .force('charge', d3.forceManyBody().strength(isMobile ? -120 : -180))
-            .force('center', d3.forceCenter(0, 0))
-            .alphaDecay(0.01);
+            .force('center', d3.forceCenter(0, 0));
+          
+          simulationRef.current = simulation;
 
           svg.append('circle').attr('cx', 0).attr('cy', 0).attr('r', Math.min(width, height) / 2 - 40).attr('stroke', 'rgba(255, 255, 255, 0.1)').attr('stroke-width', 1).attr('fill', 'none');
 
@@ -227,7 +283,7 @@
             .call(d3.drag()
                 .on('start', (event, d) => { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
                 .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
-                .on('end', (event, d) => { if (!event.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }));
+                .on('end', (event, d) => { if (!event.active) simulation.alphaTarget(0.01); d.fx = null; d.fy = null; }));
 
           const getNodeColor = (d) => d.isNavLink && !d.isProject ? '#fff' : (d.isProject ? '#aaa' : '#777');
 
@@ -258,6 +314,14 @@
             .attr('transform', 'scale(1)');
 
           simulation.on('tick', () => {
+              const orbitalStrength = 0.001;
+              nodesData.forEach(d => {
+                  if (!d.isCentral) {
+                      d.vx -= d.y * orbitalStrength;
+                      d.vy += d.x * orbitalStrength;
+                  }
+              });
+
               const margin = isMobile ? 20 : 40;
               node.attr('transform', d => {
                   const nodeRadius = 10;
@@ -276,9 +340,10 @@
               link.attr('x1', d => d.source.x || 0).attr('y1', d => d.source.y || 0).attr('x2', d => d.target.x || 0).attr('y2', d => d.target.y || 0);
           });
           
-          const interval = d3.interval(() => simulation.alpha(0.05).restart(), 5000);
-          return () => { simulation.stop(); interval.stop(); };
-        }, [onNodeClick]);
+          simulation.alpha(0.3).restart();
+          
+          return () => { simulation.stop(); };
+        }, [onNodeClick, filter]);
 
         return <svg ref={svgRef} className="w-full h-full" />;
       };
@@ -341,20 +406,20 @@
                 .style('letter-spacing', '0.1em');
 
             const projectNodeGroups = node.filter(d => d.isProject);
-            projectNodeGroups.append('circle').attr('r', 3).attr('fill', '#999').attr('stroke', '#fff').attr('stroke-width', 1.5);
+            projectNodeGroups.append('circle').attr('r', isMobile ? 5 : 3).attr('fill', '#999').attr('stroke', '#fff').attr('stroke-width', 1.5);
             
             const projectTexts = projectNodeGroups.append('text').text(d => d.id)
                 .attr('y', 4)
                 .attr('fill', '#aaa')
-                .style('font-size', isMobile ? '0.75rem' : '0.8rem')
+                .style('font-size', isMobile ? '0.9rem' : '0.8rem')
                 .style('text-transform', 'uppercase');
             
             projectNodeGroups.on('mouseover', function() {
                 d3.select(this).select('text').transition().duration(200).attr('fill', '#00ffff');
-                d3.select(this).select('circle').transition().duration(200).attr('fill', '#00ffff').attr('r', 5);
+                d3.select(this).select('circle').transition().duration(200).attr('fill', '#00ffff').attr('r', isMobile ? 7 : 5);
             }).on('mouseout', function() {
                 d3.select(this).select('text').transition().duration(200).attr('fill', '#aaa');
-                d3.select(this).select('circle').transition().duration(200).attr('fill', '#999').attr('r', 3);
+                d3.select(this).select('circle').transition().duration(200).attr('fill', '#999').attr('r', isMobile ? 5 : 3);
             });
 
             node.call(d3.drag()
@@ -428,8 +493,8 @@
 
         return (
           <div className="w-full h-screen bg-black text-white animate-fade-in overflow-hidden relative">
-            <header className="fixed top-0 left-0 z-30 w-full p-6 sm:p-8 flex justify-between items-center">
-              <div className="text-md sm:text-lg font-bold tracking-wider">ARQUITECTURA BENITO</div>
+            <InteractiveGridBackground />
+            <header className="fixed top-0 left-0 z-30 w-full py-6 sm:py-8 px-6 sm:px-8 md:px-20 flex justify-end items-center">
               <div className="flex items-center space-x-2">
                 {slides.map((slide, index) => <button key={slide.id} onClick={() => scrollToSlide(index)} className={`w-3 h-3 rounded-full border-2 transition-all duration-300 ${activeIndex === index ? 'bg-white border-white scale-125' : 'bg-transparent border-gray-500 hover:border-white'}`} />)}
               </div>
@@ -443,17 +508,17 @@
                   const props = {
                       key: slide.id,
                       ref: el => slideRefs.current[index] = el,
-                      className: `w-full h-full flex-shrink-0 snap-center relative flex items-center justify-center bg-black group ${isProject ? 'cursor-pointer' : ''}`,
+                      className: `w-full h-full flex-shrink-0 snap-center relative flex items-center justify-center group ${isProject ? 'cursor-pointer' : ''}`,
                       onClick: isProject ? () => onProjectSelect(slide.id) : undefined,
                   };
 
                   return (
                       <div {...props}>
-                          <div className="absolute inset-0 bg-cover bg-center filter blur-lg scale-110 opacity-20 transition-opacity duration-500" style={{ backgroundImage: `url('${imageUrl}')` }}></div>
-                          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${imageUrl}')` }}></div>
+                          <img src={imageUrl} alt="" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover filter blur-lg scale-110 opacity-20 transition-opacity duration-500" />
+                          <img src={imageUrl} alt={slide.title} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
                           <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-50 transition-all duration-500"></div>
                           <div className="relative z-10 text-center text-white p-4 transform group-hover:scale-105 transition-transform duration-500">
-                              <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-wider uppercase" style={{ fontFamily: "'Cormorant Garamond', serif" }}>{slide.title}</h2>
+                              <h2 className="text-5xl sm:text-6xl md:text-8xl font-mono font-bold tracking-wider uppercase">{slide.title}</h2>
                               {isProject && <p className="mt-4 text-sm uppercase tracking-widest border-b border-white pb-1 inline-block">Ver Proyecto</p>}
                           </div>
                           <div className="absolute bottom-8 right-8 z-10 text-white font-mono text-sm"><span>{String(index + 1).padStart(2, '0')}</span><span className="mx-2">/</span><span>{String(slides.length).padStart(2, '0')}</span></div>
@@ -466,19 +531,85 @@
         );
       };
       
+      const InteractiveGridBackground = () => {
+        const [mousePos, setMousePos] = React.useState({ x: -9999, y: -9999 });
+
+        React.useEffect(() => {
+            const handleMouseMove = (event) => {
+                setMousePos({ x: event.clientX, y: event.clientY });
+            };
+            window.addEventListener('mousemove', handleMouseMove);
+            return () => window.removeEventListener('mousemove', handleMouseMove);
+        }, []);
+
+        const memoizedDots = React.useMemo(() => {
+            const dots = [];
+            const gridSize = 50;
+            const numCols = Math.ceil(window.innerWidth / gridSize);
+            const numRows = Math.ceil(window.innerHeight / gridSize);
+
+            for (let i = 0; i < numCols; i++) {
+                for (let j = 0; j < numRows; j++) {
+                    const x = i * gridSize;
+                    const y = j * gridSize;
+                    const dx = x - mousePos.x;
+                    const dy = y - mousePos.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    const maxDist = 250;
+                    const influence = Math.max(0, 1 - dist / maxDist);
+                    
+                    const displacement = influence * 15;
+                    const finalX = x - (dx / dist) * displacement;
+                    const finalY = y - (dy / dist) * displacement;
+                    
+                    const opacity = 0.05 + influence * 0.4;
+
+                    dots.push({
+                        key: `${i}-${j}`,
+                        cx: finalX,
+                        cy: finalY,
+                        r: 1,
+                        opacity: opacity,
+                    });
+                }
+            }
+            return dots;
+        }, [mousePos.x, mousePos.y]);
+
+
+        return (
+            <svg className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none">
+                <g>
+                    {memoizedDots.map(dot => (
+                        <circle 
+                            key={dot.key} 
+                            cx={dot.cx} 
+                            cy={dot.cy} 
+                            r={dot.r} 
+                            fill="#00ffff" 
+                            fillOpacity={dot.opacity}
+                            style={{ transition: 'cx 0.1s ease-out, cy 0.1s ease-out, fill-opacity 0.1s ease-out' }}
+                        />
+                    ))}
+                </g>
+            </svg>
+        );
+      };
+
       const ContactPage = () => {
-        const CVSection = ({ title, children }) => ( <div className="mb-8"><h3 className="text-xl font-bold uppercase tracking-widest text-white border-b border-gray-700 pb-2 mb-4">{title}</h3><div className="text-gray-400">{children}</div></div> );
-        const CVEntry = ({ title, period, place }) => ( <div className="mb-3"><p className="font-bold text-gray-200">{title}</p><p className="text-sm">{period}</p><p className="text-sm text-gray-500">{place}</p></div> );
-        const PublicationEntry = ({ title, details }) => ( <div className="mb-3"><p className="font-bold text-gray-200">{title}</p><p className="text-sm text-gray-500">{details}</p></div> );
+        const CVSection = ({ title, children }) => ( <div className="mb-8"><h3 className="font-mono text-xl font-bold uppercase tracking-widest text-cyan-400 border-b border-gray-800 pb-2 mb-4">{title}</h3><div className="text-gray-400">{children}</div></div> );
+        const CVEntry = ({ title, period, place }) => ( <div className="mb-3 transition-transform duration-300 group hover:translate-x-2"><p className="font-bold text-gray-200 transition-colors duration-300 group-hover:text-white">{title}</p><p className="text-sm">{period}</p><p className="text-sm text-gray-500">{place}</p></div> );
+        const PublicationEntry = ({ title, details }) => ( <div className="mb-3 transition-transform duration-300 group hover:translate-x-2"><p className="font-bold text-gray-200 transition-colors duration-300 group-hover:text-white">{title}</p><p className="text-sm text-gray-500">{details}</p></div> );
 
         return (
           <div className="w-full min-h-screen bg-black text-gray-300 animate-fade-in flex flex-col items-center justify-center p-4 relative overflow-auto">
-            <div className="absolute top-0 left-0 right-0 bottom-0 z-0 flex items-center justify-center opacity-5 pointer-events-none"><div className="scale-[2.5] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><EyeIcon /></div></div>
+            <InteractiveGridBackground />
             <div className="w-full max-w-4xl mx-auto z-10 relative mt-24 mb-12 px-4">
               <div className="text-center mb-16">
-                <h1 className="text-5xl md:text-7xl font-bold tracking-wider uppercase text-white mb-6">CONTACTO</h1>
+                <h1 className="font-mono text-5xl md:text-7xl font-bold tracking-wider uppercase text-white mb-6">CONTACTO</h1>
                 <p className="text-base md:text-lg text-gray-400 mb-10 max-w-xl mx-auto">Para colaboraciones, consultas sobre proyectos o cualquier otra pregunta, por favor, póngase en contacto a través del siguiente correo electrónico.</p>
-                <a href="mailto:arquitectuabenito@gmail.com" className="inline-block text-base md:text-lg font-bold text-white border-2 border-white px-8 py-3 tracking-widest uppercase transition-colors duration-300 hover:bg-white hover:text-black">arquitectuabenito@gmail.com</a>
+                <a href="mailto:arquitectuabenito@gmail.com" className="inline-block text-base md:text-lg font-bold text-cyan-400 border-2 border-cyan-400 px-8 py-3 tracking-widest uppercase transition-all duration-300 hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_20px_#00ffff]">arquitectuabenito@gmail.com</a>
               </div>
               <div className="grid md:grid-cols-2 gap-x-12">
                 <div>
@@ -517,6 +648,8 @@
                     <img 
                       src={src} 
                       alt={`Cartel ${index + 1}`} 
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-auto object-cover transition-transform duration-300 transform group-hover:scale-105"
                       style={{ animation: `fade-in-item 0.5s ease-in-out ${index * 0.1}s forwards`, opacity: 0 }}
                     />
@@ -563,18 +696,14 @@
 
         return (
           <div className="w-full min-h-screen bg-white text-black animate-fade-in overflow-y-auto">
-            <header className="sticky top-0 z-30 w-full bg-white bg-opacity-90 backdrop-blur-md">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                  <h2 className="text-sm uppercase tracking-widest font-bold">{project.title}</h2>
-                </div>
-            </header>
-
-            <main className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-              <p className="text-lg text-gray-700 mb-8 leading-relaxed" dangerouslySetInnerHTML={{ __html: project.description.replace(/\n/g, '<br />') }} />
+            
+            <main className="max-w-5xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+              <h1 className="text-4xl sm:text-6xl font-bold font-mono uppercase tracking-wider text-black mb-8">{project.title}</h1>
+              <p className="text-lg text-gray-700 mb-12 leading-relaxed" dangerouslySetInnerHTML={{ __html: project.description.replace(/\n/g, '<br />') }} />
               
               <div className="space-y-4 sm:space-y-8">
                 {project.images && project.images.map((imgSrc, index) => (
-                  <img key={index} src={imgSrc} alt={`${project.title} - Imagen ${index + 1}`} className="w-full h-auto object-cover"/>
+                  <img key={index} src={imgSrc} alt={`${project.title} - Imagen ${index + 1}`} loading="lazy" decoding="async" className="w-full h-auto object-cover"/>
                 ))}
               </div>
             </main>
@@ -616,10 +745,57 @@
           </div>
         );
       };
+      
+      const FilterControls = ({ currentFilter, onFilterChange }) => {
+        const filters = [
+          { key: 'all', label: 'Todos' },
+          { key: 'architecture', label: 'Arquitectura' },
+          { key: 'design', label: 'Diseño' },
+          { key: 'escenografias', label: 'Escenografías' },
+          { key: 'contact', label: 'Contacto' },
+        ];
+        
+        return (
+          <div className="fixed top-4 left-4 z-20 flex space-x-2 bg-black/30 backdrop-blur-sm p-1 rounded-full">
+            {filters.map(filter => (
+              <button
+                key={filter.key}
+                onClick={() => onFilterChange(filter.key)}
+                className={`px-3 py-1 text-xs sm:text-sm font-mono uppercase tracking-wider rounded-full transition-all duration-200 ${
+                  currentFilter === filter.key && filter.key !== 'contact'
+                    ? 'bg-cyan-400 text-black shadow-lg'
+                    : 'text-white hover:bg-white/20'
+                }`}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        );
+      };
 
       // MAIN APP
       const App = () => {
         const [view, setView] = React.useState({ page: 'home', projectId: null });
+        const [filter, setFilter] = React.useState('all');
+        const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+
+        React.useEffect(() => {
+            const handleMouseMove = (event) => {
+                if (view.page === 'home') {
+                    setMousePosition({
+                        x: event.clientX - window.innerWidth / 2,
+                        y: event.clientY - window.innerHeight / 2
+                    });
+                }
+            };
+            
+            window.addEventListener('mousemove', handleMouseMove);
+
+            return () => {
+                window.removeEventListener('mousemove', handleMouseMove);
+            };
+        }, [view.page]);
 
         React.useEffect(() => {
           const html = document.documentElement;
@@ -641,8 +817,25 @@
             html.style.overflow = 'auto'; body.style.overflow = 'auto';
           };
         }, [view.page, view.projectId]);
+        
+        const handleFilterChange = (newFilterKey) => {
+            if (newFilterKey === 'contact') {
+                setView({ page: 'contact', projectId: null });
+            } else {
+                setFilter(newFilterKey);
+            }
+        };
 
-        const handleNodeClick = (node) => {
+        const handleProjectSelect = React.useCallback((projectId) => {
+            const project = allProjectsData.find(p => p.id === projectId);
+            if (project && project.id === 'carteleria') {
+                setView({ page: 'carteleria', projectId });
+            } else {
+                setView({ page: 'project', projectId });
+            }
+        }, []);
+
+        const handleNodeClick = React.useCallback((node) => {
           if (node.isProject && node.projectId) {
             handleProjectSelect(node.projectId);
             return;
@@ -657,7 +850,7 @@
                 break;
             case 'CONTACTO': setView({ page: 'contact', projectId: null }); break;
           }
-        };
+        }, [handleProjectSelect]);
         
         const handleGoHome = () => setView({ page: 'home', projectId: null });
 
@@ -679,22 +872,15 @@
             }
         };
 
-        const handleProjectSelect = (projectId) => {
-            const project = allProjectsData.find(p => p.id === projectId);
-            if (project && project.id === 'carteleria') {
-                setView({ page: 'carteleria', projectId });
-            } else {
-                setView({ page: 'project', projectId });
-            }
-        };
-
         const renderContent = () => {
           switch (view.page) {
             case 'home':
               return (
                 <div className="w-full h-full flex items-center justify-center relative">
-                  <div className="central-eye absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0"><EyeIcon /></div>
-                  <div className="absolute top-0 left-0 w-full h-full z-10"><NetworkGraph onNodeClick={handleNodeClick} /></div>
+                  <div className="central-eye absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
+                    <EyeIcon mousePosition={mousePosition} />
+                  </div>
+                  <div className="absolute top-0 left-0 w-full h-full z-10"><NetworkGraph onNodeClick={handleNodeClick} filter={filter} /></div>
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-gray-500 z-20">Portfolio d3 benito</div>
                 </div>
               );
@@ -720,6 +906,7 @@
 
         return (
           <div className="w-full h-full">
+            {view.page === 'home' && <FilterControls currentFilter={filter} onFilterChange={handleFilterChange} />}
             {view.page !== 'home' && <HomeButton onClick={handleGoHome} />}
             {view.page !== 'home' && <BackButton onClick={handleBack} theme={view.page === 'project' ? 'light' : 'dark'} />}
             {renderContent()}
