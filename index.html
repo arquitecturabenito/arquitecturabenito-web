@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -75,6 +76,8 @@
 
     <script type="text/babel">
       // DATA STORE
+      const territoriosDigitalesImages = Array.from({ length: 35 }, (_, i) => `imagenes/territoriosdigitales(${i + 1}).jpg`);
+      
       const allProjectsData = [
         // ARCHITECTURE
         { id: 'anexo-aemet', category: 'architecture', title: 'Anexo AEMET', normalImage: 'imagenes/anexo-aemet-main.png', rolloverImage: 'imagenes/anexo-aemet-main-rollover.png', summary: 'Ampliación de las oficinas de la AEMET, buscando una integración respetuosa con el entorno y una alta eficiencia energética.', description: 'El proyecto para el anexo de la AEMET se centra en la creación de un espacio de trabajo moderno y sostenible. La propuesta busca no solo ampliar la capacidad de las oficinas, sino también mejorar la calidad del entorno laboral a través de la luz natural, la vegetación integrada y materiales de bajo impacto ambiental. La forma del edificio responde a un análisis exhaustivo del soleamiento y las vistas, optimizando el confort térmico y visual para los usuarios.', images: ['imagenes/anexo-aemet-1.png', 'imagenes/anexo-aemet-2.png', 'imagenes/anexo-aemet-3.png', 'imagenes/anexo-aemet-4.png', 'imagenes/anexo-aemet-5.png', 'imagenes/anexo-aemet-6.png', 'imagenes/anexo-aemet-7.png'], pdf: 'pdfs/portfolio-benito-quinones.pdf' },
@@ -87,19 +90,19 @@
         { id: 'prato-food-city', category: 'architecture', title: 'PRATO FOOD CITY', normalImage: 'imagenes/prato-main.png', rolloverImage: 'imagenes/prato-main-rollover.png', summary: 'Erasmus+BIP en Italia. El proyecto "Ring of Prato" conecta áreas en desuso para transformarlas en tierras de cultivo, promoviendo la educación pública y la cultura gastronómica local.', description: 'Erasmus+BIP en Italia\n\nThe “The Ring of Prato” project emerges with the intention of connecting large unused areas through physical and visual connections. These spaces have significant potential to explore the richness of local gastronomic culture. The project’s vision is to transform these vast extensions into cultivated lands that promote public education.\n\nFurthermore, extensive green areas with different characteristics are observed, extending like branches around the current city, projected as zones for future urban growth. As a whole, this project forms a ring that embraces the current city, delineating spaces shared by society, where food and the rural environment take center stage and exploring new areas that allow future urban growth, prioritizing pedestrians.', images: ['imagenes/prato-1.png', 'imagenes/prato-2.png', 'imagenes/prato-3.png', 'imagenes/prato-4.png', 'imagenes/prato-5.png', 'imagenes/prato-6.png', 'imagenes/prato-7.png', 'imagenes/prato-8.png'], pdf: 'pdfs/portfolio-benito-quinones.pdf' },
         
         // DESIGN
-        { id: 'territorios-digitales', category: 'design', title: 'Investigación Territorios Digitales', normalImage: 'imagenes/territorios-digitales-main.png', rolloverImage: 'imagenes/territorios-digitales-main-rollover.png', summary: 'Exploración sobre la representación y percepción de los espacios digitales y su influencia en el mundo físico.', description: 'Esta investigación explora cómo concebimos, navegamos y representamos los "territorios digitales". A través de una serie de visualizaciones de datos, cartografías especulativas y ensayos gráficos, el proyecto cuestiona la naturaleza de la frontera entre lo físico y lo virtual. Se analiza cómo las metáforas espaciales (el "escritorio", la "nube", las "salas" de chat) moldean nuestra interacción con la tecnología y, a su vez, cómo esta reconfigura nuestra percepción del espacio real.', images: ['imagenes/territorios-digitales-1.png'], pdf: null },
+        { id: 'territorios-digitales', category: 'design', title: 'Investigación Territorios Digitales', normalImage: 'imagenes/territorios-digitales-main.png', rolloverImage: 'imagenes/territorios-digitales-main-rollover.png', summary: 'Exploración sobre la representación y percepción de los espacios digitales y su influencia en el mundo físico.', description: 'Esta investigación explora cómo concebimos, navegamos y representamos los "territorios digitales". A través de una serie de visualizaciones de datos, cartografías especulativas y ensayos gráficos, el proyecto cuestiona la naturaleza de la frontera entre lo físico y lo virtual. Se analiza cómo las metáforas espaciales (el "escritorio", la "nube", las "salas" de chat) moldean nuestra interacción con la tecnología y, a su vez, cómo esta reconfigura nuestra percepción del espacio real.', images: territoriosDigitalesImages, pdf: null },
         { id: 'carteleria', category: 'design', title: 'CARTELERÍA', normalImage: 'imagenes/carteles/carteleria-main.png', rolloverImage: 'imagenes/carteles/carteleria-main-rollover.png', summary: 'Colección de carteles diseñados para diversos eventos, explorando la intersección entre tipografía, imagen y comunicación visual.', description: 'Una colección de carteles diseñados para diversos eventos y propósitos, explorando la intersección entre tipografía, imagen y comunicación visual.', posterImages: [ 'imagenes/carteles/cartel-1.png', 'imagenes/carteles/cartel-2.png', 'imagenes/carteles/cartel-3.png', 'imagenes/carteles/cartel-4.png', 'imagenes/carteles/cartel-5.png', 'imagenes/carteles/cartel-6.png', 'imagenes/carteles/cartel-7.png', 'imagenes/carteles/cartel-8.png', 'imagenes/carteles/cartel-9.png', 'imagenes/carteles/cartel-10.png', 'imagenes/carteles/cartel-11.png', 'imagenes/carteles/cartel-12.png', 'imagenes/carteles/cartel-13.png', 'imagenes/carteles/cartel-14.png', 'imagenes/carteles/cartel-15.png', 'imagenes/carteles/cartel-16.png', 'imagenes/carteles/cartel-17.png', 'imagenes/carteles/cartel-18.png', 'imagenes/carteles/cartel-19.png', 'imagenes/carteles/cartel-20.png' ] },
         { id: 'generacion-ia', category: 'design', title: 'GENERACIÓN IA', isPage: true },
-        { id: 'oneiros-lamp', category: 'design', title: 'ONEIROS LAMP', normalImage: 'imagenes/oneiros-main.png', rolloverImage: 'imagenes/oneiros-main-rollover.png', summary: 'Un diseño de lámpara que explora la materialidad y la luz para crear atmósferas oníricas.', description: 'Descripción de Oneiros Lamp. Un diseño que explora la materialidad y la luz para crear atmósferas oníricas.', images: ['imagenes/oneiros-1.png', 'imagenes/oneiros-2.png', 'imagenes/oneiros-3.png', 'imagenes/oneiros-4.png', 'imagenes/oneiros-5.png', 'imagenes/oneiros-6.png'], pdf: null },
-        { id: 'estuche', category: 'design', title: 'ESTUCHE V1 V2 V3', normalImage: 'imagenes/estuche-main.png', rolloverImage: 'imagenes/estuche-main-rollover.png', summary: 'Serie de estuches que combinan funcionalidad y estética minimalista, explorando diferentes materiales y formas.', description: 'Serie de estuches que combinan funcionalidad y estética minimalista, explorando diferentes materiales y formas.', images: ['imagenes/estuche-1.png', 'imagenes/estuche-2.png', 'imagenes/estuche-3.png', 'imagenes/estuche-4.png'], pdf: null },
-        { id: 'natural-lamp', category: 'design', title: 'NATURAL LAMP', normalImage: 'imagenes/natural-main.png', rolloverImage: 'imagenes/natural-main-rollover.png', summary: 'Lámpara diseñada con materiales orgánicos y sostenibles, buscando una conexión directa con la naturaleza.', description: 'Lámpara diseñada con materiales orgánicos y sostenibles, buscando una conexión directa con la naturaleza.', images: ['imagenes/natural-1.png'], pdf: null },
-        { id: 'juego-mesa-minutos', category: 'design', title: 'JUEGO DE MESA MINUTOS', normalImage: 'imagenes/minutos-main.png', rolloverImage: 'imagenes/minutos-main-rollover.png', summary: 'Un proyecto de diseño lúdico y estratégico para un juego de mesa.', description: 'Descripción del Juego de Mesa Minutos. Un proyecto de diseño lúdico y estratégico.', images: ['imagenes/minutos-1.png', 'imagenes/minutos-2.png', 'imagenes/minutos-3.png'], pdf: null },
-        { id: 'cmfx-walkman', category: 'design', title: 'CMFX WALKMAN', normalImage: 'imagenes/cmfx-walkman-main.png', rolloverImage: 'imagenes/cmfx-walkman-main-rollover.png', summary: 'Concepto de funda modular para teléfono CMF inspirada en el Sony Walkman, que funciona como billetera y fusiona una estética retro con una funcionalidad moderna.', description: 'CONCEPT DESING FOR NOTHING\nDesing\nEste diseño se basa en la innovadora idea de crear un módulo para el teléfono móvil CMF que también funcione como una billetera, inspirado en el legendario Sony Walkman. El CMF es un dispositivo modular que permite atornillar diferentes módulos en su parte trasera, ofreciendo una gran flexibilidad y personalización. Mi propuesta busca capturar la esencia nostálgica del Walkman, integrando elementos de diseño con transparencias y geometrías que se alinean perfectamente con la estética de Nothing.\n\nEl estuche modular no solo protege el teléfono y almacena tus pertenencias, sino que también se convierte en una expresión de estilo y funcionalidad. Las transparencias permiten un vistazo intrigante a su interior, mientras que las formas geométricas añaden un toque moderno que complementa la tecnología avanzada del CMF. Este diseño fusiona lo retro con lo contemporáneo, creando un producto que es tanto práctico como visualmente atractivo.\n\nActualmente, estoy trabajando en el desarrollo de los modelos 3D para este módulo. Creo que sería interesante organizar un concurso para alentar a la comunidad a personalizar y modificar el diseño, explorando nuevas posibilidades que reflejen la filosofía de Nothing.', images: ['imagenes/cmfx-walkman-1.png', 'imagenes/cmfx-walkman-2.png'], pdf: null },
-        { id: 'coleccion-grabados', category: 'design', title: 'COLECCIÓN DE GRABADOS', normalImage: 'imagenes/grabados-main.png', rolloverImage: 'imagenes/grabados-main-rollover.png', summary: 'Una serie de grabados que exploran técnicas tradicionales con un enfoque contemporáneo.', description: 'Una serie de grabados que exploran técnicas tradicionales con un enfoque contemporáneo.', images: ['imagenes/grabados-1.png'], pdf: null },
+        { id: 'oneiros-lamp', category: 'design', title: 'ONEIROS LAMP', normalImage: 'imagenes/oneiros-main.png', rolloverImage: 'imagenes/oneiros-main-rollover.png', summary: 'Pieza que fusiona la impresión 3D con el acabado artesanal, inspirada en las formas orgánicas de Alvar Aalto. Producción limitada disponible por encargo.', description: 'ONEIROS LAMP es una pieza que fusiona la producción en serie mediante impresión 3D con el meticuloso acabado artesanal. Inspirada en las formas orgánicas de Alvar Aalto, esta lámpara explora el equilibrio entre la tecnología y la calidez del trabajo manual. Es una pieza de producción limitada, disponible para compra por encargo.', images: ['imagenes/oneiros-1.png', 'imagenes/oneiros-2.png', 'imagenes/oneiros-3.png', 'imagenes/oneiros-4.png', 'imagenes/oneiros-5.png', 'imagenes/oneiros-6.png'], pdf: null },
+        { id: 'estuche', category: 'design', title: 'ESTUCHE V1 V2 V3', normalImage: 'imagenes/estuche-main.png', rolloverImage: 'imagenes/estuche-main-rollover.png', summary: 'Impreso en 3D y pensado para que artistas porten su mínimo vital. Compacto, simple y con un diseño milimétrico. A la venta por encargo.', description: 'Impreso en 3D, este estuche está pensado para que artistas y creativos puedan portar su "mínimo vital" en el bolsillo. Es un diseño compacto, simple y objetivo, con una precisión milimétrica en su concepción. Una solución funcional y minimalista disponible a la venta por encargo.', images: ['imagenes/estuche-1.png', 'imagenes/estuche-2.png', 'imagenes/estuche-3.png', 'imagenes/estuche-4.png'], pdf: null },
+        { id: 'natural-lamp', category: 'design', title: 'NATURAL LAMP', normalImage: 'imagenes/natural-main.png', rolloverImage: 'imagenes/natural-main-rollover.png', summary: 'Pieza única creada con un tronco de la sierra de Madrid, tallado a mano para reivindicar el arte como extensión de la naturaleza.', description: 'NATURAL LAMP es una pieza única creada a partir de un tronco recogido en la sierra de Madrid. La madera ha sido tallada y ensamblada a mano, en un proceso que busca reivindicar el arte como una extensión directa de la naturaleza, transformando un material encontrado en un objeto funcional y escultural.', images: ['imagenes/natural-1.png'], pdf: null },
+        { id: 'juego-mesa-minutos', category: 'design', title: 'JUEGO DE MESA MINUTOS', normalImage: 'imagenes/minutos-main.png', rolloverImage: 'imagenes/minutos-main-rollover.png', summary: 'Prototipo de un juego de mesa de carreras y estrategia, producido a pequeña escala para explorar sus mecánicas y diseño.', description: 'MINUTOS es un juego de mesa de carreras y estrategia donde el avance de tu ficha depende de las cartas que el azar ponga en tu mano. Este proyecto representa un ejercicio de prototipado y diseño de producto, realizado como una producción a pequeña escala para explorar las mecánicas del juego y la experiencia del usuario.', images: ['imagenes/minutos-1.png', 'imagenes/minutos-2.png', 'imagenes/minutos-3.png'], pdf: null },
+        { id: 'cmfx-walkman', category: 'design', title: 'CMFX WALKMAN', normalImage: 'imagenes/cmfx-walkman-main.png', rolloverImage: 'imagenes/cmfx-walkman-main-rollover.png', summary: 'Concepto de funda modular para el CMF Phone 1 inspirada en el Sony Walkman. Funciona como tarjetero y fusiona una estética retro con funcionalidad moderna.', description: 'Este concepto de diseño fue creado para el CMF Phone 1, un móvil que permite atornillar una extensión a su carcasa. El proyecto contempla una hibridación entre la mecánica y estética de un Walkman para crear un tarjetero modular en su parte trasera. La propuesta busca capturar la esencia nostálgica del Walkman, integrando elementos de diseño con transparencias y geometrías que se alinean con la estética de Nothing, fusionando lo retro con lo contemporáneo en un producto práctico y visualmente atractivo.', images: ['imagenes/cmfx-walkman-1.png', 'imagenes/cmfx-walkman-2.png'], pdf: null },
+        { id: 'coleccion-grabados', category: 'design', title: 'COLECCIÓN DE GRABADOS', normalImage: 'imagenes/grabados-main.png', rolloverImage: 'imagenes/grabados-main-rollover.png', summary: 'Una serie de grabados que exploran técnicas tradicionales con un enfoque contemporáneo.', description: 'Una serie de grabados que exploran técnicas tradicionales con un enfoque contemporáneo.', images: ['imagenes/grabados-1.png', 'imagenes/grabados-2.png', 'imagenes/grabados-3.png', 'imagenes/grabados-4.png', 'imagenes/grabados-5.png'], pdf: null },
         
         // SCENOGRAPHY
-        { id: 'festa-na-terra', category: 'escenografias', title: 'FESTA NA TERRA', normalImage: 'imagenes/festa-main.png', rolloverImage: 'imagenes/festa-main-rollover.png', summary: 'Diseño escenográfico para el festival "Festa Na Terra", creando un espacio inmersivo que celebra la cultura y la tradición.', description: 'Diseño escenográfico para el festival "Festa Na Terra", creando un espacio inmersivo que celebra la cultura y la tradición.', images: ['imagenes/festa-1.png'], pdf: null },
-        { id: 'cronologia-adios', category: 'escenografias', title: 'CRONOLOGÍA DE UN ADIÓS', normalImage: 'imagenes/cronologia-main.png', rolloverImage: 'imagenes/cronologia-main-rollover.png', summary: 'Escenografía para una obra de teatro que explora el paso del tiempo y la memoria a través de una cuidada puesta en escena.', description: 'Escenografía para una obra de teatro que explora el paso del tiempo y la memoria a través de una cuidada puesta en escena.', images: ['imagenes/cronologia-1.png'], pdf: null }
+        { id: 'festa-na-terra', category: 'escenografias', title: 'FESTA NA TERRA', normalImage: 'imagenes/festa-main.png', rolloverImage: 'imagenes/festa-main-rollover.png', summary: 'Diseño escenográfico para el festival "Festa Na Terra", creando un espacio inmersivo que celebra la cultura y la tradición.', description: 'ESCENOGRAFÍA PARA FESTA NA TERRA\n\n"Repleta de amor, "Festa Na Terra" es una obra escrita desde un corazón que se reparte entre dos ciudades muy distintas y lejanas entre sí. Xiana Arias nos transporta a un viaje intergeneracional repleto de paralelismos.\n\nEl sentimiento de desarraigo, la idea de familia o la búsqueda de una identidad son algunos de los temas que esta obra abarca.\n\nSi bien hace una llamada a su tierra, Galicia. Puedo afirmar que esta historia es capaz de emocionar a cualquier persona que se haya alejado de casa. Siendo indiferente Galicia, Zúrich, Madrid o Murcia, Xiana ahonda mucho más allá de lo superficial, sacando a relucir un acertadísimo sentimiento de identidad."', images: ['imagenes/festa(1).jpg', 'imagenes/festa(2).jpg', 'imagenes/festa(3).jpg', 'imagenes/festa(4).jpg', 'imagenes/festa(5).jpg', 'imagenes/festa(6).jpg', 'imagenes/festa(7).jpg', 'imagenes/festa(8).jpg', 'imagenes/festa(9).jpg', 'imagenes/festa(10).jpg', 'imagenes/festa(11).jpg', 'imagenes/festa(12).jpg', 'imagenes/festa(13).jpg', 'imagenes/festa(14).jpg', 'imagenes/festa(15).jpg'], pdf: null },
+        { id: 'cronologia-adios', category: 'escenografias', title: 'CRONOLOGÍA DE UN ADIÓS', normalImage: 'imagenes/cronologia-main.png', rolloverImage: 'imagenes/cronologia-main-rollover.png', summary: 'Escenografía para una obra de teatro que explora el paso del tiempo y la memoria a través de una cuidada puesta en escena.', description: 'Escenografía para una obra de teatro que explora el paso del tiempo y la memoria a través de una cuidada puesta en escena.', images: ['imagenes/cronologia(1).jpg', 'imagenes/cronologia(2).jpg', 'imagenes/cronologia(3).jpg', 'imagenes/cronologia(4).jpg', 'imagenes/cronologia(5).jpg', 'imagenes/cronologia(6).jpg', 'imagenes/cronologia(7).jpg', 'imagenes/cronologia(8).jpg', 'imagenes/cronologia(9).jpg', 'imagenes/cronologia(10).jpg', 'imagenes/cronologia(11).jpg', 'imagenes/cronologia(12).jpg', 'imagenes/cronologia(13).jpg', 'imagenes/cronologia(14).jpg', 'imagenes/cronologia(15).jpg'], pdf: null }
       ];
 
 
@@ -623,8 +626,8 @@
                     const influence = Math.max(0, 1 - dist / maxDist);
                     
                     const displacement = influence * 15;
-                    const finalX = x - (dx / dist) * displacement;
-                    const finalY = y - (dy / dist) * displacement;
+                    const finalX = x - (dx / (dist || 1)) * displacement; // Avoid division by zero
+                    const finalY = y - (dy / (dist || 1)) * displacement; // Avoid division by zero
                     
                     const opacity = (theme === 'dark' ? 0.05 : 0.2) + influence * 0.4;
 
@@ -854,10 +857,80 @@
         );
       };
 
+      const ImageCarousel = ({ images, title }) => {
+        const [currentIndex, setCurrentIndex] = React.useState(0);
+
+        const goToPrevious = () => {
+          const isFirstSlide = currentIndex === 0;
+          const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
+          setCurrentIndex(newIndex);
+        };
+
+        const goToNext = () => {
+          const isLastSlide = currentIndex === images.length - 1;
+          const newIndex = isLastSlide ? 0 : currentIndex + 1;
+          setCurrentIndex(newIndex);
+        };
+        
+        const goToSlide = (slideIndex) => {
+          setCurrentIndex(slideIndex);
+        };
+
+        return (
+          <div className="w-full max-w-5xl mx-auto my-8 relative">
+              <h2 className="text-3xl font-bold uppercase tracking-wider mb-6 text-white text-center">Galería</h2>
+              <div className="relative h-[60vh] rounded-lg overflow-hidden shadow-2xl shadow-cyan-500/10 mb-4 bg-black/50">
+                  {images.map((img, index) => (
+                      <div 
+                          key={index} 
+                          className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+                      >
+                          <img 
+                              src={img} 
+                              alt={`${title} - Imagen ${index + 1}`}
+                              className="w-full h-full object-contain" 
+                          />
+                      </div>
+                  ))}
+                  <button 
+                      onClick={goToPrevious} 
+                      className="absolute top-1/2 left-4 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/70 transition-all z-10 backdrop-blur-sm"
+                      aria-label="Imagen anterior"
+                  >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button 
+                      onClick={goToNext} 
+                      className="absolute top-1/2 right-4 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/70 transition-all z-10 backdrop-blur-sm"
+                      aria-label="Siguiente imagen"
+                  >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                  <div className="absolute bottom-4 right-4 bg-black/50 text-white text-sm px-3 py-1 rounded-full font-mono z-10 backdrop-blur-sm">
+                      {currentIndex + 1} / {images.length}
+                  </div>
+              </div>
+              <div className="flex justify-center p-2 space-x-2 overflow-x-auto">
+                  {images.map((img, index) => (
+                      <button key={index} onClick={() => goToSlide(index)} className="flex-shrink-0">
+                          <img 
+                              src={img} 
+                              alt={`Miniatura ${index + 1}`}
+                              className={`w-20 h-14 object-cover rounded-md transition-all border-2 ${currentIndex === index ? 'border-cyan-400 scale-110' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                          />
+                      </button>
+                  ))}
+              </div>
+          </div>
+        );
+      };
+
       const ProjectDetailPage = ({ project, allProjectsData, onProjectSelect }) => {
         if (!project) return null;
 
-        const isDarkTheme = project.id === 'hashima-animal-park';
+        const carouselProjects = ['festa-na-terra', 'cronologia-adios', 'coleccion-grabados', 'territorios-digitales'];
+        const isCarouselView = carouselProjects.includes(project.id);
+        const isDarkTheme = project.id === 'hashima-animal-park' || isCarouselView;
         const theme = isDarkTheme ? 'dark' : 'light';
 
         const relatedProjects = allProjectsData.filter(p => p.category === project.category && !p.isPage);
@@ -869,7 +942,7 @@
           <div className={`w-full min-h-screen ${isDarkTheme ? 'bg-black text-gray-300' : 'bg-white text-black'} animate-fade-in overflow-y-auto relative`}>
             <InteractiveGridBackground theme={theme} />
 
-            <main className="max-w-4xl mx-auto z-10 relative pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+            <main className={`mx-auto z-10 relative pt-24 pb-12 px-4 sm:px-6 lg:px-8 ${isCarouselView ? 'max-w-6xl' : 'max-w-4xl'}`}>
               <h1 className={`text-4xl sm:text-6xl font-bold font-mono uppercase tracking-wider ${isDarkTheme ? 'text-white' : 'text-black'} mb-16 text-center`}>{project.title}</h1>
               
               <div className="mb-16">
@@ -879,7 +952,35 @@
                 </div>
               </div>
               
-              {project.images && project.images.length > 0 && (
+              {isCarouselView && project.images && project.images.length > 0 && (
+                <ImageCarousel images={project.images} title={project.title} />
+              )}
+              
+              {project.id === 'territorios-digitales' && (
+                <div className="mt-16">
+                  <h2 className={`text-3xl font-bold uppercase tracking-wider mb-6 ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>Imágenes Destacadas</h2>
+                  <div className="space-y-8">
+                    {[
+                      'imagenes/territorios(1).jpg',
+                      'imagenes/territorios(2).jpg',
+                      'imagenes/territorios(3).jpg',
+                      'imagenes/territorios(4).jpg',
+                      'imagenes/territorios(5).jpg',
+                    ].map((imgSrc, index) => (
+                      <img 
+                        key={`featured-${index}`} 
+                        src={imgSrc} 
+                        alt={`${project.title} - Imagen destacada ${index + 1}`} 
+                        loading="lazy" 
+                        decoding="async" 
+                        className="w-full h-auto object-cover rounded-lg shadow-lg"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {!isCarouselView && project.images && project.images.length > 0 && (
                 <div>
                   <h2 className={`text-3xl font-bold uppercase tracking-wider mb-6 ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>Galería</h2>
                   <div className="space-y-8">
@@ -1082,8 +1183,10 @@
           let bgColor = '#000'; // default dark
           if (view.page === 'project') {
               const project = allProjectsData.find(p => p.id === view.projectId);
-              if (project && project.id !== 'hashima-animal-park') {
-                  bgColor = '#fff'; // light for all projects except Hashima
+              const carouselProjects = ['festa-na-terra', 'cronologia-adios', 'coleccion-grabados', 'territorios-digitales'];
+              const isCarouselView = carouselProjects.includes(project?.id);
+              if (project && project.id !== 'hashima-animal-park' && !isCarouselView) {
+                  bgColor = '#fff'; // light for all projects except Hashima and carousel projects
               }
           }
 
@@ -1139,7 +1242,7 @@
           switch (node.id) {
             case 'ARQUITECTURA': setFilter('architecture'); setView({ page: 'architecture', projectId: null }); break;
             case 'DISEÑO': setFilter('design'); setView({ page: 'design', projectId: null }); break;
-            case 'ESCENOGRAFÍAS': setFilter('escenografias'); setView({ page: 'scenography', projectId: null }); break;
+            case 'ESCENOGRAFÍAS': setFilter('scenografias'); setView({ page: 'scenography', projectId: null }); break;
             case 'CONTACTO': setFilter('contact'); setView({ page: 'contact', projectId: null }); break;
           }
         }, [handleProjectSelect]);
@@ -1187,7 +1290,9 @@
         const backButtonTheme = React.useMemo(() => {
             if (view.page === 'project') {
                 const project = allProjectsData.find(p => p.id === view.projectId);
-                return (project && project.id === 'hashima-animal-park') ? 'dark' : 'light';
+                const carouselProjects = ['festa-na-terra', 'cronologia-adios', 'coleccion-grabados', 'territorios-digitales'];
+                const isCarouselView = carouselProjects.includes(project?.id);
+                return (project && (project.id === 'hashima-animal-park' || isCarouselView)) ? 'dark' : 'light';
             }
             return 'dark';
         }, [view.page, view.projectId]);
