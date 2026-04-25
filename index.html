@@ -1,11 +1,10 @@
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
-    <title>Benito G. Quiñones | Arquitectura y Diseño</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Benito González Quiñones | Arquitectura y Diseño</title>
     <meta name="description" content="Portfolio de Benito González Quiñones, arquitecto y diseñador de la ETSAM, Madrid. Explora proyectos de arquitectura, escenografía, diseño de producto e investigación.">
     <meta name="keywords" content="benito gonzález quiñones, benito gonzalez, benito gonzalez arquitecto, benito gonzalez quiñones arquitecto, benito gonzalez madrid, benito arquitectura, benito gonzalez arquitectura, etsam, portfolio, arquitecto, diseñador, escenógrafo, madrid">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -35,6 +34,14 @@
       }
       .animate-fade-in {
         animation: fade-in 0.5s ease-in-out;
+      }
+      
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
       }
       
       @keyframes dash-flow {
@@ -72,7 +79,7 @@
   }
 }
 </script>
-
+<link rel="stylesheet" href="/index.css">
 </head>
 <body>
     <div id="root"></div>
@@ -151,7 +158,7 @@
         }, [mousePosition]);
 
         return (
-            <svg width="200" height="200" viewBox="-100 -100 200 200">
+            <svg viewBox="-100 -100 200 200" className="w-[120px] h-[120px] md:w-[200px] md:h-[200px]">
               <defs>
                 <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
                   <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
@@ -186,11 +193,11 @@
         >
             <svg width="24" height="24" viewBox="-50 -50 100 100">
                 <g opacity="0.6">
-                    <path d="M 0 -40 C 20 -20, 20 20, 0 40 C -20 20, -20 -20, 0 -40 Z" fill="white" transform="rotate(45)"/>
-                    <path d="M 0 -40 C 20 -20, 20 20, 0 40 C -20 20, -20 -20, 0 -40 Z" fill="white" transform="rotate(-45)"/>
+                    <path d="M 0 -40 C 20 -20, 20 20, 0 40 C -20 20, -20 -20, 0 -40 Z" fill="currentColor" transform="rotate(45)"/>
+                    <path d="M 0 -40 C 20 -20, 20 20, 0 40 C -20 20, -20 -20, 0 -40 Z" fill="currentColor" transform="rotate(-45)"/>
                 </g>
                 <g>
-                    <circle cx="0" cy="0" r="10" fill="white" />
+                    <circle cx="0" cy="0" r="10" fill="currentColor" />
                 </g>
             </svg>
         </button>
@@ -366,7 +373,7 @@
                 
           node.append('circle').attr('r', d => d.isNavLink && !d.isProject ? 8 : (d.isProject ? (isMobile ? 2 : 3) : 5)).attr('fill', '#999').attr('stroke', '#fff').attr('stroke-width', 1.5);
           
-          node.append('text').text(d => d.id).attr('x', d => d.isProject ? (isMobile ? 6 : 10) : 12).attr('y', 4).attr('fill', getNodeColor)
+          const nodeTexts = node.append('text').text(d => d.id).attr('x', d => d.isProject ? (isMobile ? 6 : 10) : 12).attr('y', 4).attr('fill', getNodeColor)
             .style('font-size', d => d.isNavLink && !d.isProject ? (isMobile ? '1.1rem' : '1.4rem') : (d.isProject ? (isMobile ? '0.65rem' : '0.8rem') : '0.8rem'))
             .style('text-transform', 'uppercase').style('letter-spacing', '0.1em');
 
@@ -388,20 +395,28 @@
               });
 
               const margin = isMobile ? 20 : 40;
-              node.attr('transform', d => {
+              node.each(d => {
                   const nodeRadius = 10;
-                  const textWidthEstimate = isMobile ? 60 : 160; 
+                  const textWidthEstimate = isMobile ? 30 : 60; 
                   
                   const leftBound = -width / 2 + margin + nodeRadius;
-                  const rightBound = width / 2 - margin - textWidthEstimate;
+                  const rightBound = width / 2 - margin - nodeRadius;
                   const topBound = -height / 2 + margin + nodeRadius;
                   const bottomBound = height / 2 - margin - nodeRadius;
                   
                   d.x = Math.max(leftBound, Math.min(rightBound, d.x));
                   d.y = Math.max(topBound, Math.min(bottomBound, d.y));
-
-                  return `translate(${d.x || 0}, ${d.y || 0})`;
               });
+
+              node.attr('transform', d => `translate(${d.x || 0}, ${d.y || 0})`);
+              
+              nodeTexts
+                  .attr('x', d => {
+                      const offset = d.isProject ? (isMobile ? 6 : 10) : 12;
+                      return (d.x || 0) >= 0 ? -offset : offset;
+                  })
+                  .attr('text-anchor', d => (d.x || 0) >= 0 ? 'end' : 'start');
+
               link.attr('x1', d => d.source.x || 0).attr('y1', d => d.source.y || 0).attr('x2', d => d.target.x || 0).attr('y2', d => d.target.y || 0);
           });
           
@@ -484,18 +499,18 @@
 
             const simulation = d3.forceSimulation(nodesData)
                 .force('link', d3.forceLink(linksData).id(d => d.id).distance(d => {
-                    if (d.target.isSubSun) return isMobile ? 120 : 200;
-                    return isMobile ? 80 : 120;
+                    if (d.target.isSubSun || d.target.isPage) return isMobile ? 180 : 200;
+                    return isMobile ? 120 : 120;
                 }).strength(0.5))
                 .force('charge', d3.forceManyBody().strength(d => {
-                    if (d.isSun) return isMobile ? -1000 : -2000;
-                    if (d.isSubSun) return isMobile ? -500 : -1000;
-                    return isMobile ? -100 : -130;
+                    if (d.isSun) return isMobile ? -2000 : -2000;
+                    if (d.isSubSun || d.isPage) return isMobile ? -800 : -1000;
+                    return isMobile ? -300 : -130;
                 }))
                 .force('center', d3.forceCenter(0, 0))
                 .force('collide', d3.forceCollide().radius(d => {
                     if (d.isSun) return 70;
-                    if (d.isSubSun) return 40;
+                    if (d.isSubSun || d.isPage) return 40;
                     return 25;
                 }));
 
@@ -540,7 +555,26 @@
                 .style('letter-spacing', '0.1em')
                 .style('font-weight', 'bold');
 
-            const projectNodeGroups = node.filter(d => d.isProject);
+            const pageProjectGroups = node.filter(d => d.isProject && d.isPage);
+            pageProjectGroups.append('circle').attr('r', isMobile ? 15 : 20).attr('fill', 'none').attr('stroke', '#fff').attr('stroke-width', 2).attr('stroke-dasharray', '4 4');
+            pageProjectGroups.append('text').text(d => d.id)
+                .attr('text-anchor', 'middle')
+                .attr('y', isMobile ? 25 : 35)
+                .attr('fill', '#fff')
+                .style('font-size', isMobile ? '0.7rem' : '0.9rem')
+                .style('text-transform', 'uppercase')
+                .style('letter-spacing', '0.1em')
+                .style('font-weight', 'bold');
+            
+            pageProjectGroups.on('mouseover', function() {
+                d3.select(this).select('text').transition().duration(200).attr('fill', '#00ffff');
+                d3.select(this).select('circle').transition().duration(200).attr('stroke', '#00ffff');
+            }).on('mouseout', function() {
+                d3.select(this).select('text').transition().duration(200).attr('fill', '#fff');
+                d3.select(this).select('circle').transition().duration(200).attr('stroke', '#fff');
+            });
+
+            const projectNodeGroups = node.filter(d => d.isProject && !d.isPage);
             projectNodeGroups.append('circle').attr('r', isMobile ? 5 : 3).attr('fill', '#999').attr('stroke', '#fff').attr('stroke-width', 1.5);
             
             const projectTexts = projectNodeGroups.append('text').text(d => d.id)
@@ -587,15 +621,20 @@
                 const textOffset = 12;
 
                 node.each(d => {
-                    d.x = Math.max(-width/2 + margin, Math.min(width/2 - margin, d.x));
-                    d.y = Math.max(-height/2 + margin, Math.min(height/2 - margin, d.y));
+                    const leftBound = -width / 2 + margin;
+                    const rightBound = width / 2 - margin;
+                    const topBound = -height / 2 + margin;
+                    const bottomBound = height / 2 - margin;
+
+                    d.x = Math.max(leftBound, Math.min(rightBound, d.x));
+                    d.y = Math.max(topBound, Math.min(bottomBound, d.y));
                 });
                 link.attr('x1', d => d.source.x || 0).attr('y1', d => d.source.y || 0).attr('x2', d => d.target.x || 0).attr('y2', d => d.target.y || 0);
                 node.attr('transform', d => `translate(${d.x || 0}, ${d.y || 0})`);
 
                 projectTexts
-                  .attr('x', d => (d.x || 0) >= 0 ? textOffset : -textOffset)
-                  .attr('text-anchor', d => (d.x || 0) >= 0 ? 'start' : 'end');
+                  .attr('x', d => (d.x || 0) >= 0 ? -textOffset : textOffset)
+                  .attr('text-anchor', d => (d.x || 0) >= 0 ? 'end' : 'start');
             });
             return simulation;
         }, [showEye]);
@@ -621,7 +660,7 @@
                         {tooltip.content}
                     </div>
                 )}
-                <footer className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-500 z-10">© 2024 Benito G. Quiñones</footer>
+                <footer className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-500 z-10">© 2024 Benito González Quiñones</footer>
             </div>
         );
       };
@@ -753,8 +792,79 @@
                 <div><CVSection title="Publicaciones"><PublicationEntry title="Maquetas de luz: «Light painting» arquitectónico" details="(2025), Madrid" /><PublicationEntry title="El monasterio de El Escorial: una historia medioambiental" details="(2024), Madrid, con Eduardo Prieto" /><PublicationEntry title="V de Vigueta n°11" details="(2023) Artículo ilustrado" /><PublicationEntry title="Estableciendo “puentes” entre la Universidad y el tejido social madrileño" details="(2023), ETSAM, UPM, Madrid" /></CVSection></div>
               </div>
             </div>
-            <footer className="relative text-xs text-gray-500 z-10 text-center py-4">© 2024 Benito G. Quiñones</footer>
+            <footer className="relative text-xs text-gray-500 z-10 text-center py-4">© 2024 Benito González Quiñones</footer>
           </div>
+        );
+      };
+
+      const GalleryView = ({ filter, subcategory, onProjectSelect, onSubcategorySelect, mousePosition }) => {
+        let items = [];
+        if (subcategory) {
+            items = allProjectsData.filter(p => !p.isPage && p.subcategory === subcategory).map(p => ({ ...p, isGroup: false }));
+        } else {
+            let filterCat = filter === 'all' ? null : filter === 'scenography' || filter === 'escenografias' ? 'escenografias' : filter;
+            const seenSubcategories = new Set();
+            
+            allProjectsData.forEach(p => {
+                if (filterCat && p.category !== filterCat) return;
+                
+                if (p.isPage) {
+                    items.push({ id: p.id, title: p.title, isGroup: true, type: 'page', pageId: p.id });
+                } else if (p.subcategory && !p.isPage) {
+                    if (!seenSubcategories.has(p.subcategory)) {
+                        seenSubcategories.add(p.subcategory);
+                        items.push({ id: p.subcategory, title: p.subcategory, isGroup: true, type: 'subcategory', subcategory: p.subcategory });
+                    }
+                } else {
+                    items.push({ ...p, isGroup: false });
+                }
+            });
+        }
+
+        return (
+            <div className="w-full h-full overflow-y-auto hide-scrollbar pt-32 pb-24 px-4 sm:px-8 md:px-16" style={{ backgroundColor: 'transparent' }}>
+                <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8">
+                    {items.map(item => {
+                        if (item.isGroup) {
+                            return (
+                                <div 
+                                    key={item.id} 
+                                    className="group relative border border-dashed border-gray-700 hover:border-white hover:bg-gray-900/50 p-4 sm:p-6 cursor-pointer transition-all duration-300 flex items-center justify-center min-h-[150px] sm:min-h-[250px]"
+                                    onClick={() => {
+                                        if (item.type === 'page') {
+                                           onProjectSelect(item.pageId);
+                                        } else {
+                                           if (onSubcategorySelect) onSubcategorySelect(item.subcategory);
+                                        }
+                                    }}
+                                >
+                                    <h3 className="text-center font-mono text-sm tracking-widest uppercase text-gray-400 group-hover:text-white transition-colors">
+                                        {item.title}
+                                    </h3>
+                                </div>
+                            );
+                        }
+
+                        return (
+                            <div 
+                                key={item.id} 
+                                className="group relative border border-dashed border-gray-700 hover:border-white hover:bg-gray-900/50 p-4 sm:p-6 cursor-pointer transition-all duration-300 flex flex-col items-center justify-center min-h-[150px] sm:min-h-[250px]"
+                                onClick={() => onProjectSelect(item.id)}
+                            >
+                                <div className="absolute top-2 right-2 sm:top-4 sm:right-4 w-2 h-2 rounded-full border border-gray-500 group-hover:border-white transition-colors"></div>
+                                {item.normalImage && (
+                                    <div className="w-full h-24 sm:h-32 mt-4 sm:mt-6 mb-2 sm:mb-4 overflow-hidden relative grayscale group-hover:grayscale-0 opacity-50 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
+                                        <img src={item.normalImage} alt={item.title} className="max-w-full max-h-full object-contain" />
+                                    </div>
+                                )}
+                                <h3 className="text-center font-mono text-xs sm:text-sm tracking-widest uppercase text-gray-400 group-hover:text-white transition-colors mt-auto">
+                                    {item.title}
+                                </h3>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
         );
       };
 
@@ -903,7 +1013,7 @@
               </Section>
               
             </main>
-            <footer className="relative text-xs text-gray-500 z-10 text-center py-4 mt-8">© 2024 Benito G. Quiñones</footer>
+            <footer className="relative text-xs text-gray-500 z-10 text-center py-4 mt-8">© 2024 Benito González Quiñones</footer>
           </div>
         );
       };
@@ -976,6 +1086,62 @@
         );
       };
 
+      const WebDesignPage = () => {
+        const webs = [
+          { url: 'https://inter-easy.vercel.app/', title: 'Inter Easy' },
+          { url: 'https://doca.aq.upm.es/', title: 'DOCA UPM' },
+          { url: 'https://archigloss.vercel.app/', title: 'Archigloss' }
+        ];
+
+        return (
+          <div className="w-full min-h-screen bg-black text-gray-300 animate-fade-in overflow-y-auto">
+            <main className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 pt-32 pb-16">
+              <div className="mb-16">
+                <h1 className="text-4xl md:text-6xl font-light font-mono text-white tracking-widest uppercase mb-4">DISEÑO WEB</h1>
+                <div className="h-[1px] w-24 bg-red-500 mb-8"></div>
+                <p className="text-lg md:text-xl font-mono text-gray-400 max-w-2xl leading-relaxed">
+                  Exploración y desarrollo de interfaces digitales. Sitios web diseñados y desarrollados a medida, priorizando la experiencia de usuario y una estética limpia y funcional.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-24">
+                {webs.map((site, index) => (
+                  <div key={index} className="flex flex-col gap-6">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-gray-800 pb-4">
+                      <h2 className="text-2xl font-mono uppercase tracking-widest text-white">{site.title}</h2>
+                      <a 
+                        href={site.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="inline-flex items-center gap-2 text-sm font-mono text-gray-400 hover:text-white transition-colors"
+                      >
+                        Visitar sitio web
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                      </a>
+                    </div>
+                    <div className="w-full h-[70vh] min-h-[500px] border border-gray-800 rounded-lg overflow-hidden relative group bg-white shadow-2xl">
+                       <iframe 
+                         src={site.url} 
+                         title={site.title} 
+                         className="w-full h-full border-none opacity-90 group-hover:opacity-100 transition-opacity duration-500"
+                         loading="lazy"
+                       />
+                       <div className="absolute inset-0 pointer-events-none group-hover:bg-transparent bg-black/5 transition-colors duration-500"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </main>
+                        
+            <footer className="bg-black text-gray-600 text-center p-6 mt-12 border-t border-gray-900 z-10 relative">
+              <p className="text-xs font-mono">
+                © 2024 Benito González Quiñones - Todos los derechos reservados - arquitecturabenito@gmail.com
+              </p>
+            </footer>
+          </div>
+        );
+      };
+
       const ProjectDetailPage = ({ project, allProjectsData, onProjectSelect, onBack }) => {
         const containerRef = React.useRef(null);
 
@@ -987,9 +1153,7 @@
 
         if (!project) return null;
 
-        const carouselProjects = ['festa-na-terra', 'cronologia-adios', 'coleccion-grabados', 'territorios-digitales'];
-        const isCarouselView = carouselProjects.includes(project.id);
-        const isDarkTheme = project.id === 'hashima-animal-park' || isCarouselView;
+        const isDarkTheme = project.id === 'hashima-animal-park';
         const theme = isDarkTheme ? 'dark' : 'light';
 
         const relatedProjects = allProjectsData.filter(p => p.category === project.category && !p.isPage);
@@ -997,92 +1161,107 @@
         const prevProject = currentIndex > 0 ? relatedProjects[currentIndex - 1] : null;
         const nextProject = currentIndex < relatedProjects.length - 1 ? relatedProjects[currentIndex + 1] : null;
 
+        const paragraphs = project.description ? project.description.split('\n').filter(p => p.trim() !== '') : [];
+        const allMedia = [
+            ...(project.videos || []).map(src => ({ type: 'video', src })),
+            ...(project.gifs || []).map(src => ({ type: 'gif', src })),
+            ...(project.images || []).map(src => ({ type: 'image', src }))
+        ];
+
+        const renderEditorialContent = () => {
+            const blocks = [];
+            let pIdx = 0;
+            let mIdx = 0;
+
+            const getNextMediaLayout = () => {
+                if (mIdx >= allMedia.length) return null;
+                const layoutType = [1, 2, 1, 1, 2][mIdx % 5]; 
+                if (layoutType === 2 && mIdx + 1 < allMedia.length) {
+                    const items = [allMedia[mIdx], allMedia[mIdx+1]];
+                    mIdx += 2;
+                    return { type: 'media-group', items, layout: 'half' };
+                } else {
+                    const items = [allMedia[mIdx]];
+                    mIdx += 1;
+                    return { type: 'media-group', items, layout: 'full' };
+                }
+            };
+
+            while (pIdx < paragraphs.length || mIdx < allMedia.length) {
+                const mediaGroup = getNextMediaLayout();
+                if (mediaGroup) blocks.push(mediaGroup);
+
+                if (pIdx < paragraphs.length) {
+                    blocks.push({ type: 'text', content: paragraphs[pIdx] });
+                    pIdx++;
+                }
+            }
+
+            return blocks.map((block, i) => {
+                if (block.type === 'text') {
+                    return (
+                        <div key={`txt-${i}`} className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 my-12 md:my-16">
+                            <p className={`text-base md:text-xl font-light leading-relaxed tracking-wide ${isDarkTheme ? 'text-gray-300' : 'text-gray-700'}`}>
+                                {block.content}
+                            </p>
+                        </div>
+                    );
+                }
+
+                if (block.type === 'media-group') {
+                    if (block.layout === 'half') {
+                        return (
+                            <div key={`media-${i}`} className="w-full my-8">
+                                <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 md:grid md:grid-cols-2 md:gap-8 max-w-7xl mx-auto px-4 sm:px-8">
+                                    {block.items.map((m, j) => (
+                                        <div key={j} className={`w-[85vw] md:w-full flex-shrink-0 snap-center rounded-sm overflow-hidden flex items-center justify-center ${isDarkTheme ? 'bg-gray-900 border-gray-800' : 'bg-gray-50 border-gray-100'} border`}>
+                                            {m.type === 'video' ? (
+                                                <video src={m.src} autoPlay loop muted playsInline className="max-h-[70vh] w-full object-contain" />
+                                            ) : (
+                                                <img src={m.src} loading="lazy" alt="" className="max-h-[70vh] w-full object-contain hover:scale-105 transition-transform duration-700" />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <div key={`media-${i}`} className="w-full my-12 max-w-7xl mx-auto px-4 sm:px-8">
+                                <div className={`w-full rounded-sm overflow-hidden flex items-center justify-center ${isDarkTheme ? 'bg-gray-900 border-gray-800' : 'bg-gray-50 border-gray-100'} border`}>
+                                    {block.items[0].type === 'video' ? (
+                                        <video src={block.items[0].src} autoPlay loop muted playsInline className="max-h-[85vh] w-full object-contain" />
+                                    ) : (
+                                        <img src={block.items[0].src} loading="lazy" alt="" className="max-h-[85vh] w-full object-contain" />
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    }
+                }
+                return null;
+            });
+        };
+
         return (
           <div ref={containerRef} className={`w-full min-h-screen ${isDarkTheme ? 'bg-black text-gray-300' : 'bg-white text-black'} animate-fade-in overflow-y-auto relative`}>
             <InteractiveGridBackground theme={theme} />
 
-            <main className={`mx-auto z-10 relative pt-24 pb-12 px-4 sm:px-6 lg:px-8 ${isCarouselView ? 'max-w-6xl' : 'max-w-4xl'}`}>
-              <h1 className={`text-4xl sm:text-6xl font-bold font-mono uppercase tracking-wider ${isDarkTheme ? 'text-white' : 'text-black'} mb-16 text-center`}>{project.title}</h1>
-              
-              <div className="mb-16">
-                <h2 className={`text-3xl font-bold uppercase tracking-wider mb-6 ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>Descripción</h2>
-                <div className={`border-l-2 ${isDarkTheme ? 'border-cyan-400' : 'border-gray-400'} pl-6`}>
-                  <div className={`${isDarkTheme ? 'text-gray-400' : 'text-gray-700'} space-y-4 leading-relaxed`} dangerouslySetInnerHTML={{ __html: project.description.replace(/\n/g, '<br />') }} />
-                </div>
-              </div>
-              
-              {isCarouselView && project.images && project.images.length > 0 && (
-                <ImageCarousel images={project.images} title={project.title} />
-              )}
-              
-              {project.id === 'territorios-digitales' && (
-                <div className="mt-16">
-                  <h2 className={`text-3xl font-bold uppercase tracking-wider mb-6 ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>Imágenes Destacadas</h2>
-                  <div className="space-y-8">
-                    {[
-                      'imagenes/territoriosdigitales(1).jpg',
-                      'imagenes/territoriosdigitales(2).jpg',
-                      'imagenes/territoriosdigitales(3).jpg',
-                      'imagenes/territoriosdigitales(4).jpg',
-                      'imagenes/territoriosdigitales(5).jpg',
-                    ].map((imgSrc, index) => (
-                      <img 
-                        key={`featured-${index}`} 
-                        src={imgSrc} 
-                        alt={`${project.title} - Imagen destacada ${index + 1}`} 
-                        loading="lazy" 
-                        decoding="async" 
-                        className="w-full h-auto object-cover rounded-lg shadow-lg"
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
+            <main className={`relative z-10 w-full pt-32 pb-24`}>
+                <header className="mb-12 md:mb-20 text-center max-w-5xl mx-auto px-4">
+                    <h1 className={`text-4xl sm:text-6xl md:text-7xl font-bold font-mono uppercase tracking-widest ${isDarkTheme ? 'text-white' : 'text-black'}`}>
+                        {project.title}
+                    </h1>
+                </header>
 
-              {!isCarouselView && (project.images?.length > 0 || project.gifs?.length > 0 || project.videos?.length > 0) && (
-                <div>
-                  <h2 className={`text-3xl font-bold uppercase tracking-wider mb-6 ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>Galería</h2>
-                  <div className="space-y-8">
-                    {project.videos && project.videos.map((vidSrc, index) => (
-                      <video 
-                        key={`vid-${index}`} 
-                        src={vidSrc} 
-                        controls
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-auto object-cover rounded-lg shadow-lg"
-                      />
-                    ))}
-                    {project.gifs && project.gifs.map((gifSrc, index) => (
-                      <img 
-                        key={`gif-${index}`} 
-                        src={gifSrc} 
-                        alt={`${project.title} - GIF ${index + 1}`} 
-                        loading="lazy" 
-                        decoding="async" 
-                        className="w-full h-auto object-cover rounded-lg shadow-lg"
-                      />
-                    ))}
-                    {project.images && project.images.map((imgSrc, index) => (
-                      <img 
-                        key={`img-${index}`} 
-                        src={imgSrc} 
-                        alt={`${project.title} - Imagen ${index + 1}`} 
-                        loading="lazy" 
-                        decoding="async" 
-                        className="w-full h-auto object-cover rounded-lg shadow-lg"
-                      />
-                    ))}
-                  </div>
+                <div className="w-full">
+                    {renderEditorialContent()}
                 </div>
-              )}
 
               {project.pdf && (
-                <div className="mt-24 mb-8">
-                  <h2 className={`text-3xl font-bold uppercase tracking-wider mb-6 ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>Documentación Adjunta</h2>
-                  <div className={`w-full h-[80vh] min-h-[600px] rounded-lg overflow-hidden shadow-2xl border ${isDarkTheme ? 'border-gray-700 bg-gray-900' : 'border-gray-300 bg-gray-100'}`}>
+                <div className="mt-24 mb-8 max-w-6xl mx-auto px-4 md:px-8">
+                  <h2 className={`text-2xl sm:text-3xl font-bold font-mono uppercase tracking-wider mb-8 text-center ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>Documentación Adjunta</h2>
+                  <div className={`w-full h-[80vh] min-h-[600px] rounded-sm overflow-hidden shadow-2xl border ${isDarkTheme ? 'border-gray-800 bg-gray-900' : 'border-gray-200 bg-gray-50'}`}>
                     <object 
                       data={`${project.pdf}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`} 
                       type="application/pdf" 
@@ -1106,7 +1285,7 @@
             </main>
 
             { (prevProject || nextProject) &&
-              <nav className={`w-full mt-24 border-t border-dashed ${isDarkTheme ? 'border-gray-700' : 'border-gray-300'} z-10 relative flex flex-col sm:flex-row`}>
+              <nav className={`w-full mt-12 md:mt-24 border-t border-dashed ${isDarkTheme ? 'border-gray-700' : 'border-gray-300'} z-10 relative flex flex-col sm:flex-row`}>
                 {prevProject ? (
                     <button 
                         onClick={() => {
@@ -1147,7 +1326,7 @@
 
             <footer className={`${isDarkTheme ? 'bg-black text-gray-600' : 'bg-gray-50 text-gray-600'} text-center p-6 mt-0 z-10 relative`}>
               <p className="text-xs">
-                © 2024 Benito G. Quiñones - Todos los derechos reservados - arquitecturabenito@gmail.com
+                © 2024 Benito González Quiñones - Todos los derechos reservados - arquitecturabenito@gmail.com
               </p>
             </footer>
           </div>
@@ -1183,12 +1362,12 @@
               ))}
             </div>
             {/* Mobile */}
-            <div className="md:hidden fixed top-0 left-0 w-full z-20 flex justify-center space-x-2 bg-black/50 backdrop-blur-sm p-2">
+            <div className="md:hidden fixed top-0 left-0 w-full z-20 flex space-x-2 bg-black/50 backdrop-blur-sm p-2 overflow-x-auto hide-scrollbar">
                {filters.map(filter => (
                 <button
                   key={filter.key}
                   onClick={() => onFilterChange(filter.key)}
-                  className={`px-3 py-1 text-xs font-mono uppercase tracking-wider rounded-full transition-all duration-200 ${
+                  className={`flex-shrink-0 px-3 py-1 text-xs font-mono uppercase tracking-wider rounded-full transition-all duration-200 ${
                     currentFilter === filter.key
                       ? 'bg-cyan-400 text-black shadow-lg'
                       : 'text-white hover:bg-white/20'
@@ -1240,6 +1419,7 @@
         const [bgOpacity, setBgOpacity] = React.useState(0);
         const [disruptSignal, setDisruptSignal] = React.useState(0);
         const [showWelcome, setShowWelcome] = React.useState(true);
+        const [isGalleryMode, setIsGalleryMode] = React.useState(false);
 
 
         const handleEyeClick = () => {
@@ -1259,22 +1439,7 @@
         }, []); // Run only once on component mount
 
         React.useEffect(() => {
-            let interval;
-            const validPages = ['architecture', 'design', 'scenography', 'subcategory'];
-            if (!hoveredProjectImage && validPages.includes(view.page)) {
-                const allImages = allProjectsData.filter(p => p.normalImage).map(p => p.normalImage);
-                if (allImages.length > 0) {
-                    const setRandomImage = () => {
-                        const randomImg = allImages[Math.floor(Math.random() * allImages.length)];
-                        setSlideshowImage(randomImg);
-                    };
-                    setRandomImage(); // Set immediately
-                    interval = setInterval(setRandomImage, 250); // 4 fps
-                }
-            } else {
-                setSlideshowImage(null);
-            }
-            return () => clearInterval(interval);
+            // interval logic removed
         }, [hoveredProjectImage, view.page]);
 
         React.useEffect(() => {
@@ -1296,17 +1461,14 @@
         }, [view.page]);
         
         React.useEffect(() => {
-          const validPages = ['architecture', 'design', 'scenography', 'subcategory'];
+          const validPages = ['home', 'architecture', 'design', 'scenography', 'subcategory'];
           if (hoveredProjectImage && validPages.includes(view.page)) {
             setBgImage(hoveredProjectImage);
             setBgOpacity(1);
-          } else if (slideshowImage && validPages.includes(view.page)) {
-            setBgImage(slideshowImage);
-            setBgOpacity(0.6);
           } else {
             setBgOpacity(0);
           }
-        }, [hoveredProjectImage, slideshowImage, view.page]);
+        }, [hoveredProjectImage, view.page]);
 
         React.useEffect(() => {
           const html = document.documentElement;
@@ -1357,7 +1519,7 @@
 
         const handleProjectSelect = React.useCallback((projectId, isPage = false) => {
           if (isPage) {
-            setView({ page: 'generacion-ia', projectId: null });
+            setView({ page: projectId, projectId: null });
             return;
           }
           const project = allProjectsData.find(p => p.id === projectId);
@@ -1395,10 +1557,11 @@
 
         const handleBack = () => {
             setHoveredProjectImage(null);
-            if (view.page === 'project' || view.page === 'carteleria' || view.page === 'generacion-ia') {
+            const standalonePages = ['generacion-ia', 'web-design'];
+            if (view.page === 'project' || view.page === 'carteleria' || standalonePages.includes(view.page)) {
                 const project = allProjectsData.find(p => p.id === view.projectId);
                 
-                if (view.page === 'generacion-ia' || (project && project.category === 'design')) {
+                if (standalonePages.includes(view.page) || (project && project.category === 'design')) {
                     if (project && project.subcategory) {
                         setView({ page: 'subcategory', subcategory: project.subcategory });
                     } else {
@@ -1455,25 +1618,39 @@
             case 'home':
               return (
                 <div className="w-full h-full flex items-center justify-center relative">
-                  <div 
-                    className="central-eye absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
-                    onClick={handleEyeClick}
-                    title="Observa más de cerca..."
-                  >
-                    <EyeIcon mousePosition={relativeMousePosition} />
-                  </div>
-                  <div className="absolute top-0 left-0 w-full h-full z-10">
-                    <NetworkGraph onNodeClick={handleNodeClick} filter={filter} disruptSignal={disruptSignal} />
-                  </div>
+                  <h1 className="sr-only">Benito González Quiñones - Portfolio de Arquitectura y Diseño. Arquitecto Madrid.</h1>
+                  {!isGalleryMode && (
+                      <>
+                          <div 
+                            className="central-eye absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
+                            onClick={handleEyeClick}
+                            title="Observa más de cerca..."
+                          >
+                            <EyeIcon mousePosition={relativeMousePosition} />
+                          </div>
+                          <div className="absolute top-0 left-0 w-full h-full z-10">
+                            <NetworkGraph onNodeClick={handleNodeClick} filter={filter} disruptSignal={disruptSignal} />
+                          </div>
+                      </>
+                  )}
+                  {isGalleryMode && (
+                      <div className="absolute top-0 left-0 w-full h-full z-10">
+                         <GalleryView filter={filter} onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} mousePosition={relativeMousePosition} />
+                      </div>
+                  )}
                 </div>
               );
             case 'architecture':
+              if (isGalleryMode) return <div className="absolute top-0 left-0 w-full h-full z-10"><GalleryView filter="architecture" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} /></div>;
               return <OrbitalPage category="architecture" title="ARQUITECTURA" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} onProjectHover={handleProjectHover} showEye={true} mousePosition={relativeMousePosition} />;
             case 'design':
+              if (isGalleryMode) return <div className="absolute top-0 left-0 w-full h-full z-10"><GalleryView filter="design" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} /></div>;
               return <OrbitalPage category="design" title="DISEÑO" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} onProjectHover={handleProjectHover} showEye={true} mousePosition={relativeMousePosition} />;
             case 'scenography':
+              if (isGalleryMode) return <div className="absolute top-0 left-0 w-full h-full z-10"><GalleryView filter="scenography" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} /></div>;
               return <OrbitalPage category="escenografias" title="ESCENOGRAFÍAS" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} onProjectHover={handleProjectHover} showEye={true} mousePosition={relativeMousePosition} />;
             case 'subcategory': {
+              if (isGalleryMode) return <div className="absolute top-0 left-0 w-full h-full z-10"><GalleryView filter={filter} subcategory={view.subcategory} onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} /></div>;
               const subcategoryProjects = allProjectsData.filter(p => p.subcategory === view.subcategory);
               const category = subcategoryProjects.length > 0 ? subcategoryProjects[0].category : 'design';
               return <OrbitalPage category={category} subcategory={view.subcategory} title={view.subcategory} onProjectSelect={handleProjectSelect} onProjectHover={handleProjectHover} showEye={true} mousePosition={relativeMousePosition} />;
@@ -1486,6 +1663,9 @@
             }
             case 'generacion-ia': {
                 return <AIStudioPage />;
+            }
+            case 'web-design': {
+                return <WebDesignPage />;
             }
             case 'project':
               const project = allProjectsData.find(p => p.id === view.projectId);
@@ -1512,8 +1692,34 @@
             />
             
             {['home', 'architecture', 'design', 'scenography', 'contact'].includes(view.page) && <FilterControls currentFilter={filter} onFilterChange={handleFilterChange} />}
-            {view.page !== 'home' && <HomeButton onClick={handleGoHome} />}
-            {['project', 'carteleria', 'generacion-ia', 'subcategory'].includes(view.page) && <BackButton onClick={handleBack} theme={backButtonTheme} />}
+            {['home', 'architecture', 'design', 'scenography', 'subcategory'].includes(view.page) && (
+                  <button 
+                    onClick={() => setIsGalleryMode(!isGalleryMode)}
+                    className="absolute bottom-8 left-8 z-30 w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center text-white backdrop-blur-sm border border-gray-700 transition-all duration-300 hover:bg-opacity-75 hover:border-gray-500 hover:scale-110"
+                    title={isGalleryMode ? 'Volver a Constelación' : 'Modo Galería'}
+                  >
+                    {isGalleryMode ? (
+                        <svg width="24" height="24" viewBox="-50 -50 100 100">
+                            <g opacity="0.6">
+                                <path d="M 0 -40 C 20 -20, 20 20, 0 40 C -20 20, -20 -20, 0 -40 Z" fill="currentColor" transform="rotate(45)"/>
+                                <path d="M 0 -40 C 20 -20, 20 20, 0 40 C -20 20, -20 -20, 0 -40 Z" fill="currentColor" transform="rotate(-45)"/>
+                            </g>
+                            <g>
+                                <circle cx="0" cy="0" r="10" fill="currentColor" />
+                            </g>
+                        </svg>
+                    ) : (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    )}
+                  </button>
+            )}
+            {/* {view.page !== 'home' && <HomeButton onClick={handleGoHome} />} */}
+            {['project', 'carteleria', 'generacion-ia', 'web-design', 'subcategory'].includes(view.page) && <BackButton onClick={handleBack} theme={backButtonTheme} />}
             {renderContent()}
           </div>
         );

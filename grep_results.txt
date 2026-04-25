@@ -1,0 +1,358 @@
+120:        React.useEffect(() => {
+121-            const isMobile = window.matchMedia("(hover: none) and (pointer: coarse)").matches || window.innerWidth < 768;
+122-
+123-            if (isMobile) {
+124-                const handleOrientation = (event) => {
+125-                    const { beta, gamma } = event; // beta: front-to-back, gamma: left-to-right
+126-                    if (beta === null || gamma === null) return;
+127-                    
+128-                    const maxPupilOffset = 15;
+129-                    // Normalize gamma and beta to a range of [-1, 1] and apply offset
+130-                    const pupilX = Math.max(-1, Math.min(1, gamma / 45)) * maxPupilOffset;
+131-                    // Subtract 45 from beta to make the eye look forward when the phone is held at a natural angle
+132-                    const pupilY = Math.max(-1, Math.min(1, (beta - 45) / 45)) * maxPupilOffset;
+133-                    
+134-                    setPupilTransform(`translate(${pupilX}, ${pupilY})`);
+135-                };
+136-
+137-                window.addEventListener('deviceorientation', handleOrientation);
+138-                return () => window.removeEventListener('deviceorientation', handleOrientation);
+139-            } else {
+140-                if (!mousePosition) return;
+141-                const maxPupilOffset = 15;
+142-                const { x, y } = mousePosition;
+143-                const angle = Math.atan2(y, x);
+144-                const screenHypot = Math.sqrt(window.innerWidth * window.innerWidth + window.innerHeight * window.innerHeight) / 2;
+145-                const mouseHypot = Math.sqrt(x * x + y * y);
+146-                const normalizedDistance = Math.min(mouseHypot, screenHypot);
+147-                const pupilX = Math.cos(angle) * maxPupilOffset * (normalizedDistance / screenHypot);
+148-                const pupilY = Math.sin(angle) * maxPupilOffset * (normalizedDistance / screenHypot);
+149-                setPupilTransform(`translate(${pupilX}, ${pupilY})`);
+150-            }
+151-        }, [mousePosition]);
+152-
+153-        return (
+154-            <svg width="200" height="200" viewBox="-100 -100 200 200">
+155-              <defs>
+156-                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+157-                  <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
+158-                  <feMerge>
+159-                    <feMergeNode in="coloredBlur" />
+160-                    <feMergeNode in="SourceGraphic" />
+--
+199:        React.useEffect(() => {
+200-          if (disruptSignal > 0 && simulationRef.current) {
+201-              const nodes = simulationRef.current.nodes();
+202-              const strength = 25;
+203-              nodes.forEach(node => {
+204-                  if (!node.isCentral) {
+205-                      const angle = Math.atan2(node.y || 0, node.x || 0);
+206-                      node.vx += Math.cos(angle) * strength;
+207-                      node.vy += Math.sin(angle) * strength;
+208-                  }
+209-              });
+210-              simulationRef.current.alpha(1).restart();
+211-          }
+212-        }, [disruptSignal]);
+213-
+214:        React.useEffect(() => {
+215-          if (!svgRef.current) return;
+216-          
+217-          const isMobile = window.innerWidth < 768;
+218-          const width = window.innerWidth;
+219-          const height = window.innerHeight;
+220-
+221-          const categorySummaries = {
+222-            'ARQUITECTURA': 'Proyectos que exploran la relación entre el espacio, la forma y la función.',
+223-            'DISEÑO': 'Creación de objetos y experiencias visuales, desde carteles hasta productos.',
+224-            'ESCENOGRAFÍAS': 'Diseño de ambientes y atmósferas para contar historias en el espacio.'
+225-          };
+226-          
+227-          // --- Data Filtering Logic ---
+228-          const baseNodesRaw = [
+229-            { id: 'CENTRAL_HUB', group: 0, isCentral: true, fx: 0, fy: 0 },
+230-            { id: 'ARQUITECTURA', group: 1, isNavLink: true },
+231-            { id: 'DISEÑO', group: 2, isNavLink: true },
+232-            { id: 'ESCENOGRAFÍAS', group: 2, isNavLink: true },
+233-            { id: 'CONTACTO', group: 2, isNavLink: true },
+234-            { id: 'DOCENCIA', group: 2 }, { id: 'TRABAJO', group: 2 }, { id: 'INVESTIGACIÓN', group: 2 }, { id: 'EXPRESION ARTISTICA', group: 2 }, { id: 'Fotografía de la luz', group: 3 }, { id: 'I+D', group: 3 }, { id: 'Interiorismo', group: 3 },
+235-          ];
+236-
+237-          const baseLinksRaw = [
+238-            { source: 'CENTRAL_HUB', target: 'ARQUITECTURA', value: 1 }, { source: 'CENTRAL_HUB', target: 'DISEÑO', value: 1 }, { source: 'CENTRAL_HUB', target: 'ESCENOGRAFÍAS', value: 1 }, { source: 'CENTRAL_HUB', target: 'CONTACTO', value: 1 }, { source: 'ARQUITECTURA', target: 'DOCENCIA', value: 1 }, { source: 'ARQUITECTURA', target: 'TRABAJO', value: 1 }, { source: 'ARQUITECTURA', target: 'INVESTIGACIÓN', value: 1 }, { source: 'ARQUITECTURA', target: 'EXPRESION ARTISTICA', value: 1 }, { source: 'INVESTIGACIÓN', target: 'I+D', value: 2 }, { source: 'EXPRESION ARTISTICA', target: 'Fotografía de la luz', value: 2 }, { source: 'EXPRESION ARTISTICA', target: 'Interiorismo', value: 2 },
+239-          ];
+240-
+241-          const getSourceNode = (category) => {
+242-            switch(category) {
+243-              case 'architecture': return 'ARQUITECTURA';
+244-              case 'design': return 'DISEÑO';
+245-              case 'escenografias': return 'ESCENOGRAFÍAS';
+246-              default: return 'DISEÑO';
+247-            }
+248-          };
+249-          
+250-          let nodesData = [];
+251-          let linksData = [];
+252-
+253-          if (filter === 'all') {
+254-              nodesData = [...baseNodesRaw];
+--
+415:        React.useEffect(() => {
+416-            onProjectHoverRef.current = onProjectHover;
+417-        }, [onProjectHover]);
+418-
+419-        const simulationCallback = React.useCallback((category, subcategory, title, onProjectSelect, onSubcategorySelect) => {
+420-            if (!svgRef.current) return;
+421-            
+422-            let projects = allProjectsData.filter(p => p.category === category);
+423-            if (subcategory) {
+424-                projects = projects.filter(p => p.subcategory === subcategory);
+425-            }
+426-            
+427-            const isMobile = window.innerWidth < 768;
+428-            const width = window.innerWidth;
+429-            const height = window.innerHeight;
+430-
+431-            const baseNodes = [
+432-                { id: title, isSun: true, fx: 0, fy: 0 }
+433-            ];
+434-
+435-            const subcategories = subcategory ? [] : [...new Set(projects.map(p => p.subcategory).filter(Boolean))];
+436-            const subcategoryNodes = subcategories.map(sub => ({ id: sub, isSubSun: true, sun: title }));
+437-
+438-            const projectNodes = projects.map(p => ({ 
+439-                id: p.title, 
+440-                isProject: true, 
+441-                isPage: !!p.isPage, 
+442-                projectId: p.id, 
+443-                sun: subcategory ? title : (p.subcategory || title) 
+444-            }));
+445-            
+446-            projectNodes.forEach(node => {
+447-                node.x = 0;
+448-                node.y = 0;
+449-            });
+450-            subcategoryNodes.forEach(node => {
+451-                node.x = 0;
+452-                node.y = 0;
+453-            });
+454-            
+455-            const nodesData = [...baseNodes, ...subcategoryNodes, ...projectNodes];
+--
+604:        React.useEffect(() => {
+605-          const simulation = simulationCallback(category, subcategory, title, onProjectSelect, onSubcategorySelect);
+606-          return () => simulation.stop();
+607-        }, [category, subcategory, title, onProjectSelect, onSubcategorySelect, simulationCallback]);
+608-
+609-        return (
+610-            <div className="w-full h-screen bg-transparent text-white animate-fade-in relative">
+611-                <svg ref={svgRef} className="w-full h-full bg-transparent relative z-10" />
+612-                {showEye && (
+613-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
+614-                        <EyeIcon mousePosition={mousePosition} />
+615-                    </div>
+616-                )}
+617-                {tooltip.visible && (
+618-                    <div 
+619-                        className="absolute z-30 p-3 text-sm bg-gray-900 bg-opacity-80 backdrop-blur-sm text-white rounded-md shadow-lg max-w-xs pointer-events-none transition-opacity duration-200"
+620-                        style={{ top: tooltip.y + 15, left: tooltip.x + 15, fontFamily: "'Space Mono', monospace" }}
+621-                    >
+622-                        {tooltip.content}
+623-                    </div>
+624-                )}
+625-                <footer className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-500 z-10">© 2024 Benito G. Quiñones</footer>
+626-            </div>
+627-        );
+628-      };
+629-      
+630-      const InteractiveGridBackground = ({ theme = 'dark' }) => {
+631-        const [centerPos, setCenterPos] = React.useState({ x: -9999, y: -9999 });
+632-        const dotColor = theme === 'dark' ? '#00ffff' : '#cccccc';
+633-
+634:        React.useEffect(() => {
+635-            const isMobile = window.matchMedia("(hover: none) and (pointer: coarse)").matches || window.innerWidth < 768;
+636-
+637-            if (isMobile) {
+638-                const handleOrientation = (event) => {
+639-                    const { beta, gamma } = event;
+640-                    if (beta === null || gamma === null) return;
+641-
+642-                    const sensitivity = 3;
+643-                    const offsetX = Math.max(-1, Math.min(1, gamma / 45)) * window.innerWidth / sensitivity;
+644-                    const offsetY = Math.max(-1, Math.min(1, (beta - 45) / 45)) * window.innerHeight / sensitivity;
+645-                    
+646-                    setCenterPos({ 
+647-                        x: window.innerWidth / 2 - offsetX, 
+648-                        y: window.innerHeight / 2 - offsetY 
+649-                    });
+650-                };
+651-                window.addEventListener('deviceorientation', handleOrientation);
+652-                return () => window.removeEventListener('deviceorientation', handleOrientation);
+653-            } else {
+654-                const handleMouseMove = (event) => {
+655-                    setCenterPos({ x: event.clientX, y: event.clientY });
+656-                };
+657-                window.addEventListener('mousemove', handleMouseMove);
+658-                return () => window.removeEventListener('mousemove', handleMouseMove);
+659-            }
+660-        }, []);
+661-
+662-
+663-        const memoizedDots = React.useMemo(() => {
+664-            const dots = [];
+665-            const gridSize = 50;
+666-            const numCols = Math.ceil(window.innerWidth / gridSize);
+667-            const numRows = Math.ceil(window.innerHeight / gridSize);
+668-
+669-            for (let i = 0; i < numCols; i++) {
+670-                for (let j = 0; j < numRows; j++) {
+671-                    const x = i * gridSize;
+672-                    const y = j * gridSize;
+673-                    const dx = x - centerPos.x;
+674-                    const dy = y - centerPos.y;
+--
+1075:        React.useEffect(() => {
+1076-          if (containerRef.current) {
+1077-            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+1078-          }
+1079-        }, [project?.id]);
+1080-
+1081-        if (!project) return null;
+1082-
+1083-        const carouselProjects = ['festa-na-terra', 'cronologia-adios', 'coleccion-grabados', 'territorios-digitales'];
+1084-        const isCarouselView = carouselProjects.includes(project.id);
+1085-        const isDarkTheme = project.id === 'hashima-animal-park' || isCarouselView;
+1086-        const theme = isDarkTheme ? 'dark' : 'light';
+1087-
+1088-        const relatedProjects = allProjectsData.filter(p => p.category === project.category && !p.isPage);
+1089-        const currentIndex = relatedProjects.findIndex(p => p.id === project.id);
+1090-        const prevProject = currentIndex > 0 ? relatedProjects[currentIndex - 1] : null;
+1091-        const nextProject = currentIndex < relatedProjects.length - 1 ? relatedProjects[currentIndex + 1] : null;
+1092-
+1093-        return (
+1094-          <div ref={containerRef} className={`w-full min-h-screen ${isDarkTheme ? 'bg-black text-gray-300' : 'bg-white text-black'} animate-fade-in overflow-y-auto relative`}>
+1095-            <InteractiveGridBackground theme={theme} />
+1096-
+1097-            <main className={`mx-auto z-10 relative pt-24 pb-12 px-4 sm:px-6 lg:px-8 ${isCarouselView ? 'max-w-6xl' : 'max-w-4xl'}`}>
+1098-              <h1 className={`text-4xl sm:text-6xl font-bold font-mono uppercase tracking-wider ${isDarkTheme ? 'text-white' : 'text-black'} mb-16 text-center`}>{project.title}</h1>
+1099-              
+1100-              <div className="mb-16">
+1101-                <h2 className={`text-3xl font-bold uppercase tracking-wider mb-6 ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>Descripción</h2>
+1102-                <div className={`border-l-2 ${isDarkTheme ? 'border-cyan-400' : 'border-gray-400'} pl-6`}>
+1103-                  <div className={`${isDarkTheme ? 'text-gray-400' : 'text-gray-700'} space-y-4 leading-relaxed`} dangerouslySetInnerHTML={{ __html: project.description.replace(/\n/g, '<br />') }} />
+1104-                </div>
+1105-              </div>
+1106-              
+1107-              {isCarouselView && project.images && project.images.length > 0 && (
+1108-                <ImageCarousel images={project.images} title={project.title} />
+1109-              )}
+1110-              
+1111-              {project.id === 'territorios-digitales' && (
+1112-                <div className="mt-16">
+1113-                  <h2 className={`text-3xl font-bold uppercase tracking-wider mb-6 ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>Imágenes Destacadas</h2>
+1114-                  <div className="space-y-8">
+1115-                    {[
+--
+1343:        React.useEffect(() => {
+1344-          // Preload ALL project images to make the hover effect instant
+1345-          const allImages = allProjectsData
+1346-            .filter(p => p.normalImage)
+1347-            .map(p => p.normalImage);
+1348-          
+1349-          allImages.forEach(src => {
+1350-            const img = new Image();
+1351-            img.src = src;
+1352-          });
+1353-        }, []); // Run only once on component mount
+1354-
+1355:        React.useEffect(() => {
+1356-            let interval;
+1357-            const validPages = ['architecture', 'design', 'scenography', 'subcategory'];
+1358-            if (!hoveredProjectImage && validPages.includes(view.page)) {
+1359-                const allImages = allProjectsData.filter(p => p.normalImage).map(p => p.normalImage);
+1360-                if (allImages.length > 0) {
+1361-                    const setRandomImage = () => {
+1362-                        const randomImg = allImages[Math.floor(Math.random() * allImages.length)];
+1363-                        setSlideshowImage(randomImg);
+1364-                    };
+1365-                    setRandomImage(); // Set immediately
+1366-                    interval = setInterval(setRandomImage, 250); // 4 fps
+1367-                }
+1368-            } else {
+1369-                setSlideshowImage(null);
+1370-            }
+1371-            return () => clearInterval(interval);
+1372-        }, [hoveredProjectImage, view.page]);
+1373-
+1374:        React.useEffect(() => {
+1375-            const handleMouseMove = (event) => {
+1376-                // For the eye icon, relative to center
+1377-                if (['home', 'architecture', 'design', 'scenography', 'subcategory'].includes(view.page)) {
+1378-                    setRelativeMousePosition({
+1379-                        x: event.clientX - window.innerWidth / 2,
+1380-                        y: event.clientY - window.innerHeight / 2
+1381-                    });
+1382-                }
+1383-            };
+1384-            
+1385-            window.addEventListener('mousemove', handleMouseMove);
+1386-
+1387-            return () => {
+1388-                window.removeEventListener('mousemove', handleMouseMove);
+1389-            };
+1390-        }, [view.page]);
+1391-        
+1392:        React.useEffect(() => {
+1393-          const validPages = ['architecture', 'design', 'scenography', 'subcategory'];
+1394-          if (hoveredProjectImage && validPages.includes(view.page)) {
+1395-            setBgImage(hoveredProjectImage);
+1396-            setBgOpacity(1);
+1397-          } else if (slideshowImage && validPages.includes(view.page)) {
+1398-            setBgImage(slideshowImage);
+1399-            setBgOpacity(0.6);
+1400-          } else {
+1401-            setBgOpacity(0);
+1402-          }
+1403-        }, [hoveredProjectImage, slideshowImage, view.page]);
+1404-
+1405:        React.useEffect(() => {
+1406-          const html = document.documentElement;
+1407-          const body = document.body;
+1408-          
+1409-          if (['home', 'architecture', 'design', 'scenography', 'subcategory'].includes(view.page)) {
+1410-            html.style.overflow = 'hidden'; body.style.overflow = 'hidden';
+1411-          } else {
+1412-            html.style.overflow = 'auto'; body.style.overflow = 'auto';
+1413-          }
+1414-          
+1415-          window.scrollTo(0, 0);
+1416-
+1417-          let bgColor = '#000'; // default dark
+1418-          if (view.page === 'project') {
+1419-              const project = allProjectsData.find(p => p.id === view.projectId);
+1420-              const carouselProjects = ['festa-na-terra', 'cronologia-adios', 'coleccion-grabados', 'territorios-digitales'];
+1421-              const isCarouselView = carouselProjects.includes(project?.id);
+1422-              if (project && project.id !== 'hashima-animal-park' && !isCarouselView) {
+1423-                  bgColor = '#fff'; // light for all projects except Hashima and carousel projects
+1424-              }
+1425-          }
+1426-
+1427-          html.style.backgroundColor = bgColor;
+1428-          body.style.backgroundColor = bgColor;
+1429-
+1430-          return () => {
+1431-            html.style.overflow = 'auto'; body.style.overflow = 'auto';
+1432-          };
+1433-        }, [view.page, view.projectId]);
+1434-        
+1435-        const handleFilterChange = (newFilterKey) => {
+1436-            setHoveredProjectImage(null);
+1437-            setFilter(newFilterKey);
+1438-            const pageMap = {
+1439-                'architecture': 'architecture',
+1440-                'design': 'design',
+1441-                'escenografias': 'scenography',
+1442-                'contact': 'contact'
+1443-            };
+1444-
+1445-            if (pageMap[newFilterKey]) {
