@@ -12,10 +12,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone@7.23.0/babel.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three-spritetext@1.8.2/dist/three-spritetext.min.js"></script>
+    <script src="https://unpkg.com/react-force-graph-3d@1.24.3/dist/react-force-graph-3d.min.js"></script>
 
     <style>
       html, body, #root {
@@ -507,7 +510,7 @@ window.EscritoDetailPage = EscritoDetailPage;
 
 
       // COMPONENTS
-      const EyeIcon = ({ mousePosition }) => {
+      const EyeIcon = () => {
         const [pupilTransform, setPupilTransform] = React.useState('translate(0, 0)');
 
         React.useEffect(() => {
@@ -530,18 +533,33 @@ window.EscritoDetailPage = EscritoDetailPage;
                 window.addEventListener('deviceorientation', handleOrientation);
                 return () => window.removeEventListener('deviceorientation', handleOrientation);
             } else {
-                if (!mousePosition) return;
-                const maxPupilOffset = 15;
-                const { x, y } = mousePosition;
-                const angle = Math.atan2(y, x);
-                const screenHypot = Math.sqrt(window.innerWidth * window.innerWidth + window.innerHeight * window.innerHeight) / 2;
-                const mouseHypot = Math.sqrt(x * x + y * y);
-                const normalizedDistance = Math.min(mouseHypot, screenHypot);
-                const pupilX = Math.cos(angle) * maxPupilOffset * (normalizedDistance / screenHypot);
-                const pupilY = Math.sin(angle) * maxPupilOffset * (normalizedDistance / screenHypot);
-                setPupilTransform(`translate(${pupilX}, ${pupilY})`);
+                let animationFrameId;
+                const handleMouseMove = (event) => {
+                    const x = event.clientX - window.innerWidth / 2;
+                    const y = event.clientY - window.innerHeight / 2;
+                    
+                    // Use requestAnimationFrame for smoother performance
+                    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                    
+                    animationFrameId = requestAnimationFrame(() => {
+                        const maxPupilOffset = 15;
+                        const angle = Math.atan2(y, x);
+                        const screenHypot = Math.sqrt(window.innerWidth * window.innerWidth + window.innerHeight * window.innerHeight) / 2;
+                        const mouseHypot = Math.sqrt(x * x + y * y);
+                        const normalizedDistance = Math.min(mouseHypot, screenHypot);
+                        const pupilX = Math.cos(angle) * maxPupilOffset * (normalizedDistance / screenHypot);
+                        const pupilY = Math.sin(angle) * maxPupilOffset * (normalizedDistance / screenHypot);
+                        setPupilTransform(`translate(${pupilX}, ${pupilY})`);
+                    });
+                };
+                
+                window.addEventListener('mousemove', handleMouseMove);
+                return () => {
+                    window.removeEventListener('mousemove', handleMouseMove);
+                    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                };
             }
-        }, [mousePosition]);
+        }, []);
 
         return (
             <svg viewBox="-100 -100 200 200" className="w-[120px] h-[120px] md:w-[200px] md:h-[200px]">
@@ -561,11 +579,11 @@ window.EscritoDetailPage = EscritoDetailPage;
               <g>
                 <path d="M 0 -70 L 70 0 L 0 70 L -70 0 Z" fill="#333333" stroke="gray" strokeWidth="0.5"/>
               </g>
-              <g filter="url(#glow)" transform={pupilTransform} style={{ transition: 'transform 0.2s ease-out' }}>
-                <circle cx="0" cy="0" r="45" fill="#555555" />
-                <circle cx="0" cy="0" r="30" fill="#888888" />
-                <circle cx="0" cy="0" r="15" fill="#CCCCCC" />
-                <circle cx="0" cy="0" r="7" fill="white" />
+              <g filter="url(#glow)" transform={pupilTransform} style={{ transition: 'transform 0.1s ease-out' }}>
+                <circle cx="0" cy="0" r="35" fill="none" stroke="#00ffff" strokeOpacity="0.1" strokeWidth="1" />
+                <circle cx="0" cy="0" r="25" fill="#00ffff" fillOpacity="0.1" />
+                <circle cx="0" cy="0" r="12" fill="#00ffff" fillOpacity="0.25" />
+                <circle cx="0" cy="0" r="7" fill="#00ffff" />
               </g>
             </svg>
         );
@@ -602,42 +620,67 @@ window.EscritoDetailPage = EscritoDetailPage;
           );
       };
 
-      const NetworkGraph = ({ onNodeClick, filter, disruptSignal }) => {
-        const svgRef = React.useRef(null);
-        const simulationRef = React.useRef(null);
-        const [tooltip, setTooltip] = React.useState({ visible: false, content: '', x: 0, y: 0 });
+      const NetworkGraph = ({ onNodeClick, filter, disruptSignal, zoomTarget }) => {
+        const [graphData, setGraphData] = React.useState({ nodes: [], links: [] });
+        const [dimensions, setDimensions] = React.useState({ width: typeof window !== 'undefined' ? window.innerWidth : 800, height: typeof window !== 'undefined' ? window.innerHeight : 600 });
+        const [isLoaded, setIsLoaded] = React.useState(false);
+        const eyeRef = React.useRef(null);
 
         React.useEffect(() => {
-          if (disruptSignal > 0 && simulationRef.current) {
-              const nodes = simulationRef.current.nodes();
-              const strength = 25;
-              nodes.forEach(node => {
-                  if (!node.isCentral) {
-                      const angle = Math.atan2(node.y || 0, node.x || 0);
-                      node.vx += Math.cos(angle) * strength;
-                      node.vy += Math.sin(angle) * strength;
+          let animationFrameId;
+          const handleMouseMove = (event) => {
+              if (!eyeRef.current) return;
+              
+              const x = event.clientX - dimensions.width / 2;
+              const y = event.clientY - dimensions.height / 2;
+              
+              if (animationFrameId) cancelAnimationFrame(animationFrameId);
+              animationFrameId = requestAnimationFrame(() => {
+                  const maxPupilOffset = 2; // For the 3D pupil inside the sphere
+                  const angle = Math.atan2(y, x);
+                  
+                  const screenHypot = Math.sqrt(dimensions.width * dimensions.width + dimensions.height * dimensions.height) / 2;
+                  const mouseHypot = Math.sqrt(x * x + y * y);
+                  const normalizedDistance = Math.min(mouseHypot, screenHypot);
+                  
+                  const pupilX = Math.cos(angle) * maxPupilOffset * (normalizedDistance / screenHypot);
+                  const pupilY = -Math.sin(angle) * maxPupilOffset * (normalizedDistance / screenHypot); // Y is inverted in 3D
+                  
+                  if (eyeRef.current) {
+                      eyeRef.current.position.x = pupilX;
+                      eyeRef.current.position.y = pupilY;
                   }
               });
-              simulationRef.current.alpha(1).restart();
-          }
-        }, [disruptSignal]);
+          };
+
+          window.addEventListener('mousemove', handleMouseMove);
+          return () => {
+              window.removeEventListener('mousemove', handleMouseMove);
+              if (animationFrameId) cancelAnimationFrame(animationFrameId);
+          };
+        }, [dimensions]);
 
         React.useEffect(() => {
-          if (!svgRef.current) return;
+          const handleResize = () => setDimensions({ width: window.innerWidth, height: window.innerHeight });
+          window.addEventListener('resize', handleResize);
           
-          const isMobile = window.innerWidth < 768;
-          const width = window.innerWidth;
-          const height = window.innerHeight;
+          // Check if libraries are loaded
+          const checkLibs = setInterval(() => {
+            if (window.ForceGraph3D && window.SpriteText && window.THREE) {
+                setIsLoaded(true);
+                clearInterval(checkLibs);
+            }
+          }, 100);
 
-          const categorySummaries = {
-            'ARQUITECTURA': 'Proyectos que exploran la relación entre el espacio, la forma y la función.',
-            'DISEÑO': 'Creación de objetos y experiencias visuales, desde carteles hasta productos.',
-            'ESCENOGRAFÍAS': 'Diseño de ambientes y atmósferas para contar historias en el espacio.'
-          };
-          
-          // --- Data Filtering Logic ---
+          return () => {
+              window.removeEventListener('resize', handleResize);
+              clearInterval(checkLibs);
+          }
+        }, []);
+
+        React.useEffect(() => {
           const baseNodesRaw = [
-            { id: 'CENTRAL_HUB', group: 0, isCentral: true, fx: 0, fy: 0 },
+            { id: 'CENTRAL_HUB', group: 0, isCentral: true, fx: 0, fy: 0, fz: 0 },
             { id: 'ARQUITECTURA', group: 1, isNavLink: true, isCategoryNode: true, targetCategory: 'architecture' },
             { id: 'DISEÑO', group: 2, isNavLink: true, isCategoryNode: true, targetCategory: 'design' },
             { id: 'ESCENOGRAFÍAS', group: 2, isNavLink: true, isCategoryNode: true, targetCategory: 'scenography' },
@@ -663,7 +706,7 @@ window.EscritoDetailPage = EscritoDetailPage;
           const getSourceNode = (project) => {
             if (project.category === 'architecture') return project.subcategory || 'ARQUITECTURA';
             if (project.category === 'design') return project.subcategory || 'DISEÑO';
-            if (project.category === 'scenography') return 'ESCENOGRAFÍAS';
+            if (project.category === 'escenografias' || project.category === 'scenography') return 'ESCENOGRAFÍAS';
             return 'CENTRAL_HUB';
           };
 
@@ -680,16 +723,15 @@ window.EscritoDetailPage = EscritoDetailPage;
                   id: p.title, group: 4, isNavLink: true, isProject: true, projectId: p.id, isPage: !!p.isPage,
                   targetPage: p.targetPage || p.id
               }));
-              // For all projects, getSourceNode will return 'PROYECTOS', 'INVESTIGACIÓN', 'CONCEPT', 'LUMINARIAS', etc.
               const projectLinks = relevantProjects.map(p => ({ source: getSourceNode(p), target: p.title, value: 5 }));
               
               nodesData.push(...projectNodes);
               linksData.push(...projectLinks);
           } else {
-              const categoryMap = { 'architecture': 'ARQUITECTURA', 'design': 'DISEÑO', 'scenography': 'ESCENOGRAFÍAS' };
+              const categoryMap = { 'architecture': 'ARQUITECTURA', 'design': 'DISEÑO', 'scenography': 'ESCENOGRAFÍAS', 'escenografias': 'ESCENOGRAFÍAS' };
               const categoryName = categoryMap[filter];
               if (categoryName) {
-                  let localProjects = relevantProjects.filter(p => p.category === filter);
+                  let localProjects = relevantProjects.filter(p => p.category === filter || (filter === 'escenografias' && p.category === 'scenography') || (filter === 'scenography' && p.category === 'escenografias'));
                   let localSubcategories = [];
                   
                   if (filter === 'architecture') {
@@ -705,13 +747,12 @@ window.EscritoDetailPage = EscritoDetailPage;
                   }));
                   
                   const projectLinks = localProjects.map(p => {
-                     // Inside a category, link to subcategories if any, else link to category
                      const src = getSourceNode(p);
                      return { source: src, target: p.title, value: 5 };
                   });
 
                   nodesData = [
-                      { id: 'CENTRAL_HUB', group: 0, isCentral: true, fx: 0, fy: 0 },
+                      { id: 'CENTRAL_HUB', group: 0, isCentral: true, fx: 0, fy: 0, fz: 0 },
                       { id: categoryName, group: 1, isNavLink: true },
                       ...localSubcategories,
                       ...projectNodes
@@ -723,103 +764,137 @@ window.EscritoDetailPage = EscritoDetailPage;
                   ];
               }
           }
-          // --- End Data Filtering ---
           
-          const visibleNodes = nodesData.filter(n => n.id !== 'CENTRAL_HUB');
+          setGraphData({ nodes: nodesData, links: linksData });
+        }, [filter]);
 
-          const svg = d3.select(svgRef.current)
-            .attr('width', width)
-            .attr('height', height)
-            .attr('viewBox', [-width / 2, -height / 2, width, height]);
+        const fgRef = React.useRef();
 
-          svg.selectAll("*").remove(); 
-
-          if (simulationRef.current) {
-            simulationRef.current.stop();
+        React.useEffect(() => {
+          if (disruptSignal > 0 && fgRef.current) {
+               fgRef.current.d3ReheatSimulation();
           }
+        }, [disruptSignal]);
 
-          const simulation = d3.forceSimulation(nodesData)
-            .force('link', d3.forceLink(linksData).id(d => d.id).distance(d => {
-              if (isMobile) return d.value === 1 ? 200 : (d.value === 5 ? 80 : 120);
-              return d.value === 1 ? 300 : (d.value === 5 ? 120 : 180);
-            }))
-            .force('charge', d3.forceManyBody().strength(d => d.isCentral ? -1000 : (isMobile ? -200 : -400)))
-            .force('center', d3.forceCenter(0, 0));
-          
-          simulationRef.current = simulation;
-          simulation.alphaTarget(0.01); // Keep simulation active for continuous orbit
-
-          svg.append('circle').attr('cx', 0).attr('cy', 0).attr('r', Math.min(width, height) / 2 - 40).attr('stroke', 'rgba(255, 255, 255, 0.1)').attr('stroke-width', 1).attr('fill', 'none');
-
-          const link1 = svg.append('g').attr('stroke', '#666').attr('stroke-opacity', 0).selectAll('line').data(linksData).join('line').attr('class', 'animated-link').attr('stroke-width', d => d.value === 5 ? 0.5 : Math.sqrt(d.value));
-          link1.transition().duration(1000).delay(500).attr('stroke-opacity', 0.6);
-
-          const node1 = svg.append('g').selectAll('g').data(visibleNodes).join('g')
-            .style('cursor', d => d.isNavLink ? 'pointer' : 'default')
-            .on('click', (event, d) => {
-                if (!d.isNavLink) return;
-                event.preventDefault();
-                event.stopPropagation();
-                onNodeClick(d);
-            })
-            .call(d3.drag()
-                .on('start', (event, d) => { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
-                .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
-                .on('end', (event, d) => { if (!event.active) simulation.alphaTarget(0.01); d.fx = null; d.fy = null; }));
-
-          const getNodeColor = (d) => d.isNavLink && !d.isProject ? '#fff' : (d.isProject ? '#aaa' : '#777');
-
-          node1.on('mouseover', function(event, d) {
-            if (d.isNavLink) {
-              d3.select(this).select('text').transition().duration(200).attr('fill', '#00ffff');
-              d3.select(this).select('circle').transition().duration(200).attr('fill', '#00ffff').attr('r', d.isNavLink && !d.isProject ? 10 : (d.isProject ? 7 : 8));
-            }
-          }).on('mouseout', function(event, d) {
-            if (d.isNavLink) {
-              d3.select(this).select('text').transition().duration(200).attr('fill', d.isProject ? '#aaa' : '#fff');
-              d3.select(this).select('circle').transition().duration(200).attr('fill', getNodeColor(d)).attr('r', d.isNavLink && !d.isProject ? 8 : (d.isProject ? 5 : 6));
-            }
-          });
-
-          node1.append('circle').attr('r', d => d.isNavLink && !d.isProject ? 8 : (d.isProject ? 5 : 6)).attr('fill', getNodeColor).attr('stroke', '#000').attr('stroke-width', 2);
-          
-          node1.append('text').text(d => d.id)
-            .attr('x', 12)
-            .attr('y', 4)
-            .attr('fill', d => d.isProject ? '#aaa' : '#fff')
-            .style('font-size', isMobile ? '0.8rem' : '0.9rem')
-            .style('text-transform', 'uppercase')
-            .style('letter-spacing', '0.05em')
-            .style('font-weight', d => d.isProject ? 'normal' : 'bold')
-            .style('opacity', d => d.isProject ? 0.7 : 1);
-
-          simulation.on('tick', () => {
-            const margin = isMobile ? 10 : 20;
-            const leftBound = -width / 2 + margin;
-            const rightBound = width / 2 - margin;
-            const topBound = -height / 2 + margin;
-            const bottomBound = height / 2 - margin;
-            
-            node1.each(d => {
-                d.x = Math.max(leftBound, Math.min(rightBound, d.x));
-                d.y = Math.max(topBound, Math.min(bottomBound, d.y));
+        React.useEffect(() => {
+          if (fgRef.current) {
+            fgRef.current.d3Force('link').distance(link => {
+              if (link.value === 1) return 200; // Central to Category
+              if (link.value === 2) return 100;  // Category to Subcategory
+              return 60;                        // Subcat/Cat to Project
             });
+            fgRef.current.d3Force('charge').strength(-150);
+            fgRef.current.d3ReheatSimulation();
+          }
+        }, [graphData]);
 
-            link1.attr('x1', d => d.source.x || 0).attr('y1', d => d.source.y || 0).attr('x2', d => d.target.x || 0).attr('y2', d => d.target.y || 0);
-            node1.attr('transform', d => `translate(${d.x || 0}, ${d.y || 0})`);
-          });
+        React.useEffect(() => {
+            if (zoomTarget && fgRef.current && isLoaded) {
+                 const mappedZoomTarget = zoomTarget === 'escenografias' ? 'scenography' : zoomTarget;
+                 const targetNode = graphData.nodes.find(n => n.targetCategory === mappedZoomTarget || n.id.toLowerCase() === mappedZoomTarget.toLowerCase() || n.targetPage === mappedZoomTarget || n.projectId === mappedZoomTarget);
+                 if (targetNode) {
+                     const distance = 80;
+                     const targetX = targetNode.x || 0.1;
+                     const targetY = targetNode.y || 0.1;
+                     const targetZ = targetNode.z || 0.1;
+                     const distRatio = 1 + distance/Math.hypot(targetX, targetY, targetZ);
+                     fgRef.current.cameraPosition(
+                         { x: targetX * distRatio, y: targetY * distRatio, z: targetZ * distRatio },
+                         targetNode,
+                         2600
+                     );
+                 }
+            }
+        }, [zoomTarget, graphData.nodes, isLoaded]);
 
-          return () => simulation.stop();
-        }, [filter, disruptSignal, onNodeClick]);
+        if (!isLoaded) {
+             return <div className="text-white w-full h-full flex items-center justify-center font-mono">Iniciando constelación 3D...</div>;
+        }
+        
+        const ForceGraph3D = window.ForceGraph3D;
+        const SpriteText = window.SpriteText;
 
         return (
-            <div className="w-full h-full relative">
-                <svg ref={svgRef} className="w-full h-full bg-transparent relative z-10" />
-            </div>
+             <div className="w-full h-full relative cursor-move">
+                <ForceGraph3D
+                   ref={fgRef}
+                   width={dimensions.width}
+                   height={dimensions.height}
+                   graphData={graphData}
+                   nodeLabel={() => ''}
+                   onNodeClick={(node) => {
+                       if (node.isNavLink || node.isProject || node.isPage || node.isCategoryNode) {
+                           onNodeClick(node);
+                       }
+                   }}
+                   nodeThreeObject={(node) => {
+                       if (node.isCentral) {
+                           const group = new window.THREE.Group();
+
+                           const outerGeo = new window.THREE.SphereGeometry(15, 32, 32);
+                           const outerMat = new window.THREE.MeshPhongMaterial({ color: 0xffffff, transparent: true, opacity: 0.15 });
+                           group.add(new window.THREE.Mesh(outerGeo, outerMat));
+
+                           const midGeo = new window.THREE.SphereGeometry(10, 32, 32);
+                           const midMat = new window.THREE.MeshPhongMaterial({ color: 0x00ffff, transparent: true, opacity: 0.25 });
+                           group.add(new window.THREE.Mesh(midGeo, midMat));
+                           
+                           const pupilGeo = new window.THREE.SphereGeometry(4, 32, 32);
+                           const pupilMat = new window.THREE.MeshPhongMaterial({ color: 0x00ffff });
+                           const pupil = new window.THREE.Mesh(pupilGeo, pupilMat);
+                           group.add(pupil);
+                           
+                           eyeRef.current = pupil;
+                           
+                           return group;
+                       }
+                       
+                       const group = new window.THREE.Group();
+                       
+                       let radius = node.isProject ? 2 : (node.isSubcategory ? 4 : 6);
+                       let color = node.isProject ? 0xaaaaaa : 0xffffff;
+                       let textColor = node.isProject ? '#aaaaaa' : '#ffffff';
+                       let textHeight = node.isProject ? 3 : (node.isSubcategory ? 4 : 5);
+                       
+                       if (node.isCategoryNode || ['ARQUITECTURA', 'DISEÑO', 'ESCENOGRAFÍAS', 'CONTACTO'].includes(node.id)) {
+                           color = 0x00ffff;
+                           textColor = '#00ffff';
+                           radius = 6;
+                           textHeight = 5;
+                       }
+
+                       const nodeGeo = new window.THREE.SphereGeometry(radius, 16, 16);
+                       const nodeMat = new window.THREE.MeshBasicMaterial({ color: color, wireframe: true, transparent: true, opacity: 0.5 });
+                       group.add(new window.THREE.Mesh(nodeGeo, nodeMat));
+
+                       const sprite = new SpriteText(node.id);
+                       sprite.color = textColor;
+                       sprite.textHeight = textHeight;
+                       sprite.fontFace = "'Space Mono', monospace";
+                       sprite.backgroundColor = 'rgba(0,0,0,0.4)';
+                       sprite.padding = 2;
+                       sprite.position.y = radius + textHeight + 1; 
+                       group.add(sprite);
+
+                       return group;
+                   }}
+                   linkWidth={d => (d.value === 1 ? 2.5 : (d.value === 2 ? 1.5 : 0.8))}
+                   linkColor={(link) => link.value > 2 ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.9)'}
+                   backgroundColor="rgba(0,0,0,0)"
+                   showNavInfo={false}
+                   onNodeHover={(node) => {
+                       if (node && (node.isNavLink || node.isProject)) {
+                           document.body.style.cursor = 'pointer';
+                       } else {
+                           document.body.style.cursor = 'grab';
+                       }
+                   }}
+                />
+             </div>
         );
       };
       
-      const OrbitalPage = ({ category, subcategory, title, onProjectSelect, onSubcategorySelect, onProjectHover = () => {}, showEye = false, mousePosition }) => {
+      const OrbitalPage = ({ category, subcategory, title, onProjectSelect, onSubcategorySelect, onProjectHover = () => {}, showEye = false }) => {
         const svgRef = React.useRef(null);
         const [tooltip, setTooltip] = React.useState({ visible: false, content: '', x: 0, y: 0 });
 
@@ -894,9 +969,9 @@ window.EscritoDetailPage = EscritoDetailPage;
                     return 25;
                 }));
 
-            const link = svg.append('g').attr('stroke', '#aaa').attr('stroke-opacity', 0).selectAll('line').data(linksData).join('line').attr('class', 'animated-link')
-                .attr('stroke-width', d => d.target.isSubSun ? 2 : 1);
-            link.transition().duration(1000).delay(800).attr('stroke-opacity', d => d.target.isSubSun ? 0.9 : 0.5);
+            const link = svg.append('g').attr('stroke', '#fff').attr('stroke-opacity', 0).selectAll('line').data(linksData).join('line').attr('class', 'animated-link')
+                .attr('stroke-width', d => d.target.isSubSun ? 3 : 1.5);
+            link.transition().duration(1000).delay(800).attr('stroke-opacity', d => d.target.isSubSun ? 1 : 0.7);
 
             const node = svg.append('g').selectAll('g').data(nodesData).join('g')
                 .style('cursor', d => (d.isProject || d.isSubSun) ? 'pointer' : 'default')
@@ -1029,7 +1104,7 @@ window.EscritoDetailPage = EscritoDetailPage;
                 <svg ref={svgRef} className="w-full h-full bg-transparent relative z-10" />
                 {showEye && (
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
-                        <EyeIcon mousePosition={mousePosition} />
+                        <EyeIcon />
                     </div>
                 )}
                 {tooltip.visible && (
@@ -1177,7 +1252,7 @@ window.EscritoDetailPage = EscritoDetailPage;
         );
       };
 
-      const GalleryView = ({ filter, subcategory, onProjectSelect, onSubcategorySelect, mousePosition }) => {
+      const GalleryView = ({ filter, subcategory, onProjectSelect, onSubcategorySelect }) => {
         let items = [];
         if (subcategory) {
             items = allProjectsData.filter(p => !p.isPage && p.subcategory === subcategory).map(p => ({ ...p, isGroup: false }));
@@ -1879,7 +1954,7 @@ window.EscritoDetailPage = EscritoDetailPage;
       const App = () => {
         const [view, setView] = React.useState({ page: 'home', projectId: null });
         const [filter, setFilter] = React.useState('all');
-        const [relativeMousePosition, setRelativeMousePosition] = React.useState({ x: 0, y: 0 });
+        const [zoomTarget, setZoomTarget] = React.useState(null);
         const [hoveredProjectImage, setHoveredProjectImage] = React.useState(null);
         const [slideshowImage, setSlideshowImage] = React.useState(null);
         const [bgImage, setBgImage] = React.useState(null);
@@ -1894,39 +1969,23 @@ window.EscritoDetailPage = EscritoDetailPage;
         };
 
         React.useEffect(() => {
-          // Preload ALL project images to make the hover effect instant
-          const allImages = allProjectsData
-            .filter(p => p.normalImage)
-            .map(p => p.normalImage);
-          
-          allImages.forEach(src => {
-            const img = new Image();
-            img.src = src;
-          });
+          // Preload ALL project images lazily
+          setTimeout(() => {
+            const allImages = allProjectsData
+              .filter(p => p.normalImage)
+              .map(p => p.normalImage);
+            
+            allImages.forEach(src => {
+              const img = new Image();
+              img.src = src;
+            });
+          }, 2000);
         }, []); // Run only once on component mount
 
         React.useEffect(() => {
             // interval logic removed
         }, [hoveredProjectImage, view.page]);
 
-        React.useEffect(() => {
-            const handleMouseMove = (event) => {
-                // For the eye icon, relative to center
-                if (['home', 'architecture', 'design', 'scenography', 'subcategory'].includes(view.page)) {
-                    setRelativeMousePosition({
-                        x: event.clientX - window.innerWidth / 2,
-                        y: event.clientY - window.innerHeight / 2
-                    });
-                }
-            };
-            
-            window.addEventListener('mousemove', handleMouseMove);
-
-            return () => {
-                window.removeEventListener('mousemove', handleMouseMove);
-            };
-        }, [view.page]);
-        
         React.useEffect(() => {
           const validPages = ['home', 'architecture', 'design', 'scenography', 'subcategory'];
           if (hoveredProjectImage && validPages.includes(view.page)) {
@@ -1969,7 +2028,7 @@ window.EscritoDetailPage = EscritoDetailPage;
         
         const handleFilterChange = (newFilterKey) => {
             setHoveredProjectImage(null);
-            setFilter(newFilterKey);
+            
             const pageMap = {
                 'architecture': 'architecture',
                 'design': 'design',
@@ -1977,10 +2036,18 @@ window.EscritoDetailPage = EscritoDetailPage;
                 'contact': 'contact'
             };
 
-            if (pageMap[newFilterKey]) {
-                setView({ page: pageMap[newFilterKey], projectId: null });
-            } else { // This handles 'all'
-                setView({ page: 'home', projectId: null });
+            const targetPage = pageMap[newFilterKey] ? pageMap[newFilterKey] : 'home';
+            
+            if (view.page === 'home' && targetPage !== 'home') {
+                 setZoomTarget(newFilterKey);
+                 setTimeout(() => {
+                     setFilter(newFilterKey);
+                     setView({ page: targetPage, projectId: null });
+                     setZoomTarget(null);
+                 }, 3200);
+            } else {
+                 setFilter(newFilterKey);
+                 setView({ page: targetPage, projectId: null });
             }
         };
 
@@ -2006,7 +2073,29 @@ window.EscritoDetailPage = EscritoDetailPage;
           }
         }, []);
 
-        const handleNodeClick = React.useCallback((node) => {
+                const handleNodeClick = React.useCallback((node) => {
+          if (view.page === 'home') {
+              setZoomTarget(node.projectId || node.id);
+              setTimeout(() => {
+                  if (node.isProject && node.projectId) {
+                    const project = allProjectsData.find(p => p.id === node.projectId);
+                    if (project?.isPage) {
+                      handleProjectSelect(node.projectId, true);
+                    } else {
+                      handleProjectSelect(node.projectId, false);
+                    }
+                  } else if (['ARQUITECTURA', 'DISEÑO', 'ESCENOGRAFÍAS', 'CONTACTO'].includes(node.id)) {
+                      let filterKey = node.id === 'ARQUITECTURA' ? 'architecture' : node.id === 'DISEÑO' ? 'design' : node.id === 'ESCENOGRAFÍAS' ? 'scenography' : 'contact';
+                      setFilter(filterKey);
+                      setView({ page: filterKey, projectId: null });
+                  } else if (node.isSubcategory) {
+                      setView({ page: 'subcategory', subcategory: node.id });
+                  }
+                  setZoomTarget(null);
+              }, 3200);
+              return;
+          }
+
           if (node.isProject && node.projectId) {
             const project = allProjectsData.find(p => p.id === node.projectId);
             if (project?.isPage) {
@@ -2016,13 +2105,18 @@ window.EscritoDetailPage = EscritoDetailPage;
             }
             return;
           }
-          switch (node.id) {
-            case 'ARQUITECTURA': setFilter('architecture'); setView({ page: 'architecture', projectId: null }); break;
-            case 'DISEÑO': setFilter('design'); setView({ page: 'design', projectId: null }); break;
-            case 'ESCENOGRAFÍAS': setFilter('scenografias'); setView({ page: 'scenography', projectId: null }); break;
-            case 'CONTACTO': setFilter('contact'); setView({ page: 'contact', projectId: null }); break;
+          
+          if (['ARQUITECTURA', 'DISEÑO', 'ESCENOGRAFÍAS', 'CONTACTO'].includes(node.id)) {
+              let filterKey = node.id === 'ARQUITECTURA' ? 'architecture' : node.id === 'DISEÑO' ? 'design' : node.id === 'ESCENOGRAFÍAS' ? 'scenography' : 'contact';
+              setFilter(filterKey);
+              setView({ page: filterKey, projectId: null });
+              return;
           }
-        }, [handleProjectSelect]);
+          if (node.isSubcategory) {
+              setView({ page: 'subcategory', subcategory: node.id });
+              return;
+          }
+        }, [handleProjectSelect, view.page]);
         
         const handleGoHome = () => {
           setHoveredProjectImage(null);
@@ -2115,42 +2209,38 @@ window.EscritoDetailPage = EscritoDetailPage;
                 <div className="w-full h-full flex items-center justify-center relative">
                   <h1 className="sr-only">Benito González Quiñones - Portfolio de Arquitectura y Diseño. Arquitecto Madrid.</h1>
                   {!isGalleryMode && (
-                      <>
-                          <div 
-                            className="central-eye absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer"
-                            onClick={handleEyeClick}
-                            title="Observa más de cerca..."
-                          >
-                            <EyeIcon mousePosition={relativeMousePosition} />
-                          </div>
-                          <div className="absolute top-0 left-0 w-full h-full z-10">
-                            <NetworkGraph onNodeClick={handleNodeClick} filter={filter} disruptSignal={disruptSignal} />
-                          </div>
-                      </>
+                      <div className="absolute top-0 left-0 w-full h-full z-10">
+                        <NetworkGraph onNodeClick={handleNodeClick} filter={filter} disruptSignal={disruptSignal} zoomTarget={zoomTarget} />
+                        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 md:bottom-auto md:top-8 md:right-8 md:left-auto md:translate-x-0 p-3 bg-black/40 backdrop-blur-md rounded-xl md:rounded-lg border border-white/10 text-white/70 text-[10px] md:text-xs font-mono tracking-wider pointer-events-none opacity-70 animate-pulse text-center whitespace-pre-line z-50">
+                           {typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0) 
+                              ? "Arrastra para orbitar\nPellizca para zoom\nToca para explorar" 
+                              : "Arrastra: Orbitar\nScroll: Zoom\nClic: Explorar"}
+                        </div>
+                      </div>
                   )}
                   {isGalleryMode && (
                       <div className="absolute top-0 left-0 w-full h-full z-10">
-                         <GalleryView filter={filter} onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} mousePosition={relativeMousePosition} />
+                         <GalleryView filter={filter} onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} />
                       </div>
                   )}
                 </div>
               );
             case 'architecture':
               if (isGalleryMode) return <div className="absolute top-0 left-0 w-full h-full z-10"><GalleryView filter="architecture" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} /></div>;
-              return <OrbitalPage category="architecture" title="ARQUITECTURA" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} onProjectHover={handleProjectHover} showEye={true} mousePosition={relativeMousePosition} />;
+              return <OrbitalPage category="architecture" title="ARQUITECTURA" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} onProjectHover={handleProjectHover} showEye={true} />;
             
             
             case 'design':
               if (isGalleryMode) return <div className="absolute top-0 left-0 w-full h-full z-10"><GalleryView filter="design" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} /></div>;
-              return <OrbitalPage category="design" title="DISEÑO" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} onProjectHover={handleProjectHover} showEye={true} mousePosition={relativeMousePosition} />;
+              return <OrbitalPage category="design" title="DISEÑO" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} onProjectHover={handleProjectHover} showEye={true} />;
             case 'scenography':
               if (isGalleryMode) return <div className="absolute top-0 left-0 w-full h-full z-10"><GalleryView filter="scenography" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} /></div>;
-              return <OrbitalPage category="escenografias" title="ESCENOGRAFÍAS" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} onProjectHover={handleProjectHover} showEye={true} mousePosition={relativeMousePosition} />;
+              return <OrbitalPage category="escenografias" title="ESCENOGRAFÍAS" onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} onProjectHover={handleProjectHover} showEye={true} />;
             case 'subcategory': {
               if (isGalleryMode) return <div className="absolute top-0 left-0 w-full h-full z-10"><GalleryView filter={filter} subcategory={view.subcategory} onProjectSelect={handleProjectSelect} onSubcategorySelect={handleSubcategorySelect} /></div>;
               const subcategoryProjects = allProjectsData.filter(p => p.subcategory === view.subcategory);
               const category = subcategoryProjects.length > 0 ? subcategoryProjects[0].category : 'design';
-              return <OrbitalPage category={category} subcategory={view.subcategory} title={view.subcategory} onProjectSelect={handleProjectSelect} onProjectHover={handleProjectHover} showEye={true} mousePosition={relativeMousePosition} />;
+              return <OrbitalPage category={category} subcategory={view.subcategory} title={view.subcategory} onProjectSelect={handleProjectSelect} onProjectHover={handleProjectHover} showEye={true} />;
             }
             case 'contact':
               return <ContactPage />;
