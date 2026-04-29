@@ -2362,26 +2362,31 @@ window.EscritoDetailPage = EscritoDetailPage;
         React.useEffect(() => {
           const handlePath = () => {
             const path = window.location.pathname;
-            if (path === '/tutorialia' || path.endsWith('/tutorialia')) {
+            const hash = window.location.hash;
+            if (path.includes('/tutorialia') || hash === '#/tutorialia') {
               setView({ page: 'generacion-ia', projectId: null });
-            } else if (path === '/' || path === '') {
+            } else if (path === '/' || path === '' || hash === '#/' || hash === '') {
               setView({ page: 'home', projectId: null });
             }
           };
           
           handlePath();
           window.addEventListener('popstate', handlePath);
-          return () => window.removeEventListener('popstate', handlePath);
+          window.addEventListener('hashchange', handlePath);
+          return () => {
+            window.removeEventListener('popstate', handlePath);
+            window.removeEventListener('hashchange', handlePath);
+          };
         }, []);
 
         React.useEffect(() => {
           if (view.page === 'generacion-ia') {
-            if (window.location.pathname !== '/tutorialia') {
-              window.history.pushState(null, '', '/tutorialia');
+            if (window.location.hash !== '#/tutorialia') {
+              window.history.pushState(null, '', '#/tutorialia');
             }
           } else if (view.page === 'home') {
-            if (window.location.pathname === '/tutorialia') {
-              window.history.pushState(null, '', '/');
+            if (window.location.hash === '#/tutorialia') {
+              window.history.pushState(null, '', '#/');
             }
           }
         }, [view.page]);
