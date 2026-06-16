@@ -2431,6 +2431,21 @@ window.EscritoDetailPage = EscritoDetailPage;
                  </p>
               </button>
            </div>
+
+           <a 
+              href="https://drive.google.com/file/d/1h-SuLrKgAEDFt16S2rM1tHqEd_F8T5jO/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute bottom-6 right-6 md:bottom-12 md:right-12 flex flex-col items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full border border-white/20 hover:border-cyan-400 bg-black/50 backdrop-blur-sm group transition-all duration-500 hover:scale-105 z-50 cursor-pointer"
+           >
+              <svg viewBox="0 0 100 100" className="w-8 h-8 md:w-10 md:h-10 mb-1 stroke-gray-400 group-hover:stroke-cyan-400 transition-all duration-500 fill-transparent stroke-[4]">
+                 <rect x="25" y="30" width="22" height="28" rx="2" />
+                 <rect x="53" y="30" width="22" height="28" rx="2" />
+              </svg>
+              <span className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-gray-400 group-hover:text-cyan-400 transition-colors text-center w-full">
+                porfolio
+              </span>
+           </a>
         </div>
         );
       };
@@ -2468,7 +2483,7 @@ window.EscritoDetailPage = EscritoDetailPage;
               `}
             </style>
             <div 
-              className="fixed pointer-events-none z-[9999] flex flex-col items-start justify-start"
+              className="fixed pointer-events-none z-[9999] flex flex-col items-start justify-start mix-blend-difference"
               style={{ 
                 left: `${position.x}px`, 
                 top: `${position.y}px`,
@@ -2476,7 +2491,7 @@ window.EscritoDetailPage = EscritoDetailPage;
               }}
             >
               <div className={`relative flex items-center justify-center transition-all duration-300 ${isHovering ? 'scale-150' : 'scale-100'}`}>
-                 <svg width="32" height="32" viewBox="0 0 32 32" className={`transition-colors duration-300 ${isHovering ? 'text-cyan-400' : 'text-white/80'}`}>
+                 <svg width="32" height="32" viewBox="0 0 32 32" className={`transition-colors duration-300 ${isHovering ? 'text-cyan-400' : 'text-white'}`}>
                      <circle cx="16" cy="16" r="2" fill="currentColor" />
                      <line x1="16" y1="4" x2="16" y2="10" stroke="currentColor" strokeWidth="1" />
                      <line x1="16" y1="22" x2="16" y2="28" stroke="currentColor" strokeWidth="1" />
