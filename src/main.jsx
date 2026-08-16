@@ -246,10 +246,10 @@ const useTranslation = (overrideLang) => {
     }
   };
 
-  const t = (key) => translations[lang][key] || key;
+  const t = React.useCallback((key) => translations[lang][key] || key, [lang]);
   
   // Custom translation helper for project dynamic fields
-  const pt = (project, field) => {
+  const pt = React.useCallback((project, field) => {
     if (!project) return "";
     if (lang === "en") {
       if (project[field + "_en"]) return project[field + "_en"];
@@ -259,7 +259,7 @@ const useTranslation = (overrideLang) => {
       if (project[field + "_es"]) return project[field + "_es"];
     }
     return project[field] || "";
-  };
+  }, [lang]);
 
   return { t, pt, lang };
 };
@@ -1970,7 +1970,7 @@ const InteractiveGridBackground = ({ theme = "dark" }) => {
 const ContactPage = () => {
   const CVSection = ({ title, children }) => (
     <div className="mb-8">
-      <h3 className="font-mono text-xl font-bold uppercase tracking-widest text-cyan-400 border-b border-gray-800 pb-2 mb-4">
+      <h3 className="font-mono text-sm sm:text-xl font-bold uppercase tracking-widest text-cyan-400 border-b border-gray-800 pb-2 mb-4">
         {title}
       </h3>
       <div className="text-gray-400">{children}</div>
@@ -1978,43 +1978,44 @@ const ContactPage = () => {
   );
   const CVEntry = ({ title, period, place }) => (
     <div className="mb-3 transition-transform duration-300 group hover:translate-x-2">
-      <p className="font-bold text-gray-200 transition-colors duration-300 group-hover:text-white">
+      <p className="font-bold text-xs sm:text-base text-gray-200 transition-colors duration-300 group-hover:text-white leading-tight mb-1">
         {title}
       </p>
-      <p className="text-sm">{period}</p>
-      <p className="text-sm text-gray-500">{place}</p>
+      <p className="text-[10px] sm:text-sm leading-tight">{period}</p>
+      <p className="text-[10px] sm:text-sm text-gray-500 leading-tight">{place}</p>
     </div>
   );
   const PublicationEntry = ({ title, details }) => (
     <div className="mb-3 transition-transform duration-300 group hover:translate-x-2">
-      <p className="font-bold text-gray-200 transition-colors duration-300 group-hover:text-white">
+      <p className="font-bold text-xs sm:text-base text-gray-200 transition-colors duration-300 group-hover:text-white leading-tight mb-1">
         {title}
       </p>
-      <p className="text-sm text-gray-500">{details}</p>
+      <p className="text-[10px] sm:text-sm text-gray-500 leading-tight">{details}</p>
     </div>
   );
 
   return (
-    <div className="w-full min-h-screen bg-black text-gray-300 animate-fade-in flex flex-col items-center justify-start p-4 relative overflow-auto">
+    <div className="w-full min-h-screen bg-black text-gray-300 animate-fade-in flex flex-col items-center justify-start relative overflow-hidden">
       <InteractiveGridBackground />
-      <div className="w-full max-w-6xl mx-auto z-10 relative mt-24 mb-12 px-4 sm:px-8">
-        <div className="text-center mb-16 w-full flex flex-col items-center">
-          <h1 className="font-mono text-5xl md:text-7xl font-bold tracking-wider uppercase text-white mb-6">
-            CONTACTO
-          </h1>
-          <p className="text-base md:text-lg text-gray-400 mb-10 max-w-xl">
-            Para colaboraciones, consultas sobre proyectos o cualquier otra
-            pregunta, por favor, póngase en contacto a través del siguiente
-            correo electrónico.
-          </p>
-          <a
-            href="mailto:arquitecturabenito@gmail.com"
-            className="inline-block text-base md:text-lg font-bold text-cyan-400 border-2 border-cyan-400 px-8 py-3 tracking-widest uppercase transition-all duration-300 hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_20px_#00ffff]"
-          >
-            arquitecturabenito@gmail.com
-          </a>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-12 lg:gap-x-16">
+      <div className="w-full h-full overflow-y-auto px-4 sm:px-8 pb-12 pt-28">
+        <div className="w-full max-w-6xl mx-auto z-10 relative">
+          <div className="text-center mb-12 w-full flex flex-col items-center">
+            <h1 className="font-mono text-4xl sm:text-5xl md:text-7xl font-bold tracking-wider uppercase text-white mb-6">
+              CONTACTO
+            </h1>
+            <p className="text-sm md:text-base text-gray-400 mb-8 max-w-xl px-4">
+              Para colaboraciones, consultas sobre proyectos o cualquier otra
+              pregunta, por favor, póngase en contacto a través del siguiente
+              correo electrónico.
+            </p>
+            <a
+              href="mailto:arquitecturabenito@gmail.com"
+              className="inline-block text-xs sm:text-sm font-bold text-cyan-400 border border-cyan-400 px-4 sm:px-6 py-2 tracking-widest uppercase transition-all duration-300 hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_15px_#00ffff] break-all max-w-[90vw]"
+            >
+              arquitecturabenito@gmail.com
+            </a>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10 sm:gap-x-12 lg:gap-x-16">
           <div>
             <CVSection title="Experiencia">
               <CVEntry
@@ -2154,10 +2155,42 @@ const ContactPage = () => {
             </CVSection>
           </div>
         </div>
+        <footer className="relative text-xs text-gray-500 z-10 text-center py-4 mt-8">
+          © 2024 Benito González Quiñones
+        </footer>
       </div>
-      <footer className="relative text-xs text-gray-500 z-10 text-center py-4">
-        © 2024 Benito González Quiñones
-      </footer>
+      </div>
+    </div>
+  );
+};
+
+const FolderSprite = ({ images, isDesignMode }) => {
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+  
+  React.useEffect(() => {
+    if (!images || images.length <= 1) return;
+    
+    // Start at a random index to avoid visual sync on load
+    setCurrentIndex(Math.floor(Math.random() * images.length));
+    
+    // Randomize the interval duration between 1.5s and 3s for each folder
+    const randomInterval = 1500 + Math.random() * 1500;
+    
+    const interval = setInterval(() => {
+      setCurrentIndex(prev => (prev + 1) % images.length);
+    }, randomInterval);
+    return () => clearInterval(interval);
+  }, [images]);
+
+  if (!images || images.length === 0) return null;
+
+  return (
+    <div className="absolute inset-0 w-full h-full overflow-hidden opacity-30 group-hover:opacity-70 transition-opacity duration-300 pointer-events-none p-4 rounded-inherit flex items-center justify-center">
+      <OptimizedImage
+        src={images[currentIndex]}
+        className="w-full h-full object-contain mix-blend-screen"
+        theme={isDesignMode ? "design" : "dark"}
+      />
     </div>
   );
 };
@@ -2170,6 +2203,15 @@ const GalleryView = ({
   onFilterChange,
 }) => {
   const { t, pt } = useTranslation();
+  const [activeFolder, setActiveFolder] = React.useState(null);
+  const [isFolderMinimized, setIsFolderMinimized] = React.useState(false);
+
+  const getFolderImages = React.useCallback((subcat) => {
+    return allProjectsData
+      .filter((p) => !p.isPage && p.subcategory === subcat && p.normalImage)
+      .map((p) => p.normalImage);
+  }, []);
+
   let items = [];
   if (subcategory) {
     items = allProjectsData
@@ -2195,6 +2237,7 @@ const GalleryView = ({
             isGroup: true,
             type: "page",
             pageId: p.id,
+            category: p.category,
           });
         });
 
@@ -2218,6 +2261,7 @@ const GalleryView = ({
           isGroup: true,
           type: "subcategory",
           subcategory: sub,
+          category: catId,
         });
         catProjects
           .filter((p) => !p.isPage && p.subcategory === sub)
@@ -2249,6 +2293,7 @@ const GalleryView = ({
           isGroup: true,
           type: "page",
           pageId: p.id,
+          category: p.category,
         });
       } else if (p.subcategory && !p.isPage) {
         if (!seenSubcategories.has(p.subcategory)) {
@@ -2259,9 +2304,9 @@ const GalleryView = ({
             isGroup: true,
             type: "subcategory",
             subcategory: p.subcategory,
+            category: p.category,
           });
         }
-        items.push({ ...p, isGroup: false });
       } else {
         items.push({ ...p, isGroup: false });
       }
@@ -2270,12 +2315,120 @@ const GalleryView = ({
 
   return (
     <div
-      className="w-full h-full overflow-y-auto hide-scrollbar pt-32 pb-24 px-4 sm:px-8 md:px-16"
+      className="w-full h-full overflow-y-auto hide-scrollbar pt-32 pb-24 px-4 sm:px-8 md:px-16 relative"
       style={{ backgroundColor: "transparent" }}
     >
+      {activeFolder && !isFolderMinimized && (() => {
+        const activeFolderCat = allProjectsData.find(p => p.subcategory === activeFolder)?.category;
+        const isDesignMode = filter === "design" || activeFolderCat === "design";
+        return (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 pt-32 pb-28 sm:p-12 animate-fade-in bg-black/80 backdrop-blur-md" onClick={() => setActiveFolder(null)}>
+            <div 
+              className={`w-full h-full sm:max-w-6xl sm:h-[80vh] flex flex-col hide-scrollbar relative overflow-hidden shadow-2xl ${isDesignMode ? "bg-[#0000ff] border-2 border-[#FFCC00] rounded-none" : "bg-black border border-white/20 rounded-xl sm:rounded-2xl"}`}
+              onClick={(e) => e.stopPropagation()}
+              style={{ 
+                boxShadow: isDesignMode ? (window.innerWidth < 768 ? "4px 4px 0px rgba(255,0,0,0.8)" : "20px 20px 0px rgba(255,0,0,0.5)") : "0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.1) inset" 
+              }}
+            >
+              {/* Sticky Header with Mac OS controls */}
+              <div className={`flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b shrink-0 sticky top-0 z-30 ${isDesignMode ? "border-[#FFCC00] bg-[#0000ff]" : "border-white/10 bg-black/95"}`}>
+                <h2 className={`text-base sm:text-2xl uppercase tracking-widest truncate mr-2 ${isDesignMode ? "text-[#FFCC00] font-bold font-mono" : "text-white font-serif"}`}>
+                  {activeFolder}
+                </h2>
+                <div className="flex space-x-3 sm:space-x-2 items-center shrink-0 group">
+                  <button onClick={(e) => { e.stopPropagation(); setIsFolderMinimized(true); }} className="w-6 h-6 sm:w-4 sm:h-4 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors cursor-pointer flex items-center justify-center text-black opacity-80 sm:opacity-60 group-hover:opacity-100" aria-label="Minimize">
+                    <svg className="w-3 h-3 sm:w-2 sm:h-2" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 7H12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); setActiveFolder(null); }} className="w-6 h-6 sm:w-4 sm:h-4 rounded-full bg-red-500 hover:bg-red-400 transition-colors cursor-pointer flex items-center justify-center text-black opacity-80 sm:opacity-60 group-hover:opacity-100" aria-label="Close">
+                    <svg className="w-3 h-3 sm:w-2 sm:h-2" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-10 hide-scrollbar">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8">
+                  {allProjectsData
+                    .filter((p) => p.subcategory === activeFolder && !p.isPage)
+                    .map((item, index) => {
+                      const organicRadii = [
+                        "rounded-[60%_40%_30%_70%/60%_30%_70%_40%]",
+                        "rounded-[30%_60%_70%_40%/50%_60%_30%_60%]",
+                        "rounded-[50%_50%_20%_80%/25%_80%_20%_75%]",
+                        "rounded-[40%_60%_70%_30%/40%_50%_60%_50%]",
+                        "rounded-[20%_80%_30%_70%/50%_40%_60%_40%]"
+                      ];
+                      const randomRadius = organicRadii[index % organicRadii.length];
+                      const designBorder = index % 2 === 0 ? "border-[#FF0000]" : "border-[#FFCC00]";
+                      const designColorGroup = isDesignMode ? `border-[3px] bg-black/40 ${randomRadius} ${designBorder}` : "";
+                      
+                      return (
+                        <div
+                          key={item.id}
+                          className={`group relative cursor-pointer transition-all duration-300 flex flex-col items-center justify-center aspect-square ${isDesignMode ? "p-4 " + designColorGroup + " hover:bg-[#0000ff]/20" : "border border-dashed border-gray-700 hover:border-white hover:bg-gray-900/30 p-2"}`}
+                          onClick={() => onProjectSelect(item.id)}
+                        >
+                          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full border border-gray-400 group-hover:border-white transition-colors bg-black/50"></div>
+                          {item.normalImage && (
+                            <div className={`absolute ${isDesignMode ? "inset-3 sm:inset-5 " + randomRadius : "inset-2 sm:inset-3"} overflow-hidden transition-all duration-500 pointer-events-none`}>
+                              <OptimizedImage
+                                src={item.normalImage}
+                                alt={item.title}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                containerClassName="w-full h-full"
+                                theme={isDesignMode ? "design" : "dark"}
+                              />
+                            </div>
+                          )}
+                          <div className={`absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3 bg-black/80 backdrop-blur-sm pt-1 pb-1.5 z-10 ${isDesignMode ? "border-none rounded-full" : "border-t border-gray-800"} pointer-events-none`}>
+                            <h3 className={`text-center font-mono text-[9px] sm:text-xs tracking-widest uppercase transition-colors truncate px-1 ${isDesignMode ? "text-[#FFCC00] group-hover:text-[#FF0000] font-bold" : "text-gray-300 group-hover:text-white"}`}>
+                              {pt(item, "title")}
+                            </h3>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {activeFolder && isFolderMinimized && (() => {
+        const activeFolderCat = allProjectsData.find(p => p.subcategory === activeFolder)?.category;
+        const isDesignMode = filter === "design" || activeFolderCat === "design";
+        return (
+          <div 
+            className={`fixed right-0 top-1/2 -translate-y-1/2 z-[100] flex items-center cursor-pointer transition-transform hover:-translate-x-2 ${isDesignMode ? "bg-[#0000ff] border-2 border-r-0 border-[#FFCC00]" : "bg-black border border-r-0 border-white/20"} rounded-l-xl p-3 sm:p-3 shadow-2xl group animate-fade-in`}
+            onClick={() => setIsFolderMinimized(false)}
+            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+          >
+            <span className={`text-xs sm:text-sm tracking-widest uppercase mb-3 sm:mb-4 ${isDesignMode ? "text-[#FFCC00] font-mono font-bold" : "text-white font-serif"}`}>
+              {activeFolder}
+            </span>
+            <div className="flex flex-col space-y-2" style={{ writingMode: 'horizontal-tb' }}>
+              <button 
+                onClick={(e) => { e.stopPropagation(); setActiveFolder(null); setIsFolderMinimized(false); }} 
+                className="w-6 h-6 sm:w-4 sm:h-4 rounded-full bg-red-500 hover:bg-red-400 transition-colors cursor-pointer flex items-center justify-center text-black opacity-80 sm:opacity-60 group-hover:opacity-100"
+              >
+                <svg className="w-3 h-3 sm:w-2 sm:h-2" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        );
+      })()}
+
       <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8">
         {items.map((item, index) => {
-          const isDesignMode = filter === "design";
+          const isItemDesign = item.category === "design" || item.targetCategory === "design" || (item.type === "subcategory" && item.id.startsWith("design-"));
+          const isDesignMode = filter === "design" || isItemDesign;
           const organicRadii = [
             "rounded-[60%_40%_30%_70%/60%_30%_70%_40%]",
             "rounded-[30%_60%_70%_40%/50%_60%_30%_60%]",
@@ -2298,18 +2451,21 @@ const GalleryView = ({
             return (
               <div
                 key={item.id}
-                className={`group relative cursor-pointer flex items-center justify-center hover:bg-white/10 hover:border-cyan-400/50 hover:scale-105 backdrop-blur-md transition-all duration-300 w-full aspect-square shadow-lg flex-col p-4 sm:p-6 ${shapeClass}`}
+                className={`group relative cursor-pointer flex items-center justify-center hover:bg-white/10 hover:border-cyan-400/50 hover:scale-105 backdrop-blur-md transition-all duration-300 w-full aspect-square shadow-lg flex-col p-4 sm:p-6 overflow-hidden ${shapeClass}`}
                 onClick={() => {
                   if (item.type === "page") {
                     onProjectSelect(item.pageId, true);
                   } else if (item.type === "category") {
                     if (onFilterChange) onFilterChange(item.targetCategory);
                   } else {
-                    if (onSubcategorySelect)
-                      onSubcategorySelect(item.subcategory);
+                    setActiveFolder(item.subcategory);
+                    setIsFolderMinimized(false);
                   }
                 }}
               >
+                {!isMainCategory && item.type === "subcategory" && (
+                  <FolderSprite images={getFolderImages(item.subcategory)} isDesignMode={isDesignMode} />
+                )}
                 {!isMainCategory && (
                   <>
                     <div className="absolute inset-[-1px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-center justify-center overflow-visible">
@@ -2341,7 +2497,7 @@ const GalleryView = ({
                   </>
                 )}
                 <h3
-                  className={`text-center uppercase font-serif font-bold text-base sm:text-lg md:text-xl lg:text-2xl tracking-wider leading-tight px-3 sm:px-6 select-none transition-colors duration-300 relative z-10 ${isDesignMode ? "text-[#FFCC00] group-hover:text-[#FF0000]" : "text-white/95 group-hover:text-cyan-400"}`}
+                  className={`text-center uppercase font-serif font-bold text-base sm:text-lg md:text-xl lg:text-2xl tracking-wider leading-tight px-3 sm:px-6 select-none transition-colors duration-300 relative z-10 drop-shadow-md ${isDesignMode ? "text-[#FFCC00] group-hover:text-[#FF0000]" : "text-white/95 group-hover:text-cyan-400"}`}
                   style={{ fontFamily: "'Cormorant Garamond', serif" }}
                 >
                   {pt(item, "title")}
@@ -4838,12 +4994,8 @@ const App = () => {
         standalonePages.includes(view.page) ||
         (project && project.category === "design")
       ) {
-        if (project && project.subcategory) {
-          setView({ page: "subcategory", subcategory: project.subcategory });
-        } else {
-          setFilter("design");
-          setView({ page: "design", projectId: null });
-        }
+        setFilter("design");
+        setView({ page: "design", projectId: null });
         return;
       }
 
