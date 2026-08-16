@@ -31,19 +31,36 @@ const OptimizedImage = ({
     setHasError(false);
   }, [src]);
 
-  // Construct WebP candidate if current src is png/jpg/jpeg
-  const webpCandidate = React.useMemo(() => {
-    if (!src || typeof src !== "string") return null;
-    if (src.endsWith(".png") || src.endsWith(".jpg") || src.endsWith(".jpeg")) {
-      return src.replace(/\.(png|jpg|jpeg)$/i, ".webp");
+  // Construct alternative candidate (if src is .webp, test .png/.jpg as fallbacks; if src is .png/.jpg, test .webp)
+  const alternateCandidates = React.useMemo(() => {
+    if (!src || typeof src !== "string") return [];
+    if (src.endsWith(".webp")) {
+      return [
+        src.replace(/\.webp$/i, ".png"),
+        src.replace(/\.webp$/i, ".jpg"),
+        src.replace(/\.webp$/i, ".jpeg")
+      ];
     }
-    return null;
+    if (src.endsWith(".png") || src.endsWith(".jpg") || src.endsWith(".jpeg")) {
+      return [src.replace(/\.(png|jpg|jpeg)$/i, ".webp")];
+    }
+    return [];
+  }, [src]);
+
+  const [attemptIndex, setAttemptIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    setCurrentSrc(src);
+    setAttemptIndex(0);
+    setIsLoaded(false);
+    setHasError(false);
   }, [src]);
 
   const handleError = () => {
-    if (webpCandidate && currentSrc === webpCandidate) {
-      // Fallback to original format
-      setCurrentSrc(src);
+    if (attemptIndex < alternateCandidates.length) {
+      const nextCandidate = alternateCandidates[attemptIndex];
+      setAttemptIndex((prev) => prev + 1);
+      setCurrentSrc(nextCandidate);
     } else if (fallbackSrc && currentSrc !== fallbackSrc) {
       setCurrentSrc(fallbackSrc);
     } else {
@@ -113,23 +130,18 @@ const OptimizedImage = ({
           <span className="uppercase tracking-wider truncate max-w-full">{alt || "Visual"}</span>
         </div>
       ) : (
-        <picture className="w-full h-full flex items-center justify-center">
-          {webpCandidate && (
-            <source srcSet={webpCandidate} type="image/webp" />
-          )}
-          <img
-            src={currentSrc}
-            alt={alt}
-            loading={loading}
-            decoding={decoding}
-            onLoad={() => setIsLoaded(true)}
-            onError={handleError}
-            className={`${className} transition-opacity duration-500 ease-out ${
-              isLoaded ? "opacity-100" : "opacity-0"
-            }`}
-            style={style}
-          />
-        </picture>
+        <img
+          src={currentSrc}
+          alt={alt}
+          loading={loading}
+          decoding={decoding}
+          onLoad={() => setIsLoaded(true)}
+          onError={handleError}
+          className={`${className} transition-opacity duration-500 ease-out ${
+            isLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          style={style}
+        />
       )}
     </div>
     
@@ -2341,22 +2353,22 @@ const GalleryView = ({
           return (
             <div
               key={item.id}
-              className={`group relative cursor-pointer transition-all duration-300 flex flex-col items-center justify-center aspect-square ${isDesignMode ? "p-4 " + designColorGroup + " hover:bg-[#0000ff]/20" : "border border-dashed border-gray-700 hover:border-white hover:bg-gray-900/50 p-2"}`}
+              className={`group relative cursor-pointer transition-all duration-300 flex flex-col items-center justify-center aspect-square ${isDesignMode ? "p-4 " + designColorGroup + " hover:bg-[#0000ff]/20" : "border border-dashed border-gray-700 hover:border-white hover:bg-gray-900/30 p-2"}`}
               onClick={() => onProjectSelect(item.id)}
             >
               <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full border border-gray-400 group-hover:border-white transition-colors bg-black/50"></div>
               {item.normalImage && (
-                <div className={`absolute ${isDesignMode ? "inset-3 sm:inset-5 " + randomRadius : "inset-2 sm:inset-3"} overflow-hidden grayscale group-hover:grayscale-0 opacity-70 group-hover:opacity-100 transition-all duration-500 pointer-events-none`}>
+                <div className={`absolute ${isDesignMode ? "inset-3 sm:inset-5 " + randomRadius : "inset-2 sm:inset-3"} overflow-hidden transition-all duration-500 pointer-events-none`}>
                   <OptimizedImage
                     src={item.normalImage}
                     alt={item.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     containerClassName="w-full h-full"
                     theme={isDesignMode ? "design" : "dark"}
                   />
                 </div>
               )}
-              <div className={`absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3 bg-black/70 backdrop-blur-sm pt-1 pb-1.5 z-10 ${isDesignMode ? "border-none rounded-full" : "border-t border-gray-800"} pointer-events-none`}>
+              <div className={`absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3 bg-black/80 backdrop-blur-sm pt-1 pb-1.5 z-10 ${isDesignMode ? "border-none rounded-full" : "border-t border-gray-800"} pointer-events-none`}>
                 <h3 className={`text-center font-mono text-[9px] sm:text-xs tracking-widest uppercase transition-colors truncate px-1 ${isDesignMode ? "text-[#FFCC00] group-hover:text-[#FF0000] font-bold" : "text-gray-300 group-hover:text-white"}`}>
                   {pt(item, "title")}
                 </h3>
@@ -2377,6 +2389,22 @@ const CarteleriaPage = ({ project }) => {
 
   const openModal = (imgSrc) => setModalImage(imgSrc);
   const closeModal = () => setModalImage(null);
+
+  const postersToDisplay = React.useMemo(() => {
+    if (project.posterImages && project.posterImages.length > 0) {
+      return project.posterImages;
+    }
+    if (project.images && project.images.length > 0) {
+      return project.images;
+    }
+    // Fallback: auto-generate standard poster image paths (1 to 12) + normalImage
+    const generated = [];
+    if (project.normalImage) generated.push(project.normalImage);
+    for (let i = 1; i <= 12; i++) {
+      generated.push(`imagenes/carteles/carteleria-${i}.webp`);
+    }
+    return generated;
+  }, [project]);
 
   return (
     <div className="w-full min-h-screen bg-black text-white animate-fade-in relative overflow-y-auto">
@@ -2402,22 +2430,21 @@ const CarteleriaPage = ({ project }) => {
             Galería de Carteles
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {project.posterImages &&
-              project.posterImages.map((src, index) => (
-                <div
-                  key={index}
-                  className="group cursor-pointer"
-                  onClick={() => openModal(src)}
-                >
-                  <OptimizedImage
-                    src={src}
-                    alt={`Cartel ${index + 1}`}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-auto object-cover transition-transform duration-300 transform group-hover:scale-105 rounded-md shadow-lg"
-                  />
-                </div>
-              ))}
+            {postersToDisplay.map((src, index) => (
+              <div
+                key={index}
+                className="group cursor-pointer"
+                onClick={() => openModal(src)}
+              >
+                <OptimizedImage
+                  src={src}
+                  alt={`Cartel ${index + 1}`}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-auto object-cover transition-transform duration-300 transform group-hover:scale-105 rounded-md shadow-lg"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </main>
@@ -3688,7 +3715,7 @@ const ProjectDetailPage = ({
                 {block.items.map((m, j) => (
                   <div
                     key={j}
-                    className={`w-[85vw] md:w-full flex-shrink-0 snap-center rounded-sm overflow-hidden flex items-center justify-center ${isDarkTheme ? "bg-gray-900 border-gray-800" : "bg-gray-50 border-gray-100"} border`}
+                    className={`w-[85vw] md:w-full flex-shrink-0 snap-center rounded-sm overflow-hidden flex items-center justify-center ${isDarkTheme ? "bg-transparent border-white/10" : "bg-transparent border-black/10"} border`}
                   >
                     {m.type === "video" ? (
                       <video
@@ -3720,7 +3747,7 @@ const ProjectDetailPage = ({
               className="w-full my-12 max-w-7xl mx-auto px-4 sm:px-8"
             >
               <div
-                className={`w-full rounded-sm overflow-hidden flex items-center justify-center ${isDarkTheme ? "bg-gray-900 border-gray-800" : "bg-gray-50 border-gray-100"} border`}
+                className={`w-full rounded-sm overflow-hidden flex items-center justify-center ${isDarkTheme ? "bg-transparent border-white/10" : "bg-transparent border-black/10"} border`}
               >
                 {block.items[0].type === "video" ? (
                   <video
