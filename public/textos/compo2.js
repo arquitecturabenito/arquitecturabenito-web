@@ -1,0 +1,17 @@
+window.escritosData.push({
+  "id": "compo2",
+  "title": "A ver si nos aclaramos",
+  "date": "Otoño 24/25",
+  "summary": "El problema de la industrialización del arquitecto en la Casa Garoza.",
+  "text": "Año 295 Después de Ford (o año 2845 de la Era Común - e.c.). La familia Johnson quiere adquirir una edificación de vivienda mínima para su terreno a las afueras del nuevo bosque, ubicado en lo que solíamos llamar Madrid. Eligen un módulo A de cocina comedor, y le añaden un único habitáculo de descanso (Z), ya que, de momento, no se les ha asignado “cría” alguna. Es el espacio de reconciliación natural perfecto para ambos. El montaje es rápido: En pocos días, ya tienen a su entera disposición la nueva casa industrializada. Yo me pregunto, ¿podría esto ser así? Y, si fuera tan bueno, ¿por qué no está ya en nuestro día a día?\n\nLa Casa Garoza nace atendiendo a unas necesidades concretas, para las cuales se establecen unas normas que ordenan dichas peticiones. La planta baja se estructura mediante una banda más ancha para las estancias (A) y una más estrecha para tránsito entre las primeras y el segundo nivel (B). En la segunda altura, resguardándose del exterior y con un ambiente más privado, se ubica una habitación doble: un espacio que podríamos considerar como un módulo independiente, llamémoslo (Z).\n\nAunque esta proyección atiende a unas exigencias iniciales, con el paso del tiempo, es inevitable que cambien. La familia aumenta, y se necesitan tres módulos de dormitorio más. Si decidimos olvidar la articulación de módulos, podríamos intuir la ampliación como una sencilla adhesión de tres módulos (Z). Sin embargo, es la configuración inicial la que desatiende el principio de industrialización a favor de la forma, impidiendo así continuar con el orden inicial. \nPara solucionar el problema, los arquitectos añaden una segunda banda de servicios para zonas húmedas y rellenan el espacio sobrante con habitaciones, pero esta vez sin atender a un módulo concreto. Y, como no podía ser de otra forma, venden este nuevo espacio como un nuevo módulo industrializado y adaptable a cualquier tipo de modificación, ampliable hasta el infinito.\n\nNo es mi intención tratar como ignorantes a los lectores incidiendo en la absurdez de dichas declaraciones. Simplemente, debemos revisar la sucesión de hechos.\nEn búsqueda de una unidad mínima de vivienda, y, suponiendo que el espacio previo de comedor, cocina y zona de estar fuera suficiente para 5, la incógnita se encontraría en cómo disponer tres habitaciones siguiendo las normas iniciales. Dormitorios en un nivel superior, más íntimo, acceso desde una plataforma de distribución y un módulo único para todas las habitaciones, pues todas necesitan lo mismo: el mínimo.\n\nEs la arquitectura de lo vernáculo, la “architecture without architects” de cualquier pueblo. La casa que derriba un tabique y añade una habitación. Una habitación que, con los años, se convierte en trastero, oficina o garaje. Es esa arquitectura que va en contra del manifiesto que Casa Garoza defiende, y que sin embargo, se queda en palabras, la que, con su propia evolución, se deja en evidencia frente a sus principios. ¿No sería mejor evitar establecer normas que no se pueden cumplir?",
+  "images": [
+    "imagenes/compo2.1.png",
+    "imagenes/compo2.2.png",
+    "imagenes/compo2.3.png"
+  ],
+  "category": "critica",
+  "tags": [
+    "crítica",
+    "arquitectura"
+  ]
+});

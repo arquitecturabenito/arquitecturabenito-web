@@ -1,0 +1,30 @@
+window.defaultProjectsData.push({
+  "id": "el-escorial",
+  "category": "architecture",
+  "subcategory": "INVESTIGACIÓN",
+  "title": "COCINA MONACAL DE EL ESCORIAL",
+  "title_es": "COCINA MONACAL DE EL ESCORIAL",
+  "title_en": "EL ESCORIAL MONASTIC KITCHEN",
+  "normalImage": "imagenes/elescorial-main.png",
+  "rolloverImage": "imagenes/elescorial-main-rollover.png",
+  "summary": "Investigación sobre la disposición original y evolución de la cocina del Monasterio de El Escorial mediante planimetría histórica y modelado 3D.",
+  "summary_es": "Investigación sobre la disposición original y evolución de la cocina del Monasterio de El Escorial mediante planimetría histórica y modelado 3D.",
+  "summary_en": "Research on the original layout and architectural evolution of the Royal Monastery of El Escorial kitchen using historic plans and 3D modeling.",
+  "description": "Investigación Arquitectónica\n\nEl objetivo principal de este estudio es formular una hipótesis objetiva y fundamentada sobre la disposición original de la cocina del Real Monasterio de San Lorenzo de El Escorial.\n\nA través del análisis minucioso de tratados de la época, documentación histórica y levantamientos planimétricos, se reconstruye la evolución espacial y funcional de una de las áreas más fascinantes y menos documentadas del complejo herreriano.",
+  "description_es": "Investigación Arquitectónica\n\nEl objetivo principal de este estudio es formular una hipótesis objetiva y fundamentada sobre la disposición original de la cocina del Real Monasterio de San Lorenzo de El Escorial.\n\nA través del análisis minucioso de tratados de la época, documentación histórica y levantamientos planimétricos, se reconstruye la evolución espacial y funcional de una de las áreas más fascinantes y menos documentadas del complejo herreriano.",
+  "description_en": "Architectural Research\n\nThe primary objective of this study is to formulate an objective, well-founded hypothesis regarding the original spatial layout of the kitchen in the Royal Monastery of San Lorenzo de El Escorial.\n\nThrough rigorous analysis of period treatises, historical documentation, and planimetric surveys, the spatial and functional evolution of one of the most intriguing and least-documented areas of the Herrerian complex is reconstructed.",
+  "images": [
+    "imagenes/elescorial-1.png",
+    "imagenes/elescorial-2.png",
+    "imagenes/elescorial-3.png",
+    "imagenes/elescorial-4.png",
+    "imagenes/elescorial-5.png",
+    "imagenes/elescorial-6.png",
+    "imagenes/elescorial-7.png",
+    "imagenes/elescorial-8.png",
+    "imagenes/elescorial-9.png",
+    "imagenes/elescorial-10.png",
+    "imagenes/elescorial-11.png"
+  ],
+  "pdf": null
+});

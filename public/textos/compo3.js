@@ -1,0 +1,16 @@
+window.escritosData.push({
+  "id": "compo3",
+  "title": "Un trío: Lina, Corbu y Mies",
+  "date": "Otoño 24/25",
+  "summary": "La diagramática construcción del tipo y la elección de posturas.",
+  "text": "Sobre un gran podio flota un rígido espacio, como si fuese un OVNI desde el cual sus habitantes admiran el imponente contexto sobre el que se alza este edificio. Un observatorio sobre cristales que permite un espacio sensorialmente fluido, que invita a ser atravesado con algo más que la mirada. En este objeto contrastan mundos, materiales y dialécticas; resuenan aires de arquitecturas cerradas, pero a la vez abiertas. Pero, ¿cómo se organizan estas decisiones, a qué atienden y a qué tipología recurren?\n\nComo si de Mies se tratara, el estudio Arrhov Frick planta un podio que homogeneiza el terreno sobre el que nace una planta baja construida con muros de vidrio, constituyendo un espacio libre, organizado en torno a una “caja dentro de la caja” que concentra todas las instalaciones. En esta primera planta, el espacio busca relacionarse con el exterior, volcando su interés hacia el entorno. Este objetivo se satisface más que plenamente y, para lograrlo, no solo se emplea un diagrama tipológico que recuerda obras como la Casa Farnsworth, sino que también se recurre a una materialidad discursiva con el contexto, creando relaciones con el rocoso terreno que la rodea y empatizando con él.\n\nEsto contrasta totalmente con lo que se experimenta en la segunda planta, la cual acoge estancias de descanso que buscan cerrarse sobre sí mismas, observando el contexto desde un lugar más distante. En esta planta, se adopta un esquema compacto que organiza los espacios y reduce las aperturas hacia el exterior, utilizándolas como marcos para el paisaje, tal como Le Corbusier plantea en sus famosos “cinco puntos para una nueva arquitectura”. \n\nAdemás, siguiendo un mismo hilo discursivo, para lograr lo opuesto a lo que se ve en la planta baja, se aborda el problema en dirección contraria. Si en la inferior apreciamos una relación material de iguales, en la superior encontramos la madera, un material que contrasta con el exterior. Siendo cálido y acogedor nos invita a permanecer en la cama sin querer salir. Sin duda, podríamos trazar una comparación con los interiores de Frank Lloyd Wright.\n\nAsí, el uso de tipologías para responder a fines específicos genera un diagrama que, a su vez, construye el proyecto. La imagen exterior del edificio es el resultado de estas decisiones proyectuales. Juntar piezas y cambiar el discurso del edificio en función de ciertos factores y formas de habitar el espacio es lo que caracteriza esta obra, y la hace muy similar a la forma de trabajar de Lina Bo Bardi en la Casa de Cristal, donde el espacio también se divide en dos: una parte abierta hacia el exterior y otra, más privada, que se recoge sobre sí misma.\n\nLa capacidad de recurrir a un amplio repertorio de tipologías, articulándolas de manera óptima para abordar un caso concreto, es sin duda la forma de crear buena arquitectura. Lo vemos en Lina Bo Bardi con la \"Casa de Cristal\", y lo vemos en Arrhov Frick con esta impresionante actuación.",
+  "images": [
+    "imagenes/compo3.1.png",
+    "imagenes/compo3.2.png"
+  ],
+  "category": "critica",
+  "tags": [
+    "crítica",
+    "arquitectura"
+  ]
+});

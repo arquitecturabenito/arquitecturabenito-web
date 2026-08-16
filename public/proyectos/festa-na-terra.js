@@ -1,0 +1,33 @@
+window.defaultProjectsData.push({
+  "id": "festa-na-terra",
+  "category": "escenografias",
+  "title": "FESTA NA TERRA",
+  "title_es": "FESTA NA TERRA",
+  "title_en": "FESTA NA TERRA",
+  "normalImage": "imagenes/festa-main.png",
+  "rolloverImage": "imagenes/festa-main-rollover.png",
+  "summary": "Diseño escenográfico para el festival \"Festa Na Terra\", creando un espacio inmersivo y festivo que celebra las raíces comunitarias.",
+  "summary_es": "Diseño escenográfico para el festival \"Festa Na Terra\", creando un espacio inmersivo y festivo que celebra las raíces comunitarias.",
+  "summary_en": "Scenographic design for the festival \"Festa Na Terra\", creating an immersive, celebratory space rooted in community heritage.",
+  "description": "ESCENOGRAFÍA PARA FESTA NA TERRA\n\n\"Repleta de amor, 'Festa Na Terra' es una obra escrita desde un corazón rebosante de memorias y anhelo por el hogar.\"\n\nLa propuesta escenográfica construye una atmósfera cálida donde la tierra, los materiales crudos y la luz dorada transportan al espectador a un espacio de celebración comunitaria, música y nostalgia compartida.",
+  "description_es": "ESCENOGRAFÍA PARA FESTA NA TERRA\n\n\"Repleta de amor, 'Festa Na Terra' es una obra escrita desde un corazón rebosante de memorias y anhelo por el hogar.\"\n\nLa propuesta escenográfica construye una atmósfera cálida donde la tierra, los materiales crudos y la luz dorada transportan al espectador a un espacio de celebración comunitaria, música y nostalgia compartida.",
+  "description_en": "SCENOGRAPHY FOR FESTA NA TERRA\n\n\"Filled with love, 'Festa Na Terra' is a theatrical piece written from a heart overflowing with memories and longing for home.\"\n\nThe scenographic proposal creates a warm atmosphere where earth, raw materials, and golden light transport the audience into a space of community celebration, music, and shared nostalgia.",
+  "images": [
+    "imagenes/festa(1).png",
+    "imagenes/festa(2).png",
+    "imagenes/festa(3).png",
+    "imagenes/festa(4).png",
+    "imagenes/festa(5).png",
+    "imagenes/festa(6).png",
+    "imagenes/festa(7).png",
+    "imagenes/festa(8).png",
+    "imagenes/festa(9).png",
+    "imagenes/festa(10).png",
+    "imagenes/festa(11).png",
+    "imagenes/festa(12).png",
+    "imagenes/festa(13).png",
+    "imagenes/festa(14).png",
+    "imagenes/festa(15).png"
+  ],
+  "pdf": null
+});

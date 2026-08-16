@@ -1,0 +1,33 @@
+window.defaultProjectsData.push({
+  "id": "cronologia-adios",
+  "category": "escenografias",
+  "title": "CRONOLOGÍA DE UN ADIÓS",
+  "title_es": "CRONOLOGÍA DE UN ADIÓS",
+  "title_en": "CHRONOLOGY OF A GOODBYE",
+  "normalImage": "imagenes/cronologia-main.png",
+  "rolloverImage": "imagenes/cronologia-main-rollover.png",
+  "summary": "Escenografía para una obra de teatro que explora el paso del tiempo y la memoria a través de una cuidada iluminación y elementos espaciales simbólicos.",
+  "summary_es": "Escenografía para una obra de teatro que explora el paso del tiempo y la memoria a través de una cuidada iluminación y elementos espaciales simbólicos.",
+  "summary_en": "Scenography for a theatrical play exploring the passage of time and memory through thoughtful lighting and symbolic spatial elements.",
+  "description": "Escenografía para una obra de teatro que explora el paso del tiempo y la memoria a través de una cuidada iluminación y elementos espaciales simbólicos.\n\nEl diseño escénico plantea un espacio mutante que acompaña la transformación emocional de los personajes, utilizando texturas traslúcidas, sombras proyectadas y una atmósfera íntima que disuelve los límites entre la realidad y el recuerdo.",
+  "description_es": "Escenografía para una obra de teatro que explora el paso del tiempo y la memoria a través de una cuidada iluminación y elementos espaciales simbólicos.\n\nEl diseño escénico plantea un espacio mutante que acompaña la transformación emocional de los personajes, utilizando texturas traslúcidas, sombras proyectadas y una atmósfera íntima que disuelve los límites entre la realidad y el recuerdo.",
+  "description_en": "Scenography for a theatrical play exploring the passage of time and memory through meticulous lighting and symbolic spatial elements.\n\nThe stage design presents a mutating space that mirrors the emotional journey of the characters, employing translucent textures, projected shadows, and an intimate atmosphere that dissolves the boundaries between reality and remembrance.",
+  "images": [
+    "imagenes/cronologia(1).jpg",
+    "imagenes/cronologia(2).jpg",
+    "imagenes/cronologia(3).jpg",
+    "imagenes/cronologia(4).jpg",
+    "imagenes/cronologia(5).jpg",
+    "imagenes/cronologia(6).jpg",
+    "imagenes/cronologia(7).jpg",
+    "imagenes/cronologia(8).jpg",
+    "imagenes/cronologia(9).jpg",
+    "imagenes/cronologia(10).jpg",
+    "imagenes/cronologia(11).jpg",
+    "imagenes/cronologia(12).jpg",
+    "imagenes/cronologia(13).jpg",
+    "imagenes/cronologia(14).jpg",
+    "imagenes/cronologia(15).jpg"
+  ],
+  "pdf": null
+});
