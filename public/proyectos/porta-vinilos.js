@@ -6,7 +6,7 @@ window.defaultProjectsData.push({
   "title_es": "PORTA VINILOS",
   "title_en": "VINYL HOLDER",
   "normalImage": "imagenes/porta-vinilos-main.gif",
-  "rolloverImage": "imagenes/porta-vinilos-main.png",
+  "rolloverImage": "imagenes/porta-vinilos-main.webp",
   "summary": "Soporte minimalista para discos de vinilo.",
   "summary_es": "Soporte minimalista para discos de vinilo.",
   "summary_en": "Minimalist vinyl record display and storage holder.",

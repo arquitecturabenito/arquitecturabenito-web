@@ -25,10 +25,16 @@
     <meta name="twitter:image" content="https://storage.googleapis.com/aistudio-file-uploads/preview.jpg" />
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+      if (window.pdfjsLib) {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
 
@@ -142,6 +148,16 @@
     <script src="/proyectos/porta-vinilos.js"></script>
     <script src="/proyectos/festa-na-terra.js"></script>
     <script src="/proyectos/cronologia-adios.js"></script>
+
+    <!-- FOTOGRAFÍA / LIBRETOS A5 (PEQUEÑAS REVISTAS A5) -->
+    <script src="/proyectos/vida-en-tetuan.js"></script>
+    <script src="/proyectos/rapa-das-bestas.js"></script>
+    <script src="/proyectos/cartagena-2023.js"></script>
+    <script src="/proyectos/cuaderno-de-campo.js"></script>
+    <script src="/proyectos/baliza.js"></script>
+    <script src="/proyectos/mar-alla.js"></script>
+    <script src="/proyectos/abrazos.js"></script>
+    <script src="/proyectos/epa.js"></script>
 
     <!-- TEXTOS -->
     <script src="/textos/compo1.js"></script>

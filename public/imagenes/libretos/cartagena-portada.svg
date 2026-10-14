@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 2093" width="100%" height="100%">
+  <defs>
+    <linearGradient id="paperGradCart" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdfbf7"/>
+      <stop offset="50%" stop-color="#f7f1e6"/>
+      <stop offset="100%" stop-color="#ede3d1"/>
+    </linearGradient>
+    <pattern id="dotGridCart" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" fill="#c48a33" fill-opacity="0.18"/>
+    </pattern>
+  </defs>
+
+  <rect width="1480" height="2093" fill="url(#paperGradCart)"/>
+  <rect width="1480" height="2093" fill="url(#dotGridCart)"/>
+
+  <!-- Spine Depth -->
+  <rect x="0" y="0" width="28" height="2093" fill="#845012" fill-opacity="0.25"/>
+  <line x1="28" y1="0" x2="28" y2="2093" stroke="#b0731f" stroke-width="1.5" stroke-opacity="0.4"/>
+
+  <!-- Editorial Layout Frame -->
+  <rect x="80" y="80" width="1320" height="1933" fill="none" stroke="#b0731f" stroke-width="1.5" stroke-opacity="0.35"/>
+  <rect x="92" y="92" width="1296" height="1909" fill="none" stroke="#b0731f" stroke-width="0.5" stroke-opacity="0.2"/>
+
+  <!-- Registration Marks -->
+  <g stroke="#b0731f" stroke-width="1" stroke-opacity="0.5">
+    <line x1="60" y1="80" x2="100" y2="80"/><line x1="80" y1="60" x2="80" y2="100"/>
+    <line x1="1380" y1="80" x2="1420" y2="80"/><line x1="1400" y1="60" x2="1400" y2="100"/>
+    <line x1="60" y1="2013" x2="100" y2="2013"/><line x1="80" y1="1993" x2="80" y2="2033"/>
+    <line x1="1380" y1="2013" x2="1420" y2="2013"/><line x1="1400" y1="1993" x2="1400" y2="2033"/>
+  </g>
+
+  <!-- Top Metadata -->
+  <text x="140" y="150" font-family="'Space Mono', monospace" font-size="22" letter-spacing="4" fill="#845012" opacity="0.8">BENITO GONZÁLEZ QUIÑONES</text>
+  <text x="1340" y="150" text-anchor="end" font-family="'Space Mono', monospace" font-size="20" letter-spacing="3" fill="#845012" opacity="0.65">LIBRETO 03 · ISO A5</text>
+  <line x1="140" y1="175" x2="1340" y2="175" stroke="#b0731f" stroke-width="1" stroke-opacity="0.25"/>
+
+  <!-- Photography Panel: Cartagena Industrial & Port Geometries -->
+  <g transform="translate(140, 240)">
+    <rect width="1200" height="1200" fill="#fcf9f2" stroke="#b0731f" stroke-width="1" stroke-opacity="0.3"/>
+    <rect x="20" y="20" width="1160" height="1160" fill="#f5ede0"/>
+
+    <!-- Mediterranean horizon wash -->
+    <rect x="20" y="600" width="1160" height="580" fill="#e8dac4"/>
+    <line x1="20" y1="600" x2="1180" y2="600" stroke="#845012" stroke-width="2" stroke-opacity="0.5"/>
+
+    <!-- Modernist port cranes and shipyard trusses in precision ochre lines -->
+    <!-- Crane 1 -->
+    <line x1="300" y1="600" x2="380" y2="260" stroke="#845012" stroke-width="6"/>
+    <line x1="420" y1="600" x2="380" y2="260" stroke="#845012" stroke-width="6"/>
+    <line x1="330" y1="460" x2="410" y2="460" stroke="#845012" stroke-width="3"/>
+    <line x1="350" y1="360" x2="395" y2="360" stroke="#845012" stroke-width="3"/>
+    <!-- Crane Jib -->
+    <line x1="220" y1="230" x2="720" y2="200" stroke="#845012" stroke-width="5"/>
+    <line x1="380" y1="260" x2="380" y2="160" stroke="#845012" stroke-width="4"/>
+    <line x1="380" y1="160" x2="680" y2="200" stroke="#845012" stroke-width="2"/>
+    <line x1="380" y1="160" x2="240" y2="230" stroke="#845012" stroke-width="2"/>
+    <line x1="620" y1="205" x2="620" y2="450" stroke="#b0731f" stroke-width="2" stroke-dasharray="8,4"/>
+
+    <!-- Naval Dock Silo / Dry Dock Walls in Ochre / Rust -->
+    <polygon points="680,600 750,420 980,420 1060,600" fill="#b0731f" fill-opacity="0.75"/>
+    <rect x="710" y="600" width="320" height="350" fill="#845012"/>
+    <!-- Dock water reflections -->
+    <line x1="100" y1="720" x2="650" y2="720" stroke="#b0731f" stroke-width="2" stroke-opacity="0.35"/>
+    <line x1="150" y1="800" x2="600" y2="800" stroke="#b0731f" stroke-width="3" stroke-opacity="0.4"/>
+    <line x1="80" y1="880" x2="520" y2="880" stroke="#b0731f" stroke-width="2" stroke-opacity="0.3"/>
+    <line x1="200" y1="960" x2="680" y2="960" stroke="#b0731f" stroke-width="4" stroke-opacity="0.25"/>
+
+    <!-- Coastal fortress / Caliza stone bastion silhouette -->
+    <polygon points="20,600 120,480 240,510 320,600" fill="#c48a33" fill-opacity="0.6"/>
+
+    <!-- Sun disc high in Mediterranean sky -->
+    <circle cx="850" cy="240" r="140" fill="#d49b42" fill-opacity="0.25"/>
+    <circle cx="850" cy="240" r="80" fill="#b0731f" fill-opacity="0.2"/>
+
+    <!-- Frame lines and text -->
+    <rect x="20" y="20" width="1160" height="1160" fill="none" stroke="#845012" stroke-width="2" stroke-opacity="0.4"/>
+    <text x="50" y="70" font-family="'Space Mono', monospace" font-size="16" letter-spacing="3" fill="#845012" opacity="0.7">DÁRSENA MILITAR · LA UNIÓN · CARTAGENA</text>
+    <text x="1130" y="70" text-anchor="end" font-family="'Space Mono', monospace" font-size="16" fill="#845012" opacity="0.7">PLACA #03</text>
+  </g>
+
+  <!-- Typography Block -->
+  <g transform="translate(140, 1530)">
+    <text x="0" y="60" font-family="'Cormorant Garamond', Georgia, serif" font-size="76" font-weight="700" letter-spacing="4" fill="#2d1c08">CARTAGENA 2023</text>
+    <text x="0" y="125" font-family="'Cormorant Garamond', Georgia, serif" font-style="italic" font-size="34" fill="#845012">Arsenales, mineral de hierro y geometrías portuarias</text>
+
+    <line x1="0" y1="160" x2="1200" y2="160" stroke="#b0731f" stroke-width="1" stroke-opacity="0.3"/>
+
+    <!-- Details Grid -->
+    <text x="0" y="220" font-family="'Space Mono', monospace" font-size="18" letter-spacing="3" fill="#845012" opacity="0.8">UBICACIÓN</text>
+    <text x="0" y="255" font-family="'Space Mono', monospace" font-size="20" font-weight="bold" fill="#3a2713">CARTAGENA, MURCIA</text>
+
+    <text x="380" y="220" font-family="'Space Mono', monospace" font-size="18" letter-spacing="3" fill="#845012" opacity="0.8">AÑO</text>
+    <text x="380" y="255" font-family="'Space Mono', monospace" font-size="20" font-weight="bold" fill="#3a2713">2023</text>
+
+    <text x="760" y="220" font-family="'Space Mono', monospace" font-size="18" letter-spacing="3" fill="#845012" opacity="0.8">DISCIPLINA</text>
+    <text x="760" y="255" font-family="'Space Mono', monospace" font-size="20" font-weight="bold" fill="#3a2713">ARQUITECTURA MARÍTIMA</text>
+
+    <g transform="translate(1040, 200)">
+      <rect x="0" y="0" width="8" height="60" fill="#845012"/>
+      <rect x="14" y="0" width="4" height="60" fill="#845012"/>
+      <rect x="24" y="0" width="12" height="60" fill="#845012"/>
+      <rect x="42" y="0" width="4" height="60" fill="#845012"/>
+      <rect x="54" y="0" width="10" height="60" fill="#845012"/>
+      <rect x="72" y="0" width="14" height="60" fill="#845012"/>
+      <rect x="94" y="0" width="6" height="60" fill="#845012"/>
+      <rect x="108" y="0" width="10" height="60" fill="#845012"/>
+      <rect x="126" y="0" width="8" height="60" fill="#845012"/>
+      <text x="75" y="80" text-anchor="middle" font-family="'Space Mono', monospace" font-size="14" fill="#845012">A5-CART-23</text>
+    </g>
+  </g>
+
+  <line x1="140" y1="1970" x2="1340" y2="1970" stroke="#b0731f" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="140" y="2010" font-family="'Space Mono', monospace" font-size="16" letter-spacing="3" fill="#845012" opacity="0.7">CUADERNO DE PAISAJE · LITOGRAFÍA</text>
+  <text x="1340" y="2010" text-anchor="end" font-family="'Space Mono', monospace" font-size="16" letter-spacing="3" fill="#845012" opacity="0.7">148 × 210 MM</text>
+</svg>

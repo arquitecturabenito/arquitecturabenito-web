@@ -4,10 +4,13 @@ import ForceGraph3D from 'react-force-graph-3d';
 import SpriteText from 'three-spritetext';
 import * as THREE from 'three';
 import * as d3 from 'd3';
+import projectMusic from './projectMusicConfig.js';
 
 // ==========================================
 // PERFORMANCE & MEDIA OPTIMIZATION ENGINE
 // ==========================================
+
+const LanguageContext = React.createContext({ lang: "es", setLang: () => {} });
 
 const OptimizedImage = ({
   src,
@@ -21,6 +24,7 @@ const OptimizedImage = ({
   containerClassName = "",
   theme = "dark",
 }) => {
+  const { lang } = React.useContext(LanguageContext) || { lang: 'es' };
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [hasError, setHasError] = React.useState(false);
   const [currentSrc, setCurrentSrc] = React.useState(src);
@@ -100,7 +104,7 @@ const OptimizedImage = ({
             />
           </div>
           <span className="text-[8px] font-mono tracking-widest uppercase mt-2 opacity-60">
-            Cargando
+            {lang === 'en' ? 'Loading' : 'Cargando'}
           </span>
         </div>
       )}
@@ -149,9 +153,6 @@ const OptimizedImage = ({
 };
 
 
-// Contexto de Idioma
-const LanguageContext = React.createContext({ lang: "es", setLang: () => {} });
-
 const useTranslation = (overrideLang) => {
   const context = React.useContext(LanguageContext);
   const lang = overrideLang || context.lang;
@@ -162,6 +163,7 @@ const useTranslation = (overrideLang) => {
       "DISEÑO": "DISEÑO",
       "ESCENOGRAFÍAS": "ESCENOGRAFÍAS",
       "CONTACTO": "CONTACTO",
+      "Contacto": "Contacto",
       "TEXTOS": "TEXTOS",
       "PROYECTOS": "PROYECTOS",
       "Volver al Menú Principal": "Volver al Menú Principal",
@@ -170,10 +172,12 @@ const useTranslation = (overrideLang) => {
       "Ver Galería": "Ver Galería",
       "Prev": "Ant",
       "Siguiente": "Sig",
+      "Next": "Sig",
       "INICIANDO CONSTELACIÓN 3D...": "INICIANDO CONSTELACIÓN 3D...",
       "CALCULANDO ÓRBITAS Y NODOS...": "CALCULANDO ÓRBITAS Y NODOS...",
       "OPTIMIZANDO TEXTURAS Y FORMATO WEBP...": "OPTIMIZANDO TEXTURAS Y FORMATO WEBP...",
       "SISTEMA VECTORIAL LISTO": "SISTEMA VECTORIAL LISTO",
+      "CALIBRANDO CONSTELACIÓN 3D...": "CALIBRANDO CONSTELACIÓN 3D...",
       "Introducción": "Introducción",
       "Foocus": "Foocus",
       "Comfy UI": "Comfy UI",
@@ -182,30 +186,168 @@ const useTranslation = (overrideLang) => {
       "Documentación Visual": "Documentación Visual",
       "Explorar Proyectos": "Explorar Proyectos",
       "Probar suerte": "Probar suerte",
+      "Abre un proyecto al azar": "Abre un proyecto al azar",
       "Constelación": "Constelación",
       "Galería": "Galería",
       "Visualización clásica en parrilla": "Visualización clásica en parrilla",
       "TODOS": "TODOS",
       "Todos los proyectos": "TODOS",
-      "Todos": "TODOS"
+      "Todos": "TODOS",
+      "ESCRITOS / PUBLICACIONES": "ESCRITOS / PUBLICACIONES",
+      "Escritos y Publicaciones": "Escritos y Publicaciones",
+      "TUTORIAL IA": "TUTORIAL IA",
+      "DISEÑO WEB": "DISEÑO WEB",
+      "CARTELERÍA": "CARTELERÍA",
+      "GENERACIÓN IA": "GENERACIÓN IA",
+      "ÁRBOLES Y TELAS": "ÁRBOLES Y TELAS",
+      "COLECCIÓN DE CURVAS": "COLECCIÓN DE CURVAS",
+      "CRÍTICA": "CRÍTICA",
+      "ENSAYOS PROPIOS": "ENSAYOS PROPIOS",
+      "HISTORIA DE LA ARQUITECTURA": "HISTORIA DE LA ARQUITECTURA",
+      "Crítica Arquitectónica": "Crítica Arquitectónica",
+      "Ensayos Propios": "Ensayos Propios",
+      "Historia de la Arquitectura": "Historia de la Arquitectura",
+      "Buscar escritos...": "Buscar escritos...",
+      "No se encontraron escritos que coincidan con la búsqueda.": "No se encontraron escritos que coincidan con la búsqueda.",
+      "Repositorio de textos, ensayos y reflexiones críticas sobre la arquitectura, la ciudad y el diseño.": "Repositorio de textos, ensayos y reflexiones críticas sobre la arquitectura, la ciudad y el diseño.",
+      "Documentación Adjunta": "Documentación Adjunta",
+      "El archivo PDF no se ha encontrado o tu navegador no soporta la previsualización.": "El archivo PDF no se ha encontrado o tu navegador no soporta la previsualización.",
+      "Descargar o Abrir PDF": "Descargar o Abrir PDF",
+      "Todos los derechos reservados": "Todos los derechos reservados",
+      "Visitar sitio web": "Visitar sitio web",
+      "Cargando": "Cargando",
+      "Descripción": "Descripción",
+      "¿Cómo prefieres ordenar la información?": "¿Cómo prefieres ordenar la información?",
+      "Portfolio digital de Benito G. Quiñones": "Portfolio digital de Benito G. Quiñones",
+      "Exploración relacional interactiva": "Exploración relacional interactiva",
+      "porfolio": "porfolio",
+      "Navegando el interespacio...": "Navegando el interespacio...",
+      "> Navegando el interespacio...": "> Navegando el interespacio...",
+      "Experiencia": "Experiencia",
+      "Formación y Cursos": "Formación y Cursos",
+      "Logros": "Logros",
+      "Publicaciones": "Publicaciones",
+      "INICIALIZANDO MATRIZ ESPACIAL...": "INICIALIZANDO MATRIZ ESPACIAL...",
+      "CARGANDO ENTORNO...": "CARGANDO ENTORNO...",
+      "Minimizar": "Minimizar",
+      "Cerrar": "Cerrar",
+      "Anterior": "Anterior",
+      "Anexo AEMET": "Anexo AEMET",
+      "Hashima Animal Park": "Hashima Animal Park",
+      "PASEO DEHESA": "PASEO DEHESA",
+      "Paseo de la Dehesa": "Paseo de la Dehesa",
+      "COCINA MONACAL DE EL ESCORIAL": "COCINA MONACAL DE EL ESCORIAL",
+      "CRONOLOGÍA DE UN ADIÓS": "CRONOLOGÍA DE UN ADIÓS",
+      "ESTUCHE V1 V2 V3": "ESTUCHE V1 V2 V3",
+      "JUEGO DE MESA MINUTOS": "JUEGO DE MESA MINUTOS",
+      "PORTA VINILOS": "PORTA VINILOS",
+      "PROTO TAB": "PROTO TAB",
+      "Investigación Territorios Digitales": "Investigación Territorios Digitales",
+      "crítica": "crítica",
+      "arquitectura": "arquitectura",
+      "ensayo": "ensayo",
+      "técnica": "técnica",
+      "estética": "estética",
+      "brutalismo": "brutalismo",
+      "vernácula": "vernácula",
+      "efímera": "efímera",
+      "historia": "historia",
+      "teoría": "teoría",
+      "urbanismo": "urbanismo",
+      "diseño": "diseño",
+      "FOTOGRAFÍA": "FOTOGRAFÍA",
+      "Fotografía": "Fotografía",
+      "Libretos": "Libretos",
+      "Libreto": "Libreto",
+      "Libreto Fotográfico": "Libreto Fotográfico",
+      "Libretos Fotográficos": "Libretos Fotográficos",
+      "LIBRETO FOTOGRÁFICO": "LIBRETO FOTOGRÁFICO",
+      "Doble Página": "Doble Página",
+      "Página Simple": "Página Simple",
+      "PEQUEÑA REVISTA A5": "PEQUEÑA REVISTA A5",
+      "PDF CERRADO": "PDF CERRADO",
+      "SITUACIÓN CONCRETA": "SITUACIÓN CONCRETA",
+      "Descargar PDF": "Descargar PDF",
+      "Miniaturas": "Miniaturas",
+      "Pantalla Completa": "Pantalla Completa",
+      "Salir de pantalla completa": "Salir de pantalla completa",
+      "Portada": "Portada",
+      "Contraportada": "Contraportada",
+      "Página anterior": "Página anterior",
+      "Página siguiente": "Página siguiente",
+      "Páginas": "Páginas",
+      "Página": "Página",
+      "de": "de",
+      "VIDA EN TETUÁN": "VIDA EN TETUÁN",
+      "Vida en Tetuán": "Vida en Tetuán",
+      "RAPA DAS BESTAS 2025": "RAPA DAS BESTAS 2025",
+      "Rapa das Bestas 2025": "Rapa das Bestas 2025",
+      "CARTAGENA 2023": "CARTAGENA 2023",
+      "Cartagena 2023": "Cartagena 2023",
+      "CUADERNO DE CAMPO 2024": "CUADERNO DE CAMPO 2024",
+      "Cuaderno de Campo 2024": "Cuaderno de Campo 2024",
+      "DOCUMENTAL": "DOCUMENTAL",
+      "PAISAJE": "PAISAJE"
     },
     en: {
       "ARQUITECTURA": "ARCHITECTURE",
       "DISEÑO": "DESIGN",
+      "FOTOGRAFÍA": "PHOTOGRAPHY",
+      "Fotografía": "Photography",
+      "Libretos": "Booklets",
+      "Libreto": "Booklet",
+      "Libreto Fotográfico": "Photo Booklet",
+      "Libretos Fotográficos": "Photo Booklets",
+      "LIBRETO FOTOGRÁFICO": "PHOTO BOOKLET",
+      "Doble Página": "Double Page",
+      "Página Simple": "Single Page",
+      "PEQUEÑA REVISTA A5": "SMALL A5 MAGAZINE",
+      "PDF CERRADO": "CLOSED PDF",
+      "SITUACIÓN CONCRETA": "SPECIFIC SITUATION",
+      "Descargar PDF": "Download PDF",
+      "Miniaturas": "Thumbnails",
+      "Pantalla Completa": "Fullscreen",
+      "Salir de pantalla completa": "Exit Fullscreen",
+      "Portada": "Cover",
+      "Contraportada": "Back Cover",
+      "Página anterior": "Previous page",
+      "Página siguiente": "Next page",
+      "Páginas": "Pages",
+      "Página": "Page",
+      "de": "of",
+      "VIDA EN TETUÁN": "LIFE IN TETUÁN",
+      "Vida en Tetuán": "Life in Tetuán",
+      "RAPA DAS BESTAS 2025": "RAPA DAS BESTAS 2025",
+      "Rapa das Bestas 2025": "Rapa das Bestas 2025",
+      "CARTAGENA 2023": "CARTAGENA 2023",
+      "Cartagena 2023": "Cartagena 2023",
+      "CUADERNO DE CAMPO 2024": "FIELD NOTEBOOK 2024",
+      "Cuaderno de Campo 2024": "Field Notebook 2024",
+      "DOCUMENTAL": "DOCUMENTARY",
+      "PAISAJE": "LANDSCAPE",
       "ESCENOGRAFÍAS": "SCENOGRAPHY",
       "CONTACTO": "CONTACT",
+      "Contacto": "Contact",
       "TEXTOS": "TEXTS",
       "PROYECTOS": "PROJECTS",
+      "INVESTIGACIÓN": "RESEARCH",
       "Volver al Menú Principal": "Back to Main Menu",
       "Volver": "Back",
       "Próximo Proyecto": "Next Project",
       "Ver Galería": "View Gallery",
       "Prev": "Prev",
       "Siguiente": "Next",
+      "Next": "Next",
       "INICIANDO CONSTELACIÓN 3D...": "INITIALIZING 3D CONSTELLATION...",
       "CALCULANDO ÓRBITAS Y NODOS...": "CALCULATING ORBITS AND NODES...",
       "OPTIMIZANDO TEXTURAS Y FORMATO WEBP...": "OPTIMIZING TEXTURES AND WEBP FORMAT...",
       "SISTEMA VECTORIAL LISTO": "VECTOR SYSTEM READY",
+      "CALIBRANDO CONSTELACIÓN 3D...": "CALIBRATING 3D CONSTELLATION...",
+      "INICIALIZANDO MATRIZ ESPACIAL...": "INITIALIZING SPATIAL MATRIX...",
+      "CARGANDO ENTORNO...": "LOADING ENVIRONMENT...",
+      "Minimizar": "Minimize",
+      "Cerrar": "Close",
+      "Anterior": "Previous",
       "Introducción": "Introduction",
       "Foocus": "Foocus",
       "Comfy UI": "Comfy UI",
@@ -213,47 +355,152 @@ const useTranslation = (overrideLang) => {
       "Galería de Carteles": "Poster Gallery",
       "Documentación Visual": "Visual Documentation",
       "Explorar Proyectos": "Explore Projects",
+      "Probar suerte": "Feeling lucky",
+      "Abre un proyecto al azar": "Open a random project",
+      "Constelación": "Constellation",
+      "Galería": "Gallery",
+      "Visualización clásica en parrilla": "Classic grid visualization",
       "TODOS": "ALL",
       "Todos los proyectos": "ALL",
       "Todos": "ALL",
-      "GRITAR LO PÚBLICO": "SHOUT THE PUBLIC",
-      "ANEXO AEMET": "AEMET ANNEX",
-      "HASHIMA ANIMAL PARK": "HASHIMA ANIMAL PARK",
-      "PASEO DE LA DEHESA": "DEHESA PROMENADE",
-      "REHABILITACIÓN EL ESCORIAL": "EL ESCORIAL REHABILITATION",
-      "RENDERIZADO IA": "AI RENDERING",
-      "COLECCIÓN DE CURVAS": "CURVES COLLECTION",
-      "ÁRBOLES Y TELAS": "TREES AND FABRICS",
-      "PRATO FOOD CITY": "PRATO FOOD CITY",
-      "TERRITORIOS DIGITALES": "DIGITAL TERRITORIES",
+      "ESCRITOS / PUBLICACIONES": "WRITINGS / PUBLICATIONS",
+      "Escritos y Publicaciones": "Writings & Publications",
+      "TUTORIAL IA": "AI TUTORIAL",
+      "DISEÑO WEB": "WEB DESIGN",
       "CARTELERÍA": "POSTERS",
       "GENERACIÓN IA": "AI GENERATION",
-      "DISEÑO WEB": "WEB DESIGN",
+      "ÁRBOLES Y TELAS": "TREES AND FABRICS",
+      "COLECCIÓN DE CURVAS": "CURVES COLLECTION",
+      "CRÍTICA": "CRITICISM",
+      "ENSAYOS PROPIOS": "PERSONAL ESSAYS",
+      "HISTORIA DE LA ARQUITECTURA": "HISTORY OF ARCHITECTURE",
+      "Crítica Arquitectónica": "Architectural Criticism",
+      "Ensayos Propios": "Personal Essays",
+      "Historia de la Arquitectura": "History of Architecture",
+      "Buscar escritos...": "Search writings...",
+      "No se encontraron escritos que coincidan con la búsqueda.": "No writings found matching your search.",
+      "Repositorio de textos, ensayos y reflexiones críticas sobre la arquitectura, la ciudad y el diseño.": "Repository of texts, essays and critical reflections on architecture, city and design.",
+      "Documentación Adjunta": "Attached Documentation",
+      "El archivo PDF no se ha encontrado o tu navegador no soporta la previsualización.": "The PDF file was not found or your browser does not support previewing it.",
+      "Descargar o Abrir PDF": "Download or Open PDF",
+      "Todos los derechos reservados": "All rights reserved",
+      "Visitar sitio web": "Visit website",
+      "Cargando": "Loading",
+      "Descripción": "Description",
+      "¿Cómo prefieres ordenar la información?": "How do you prefer to browse the information?",
+      "Portfolio digital de Benito G. Quiñones": "Digital Portfolio of Benito G. Quiñones",
+      "Exploración relacional interactiva": "Interactive relational exploration",
+      "porfolio": "portfolio",
+      "Navegando el interespacio...": "Navigating interspace...",
+      "> Navegando el interespacio...": "> Navigating interspace...",
+      "Experiencia": "Experience",
+      "Formación y Cursos": "Education & Courses",
+      "Logros": "Achievements",
+      "Publicaciones": "Publications",
+      "GRITAR LO PÚBLICO": "SHOUT THE PUBLIC",
+      "ANEXO AEMET": "AEMET ANNEX",
+      "Anexo AEMET": "AEMET Annex",
+      "HASHIMA ANIMAL PARK": "HASHIMA ANIMAL PARK",
+      "Hashima Animal Park": "Hashima Animal Park",
+      "PASEO DE LA DEHESA": "DEHESA PROMENADE",
+      "PASEO DEHESA": "DEHESA PROMENADE",
+      "Paseo de la Dehesa": "Dehesa Promenade",
+      "REHABILITACIÓN EL ESCORIAL": "EL ESCORIAL REHABILITATION",
+      "COCINA MONACAL DE EL ESCORIAL": "EL ESCORIAL MONASTIC KITCHEN",
+      "RENDERIZADO IA": "AI RENDERING",
+      "PRATO FOOD CITY": "PRATO FOOD CITY",
+      "TERRITORIOS DIGITALES": "DIGITAL TERRITORIES",
+      "Investigación Territorios Digitales": "Digital Territories Research",
       "LÁMPARA ONEIROS": "ONEIROS LAMP",
       "ESTUCHE": "PENCIL CASE",
+      "ESTUCHE V1 V2 V3": "PENCIL CASE V1 V2 V3",
       "LÁMPARA NATURAL": "NATURAL LAMP",
       "JUEGO DE MESA": "BOARD GAME",
+      "JUEGO DE MESA MINUTOS": "MINUTOS BOARD GAME",
       "CMFX WALKMAN": "CMFX WALKMAN",
       "COLECCIÓN DE GRABADOS": "ENGRAVINGS COLLECTION",
       "PROTO-TAB": "PROTO-TAB",
+      "PROTO TAB": "PROTO TAB",
       "ARCHIGLOSS": "ARCHIGLOSS",
       "PORTA-VINILOS": "VINYL HOLDER",
+      "PORTA VINILOS": "VINYL HOLDER",
       "FESTA NA TERRA": "FESTA NA TERRA",
       "CRONOLOGÍA DEL ADIÓS": "CHRONOLOGY OF GOODBYE",
+      "CRONOLOGÍA DE UN ADIÓS": "CHRONOLOGY OF A GOODBYE",
       "Textos de Arquitectura": "Architecture Texts",
-      "Portfolio": "Portfolio"
-
+      "Portfolio": "Portfolio",
+      "¿Frío o caliente?": "Hot or Cold?",
+      "A ver si nos aclaramos": "Let's Get This Straight",
+      "Un trío: Lina, Corbu y Mies": "A Trio: Lina, Corbu and Mies",
+      "Cómo construir para la gente": "How to Build for People",
+      "Si los techos hablaran...": "If Ceilings Could Talk...",
+      "Dale una vuelta": "Turn It Around",
+      "El poder transformador de la arquitectura": "The Transforming Power of Architecture",
+      "El patito feo del bloque 532": "The Ugly Duckling of Block 532",
+      "Un trabajo de borde íntimo": "An Intimate Border Work",
+      "Recopilación de ejercicios de historia": "Compilation of History Exercises",
+      "El valor estético de la técnica": "The Aesthetic Value of Technique",
+      "crítica": "criticism",
+      "arquitectura": "architecture",
+      "ensayo": "essay",
+      "técnica": "technique",
+      "estética": "aesthetics",
+      "brutalismo": "brutalism",
+      "vernácula": "vernacular",
+      "efímera": "ephemeral",
+      "historia": "history",
+      "teoría": "theory",
+      "urbanismo": "urbanism",
+      "diseño": "design"
     }
   };
 
-  const t = React.useCallback((key) => translations[lang][key] || key, [lang]);
+  const t = React.useCallback((key) => {
+    if (!key) return "";
+    if (lang === "en") {
+      if (translations.en && translations.en[key]) {
+        return translations.en[key];
+      }
+      const upperKey = typeof key === "string" ? key.toUpperCase() : key;
+      if (translations.en && translations.en[upperKey]) {
+        return translations.en[upperKey];
+      }
+      if (typeof window !== "undefined" && window.defaultProjectsData) {
+        const found = window.defaultProjectsData.find(
+          (p) => p.title === key || (p.title && p.title.toUpperCase() === upperKey) || p.id === key
+        );
+        if (found && found.title_en) return found.title_en;
+      }
+      if (typeof window !== "undefined" && window.escritosData) {
+        const foundE = window.escritosData.find(
+          (e) => e.title === key || (e.title && e.title.toUpperCase() === upperKey) || e.id === key
+        );
+        if (foundE && foundE.title_en) return foundE.title_en;
+      }
+    }
+    if (lang === "es") {
+      if (translations.es && translations.es[key]) {
+        return translations.es[key];
+      }
+      const upperKey = typeof key === "string" ? key.toUpperCase() : key;
+      if (translations.es && translations.es[upperKey]) {
+        return translations.es[upperKey];
+      }
+    }
+    return key;
+  }, [lang]);
   
   // Custom translation helper for project dynamic fields
   const pt = React.useCallback((project, field) => {
     if (!project) return "";
     if (lang === "en") {
       if (project[field + "_en"]) return project[field + "_en"];
-      if (field === "title" && translations.en && translations.en[project.title]) return translations.en[project.title];
+      if (project[field] && translations.en && translations.en[project[field]]) return translations.en[project[field]];
+      if (field === "title" && translations.en) {
+        if (translations.en[project.title]) return translations.en[project.title];
+        const upper = typeof project.title === "string" ? project.title.toUpperCase() : project.title;
+        if (translations.en[upper]) return translations.en[upper];
+      }
     }
     if (lang === "es") {
       if (project[field + "_es"]) return project[field + "_es"];
@@ -282,7 +529,7 @@ const ConstellationLoader = ({ message = "CALIBRANDO CONSTELACIÓN 3D..." }) => 
 };
 
 const AppLoader = ({ isVisible, progress, statusText }) => {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
   return (
     <div
       className={`fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#050508] transition-all duration-700 ${
@@ -325,7 +572,7 @@ const AppLoader = ({ isVisible, progress, statusText }) => {
           Benito González Quiñones
         </h1>
         <p className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.35em] text-cyan-400/80 mt-1">
-          Arquitectura &middot; Diseño &middot; Espacio Tridimensional
+          {lang === "en" ? "Architecture · Design · 3D Space" : "Arquitectura · Diseño · Espacio Tridimensional"}
         </p>
       </div>
 
@@ -339,7 +586,7 @@ const AppLoader = ({ isVisible, progress, statusText }) => {
         </div>
 
         <div className="flex justify-between items-center text-[9px] sm:text-[10px] font-mono tracking-wider text-gray-400">
-          <span className="truncate pr-2 uppercase">{statusText || "CARGANDO ENTORNO..."}</span>
+          <span className="truncate pr-2 uppercase">{t(statusText) || (lang === "en" ? "LOADING ENVIRONMENT..." : "CARGANDO ENTORNO...")}</span>
           <span className="text-cyan-400 font-bold">{Math.round(progress)}%</span>
         </div>
       </div>
@@ -347,9 +594,78 @@ const AppLoader = ({ isVisible, progress, statusText }) => {
   );
 };
 
+const CopyPermalinkButton = ({ theme = "dark", className = "", label = null }) => {
+  const { t, lang } = useTranslation();
+  const [copied, setCopied] = React.useState(false);
 
+  const handleCopy = (e) => {
+    e.stopPropagation();
+    try {
+      const url = window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch (err) {
+      console.error("Failed to copy permalink:", err);
+    }
+  };
+
+  const isEn = lang === "en";
+
+  let colorClasses =
+    theme === "photography"
+      ? "bg-[#faf7f2] border-[#c8963e]/50 hover:bg-[#f4ede1] text-[#6e4418] hover:border-[#8c5822]"
+      : theme === "design"
+      ? "bg-black/70 border-[#ff0000]/50 hover:bg-[#ff0000]/20 text-[#ff0000]"
+      : theme === "light"
+      ? "bg-white border-gray-300 hover:bg-gray-100 text-gray-800"
+      : "bg-black/60 border-white/20 hover:bg-white/10 text-white";
+
+  return (
+    <button
+      onClick={handleCopy}
+      type="button"
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border font-mono text-[10px] sm:text-xs uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-sm select-none ${colorClasses} ${className}`}
+      title={isEn ? "Copy direct permalink" : "Copiar enlace permanente"}
+      aria-label={isEn ? "Copy permalink" : "Copiar enlace permanente"}
+    >
+      {copied ? (
+        <>
+          <svg className="w-3.5 h-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+          </svg>
+          <span className="font-bold text-green-600 dark:text-green-400">
+            {isEn ? "Copied!" : "¡Copiado!"}
+          </span>
+        </>
+      ) : (
+        <>
+          <svg className="w-3.5 h-3.5 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.8}
+              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+            />
+          </svg>
+          <span>{label || (isEn ? "Share link" : "Copiar enlace")}</span>
+        </>
+      )}
+    </button>
+  );
+};
 
 const EscritosPage = ({ onEscritoSelect }) => {
+  const { t, pt, lang } = useTranslation();
   const [searchTerm, setSearchTerm] = React.useState("");
   const [selectedTags, setSelectedTags] = React.useState([]);
 
@@ -373,9 +689,11 @@ const EscritosPage = ({ onEscritoSelect }) => {
 
   const filteredData = window.escritosData.filter((item) => {
     const term = searchTerm.toLowerCase();
+    const itemTitle = (lang === "en" ? (item.title_en || item.title) : item.title).toLowerCase();
+    const itemSummary = (lang === "en" ? (item.summary_en || item.summary) : item.summary).toLowerCase();
     const matchSearch =
-      item.title.toLowerCase().includes(term) ||
-      item.summary.toLowerCase().includes(term);
+      itemTitle.includes(term) ||
+      itemSummary.includes(term);
     const matchTags =
       selectedTags.length === 0 ||
       selectedTags.every((tag) => item.tags.includes(tag));
@@ -385,17 +703,17 @@ const EscritosPage = ({ onEscritoSelect }) => {
   const categories = [
     {
       id: "critica",
-      title: "Crítica Arquitectónica",
+      title: t("Crítica Arquitectónica"),
       items: filteredData.filter((i) => i.category === "critica"),
     },
     {
       id: "ensayo",
-      title: "Ensayos Propios",
+      title: t("Ensayos Propios"),
       items: filteredData.filter((i) => i.category === "ensayo"),
     },
     {
       id: "historia",
-      title: "Historia de la Arquitectura",
+      title: t("Historia de la Arquitectura"),
       items: filteredData.filter((i) => i.category === "historia"),
     },
   ];
@@ -406,11 +724,14 @@ const EscritosPage = ({ onEscritoSelect }) => {
       <div className="max-w-4xl mx-auto px-4 sm:px-8 font-sans relative z-10">
         <header className="mb-12 sm:mb-20 text-center sm:text-left border-b-2 border-[#111111] pb-12">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6 uppercase">
-            Escritos y <span className="italic font-light">Publicaciones</span>
+            {lang === "en" ? (
+              <React.Fragment>Writings & <span className="italic font-light">Publications</span></React.Fragment>
+            ) : (
+              <React.Fragment>Escritos y <span className="italic font-light">Publicaciones</span></React.Fragment>
+            )}
           </h1>
           <p className="text-lg text-[#444444] max-w-2xl font-mono text-sm uppercase tracking-widest">
-            Repositorio de textos, ensayos y reflexiones críticas sobre la
-            arquitectura, la ciudad y el diseño.
+            {t("Repositorio de textos, ensayos y reflexiones críticas sobre la arquitectura, la ciudad y el diseño.")}
           </p>
         </header>
 
@@ -418,7 +739,7 @@ const EscritosPage = ({ onEscritoSelect }) => {
           <div className="relative">
             <input
               type="text"
-              placeholder="Buscar escritos..."
+              placeholder={t("Buscar escritos...")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full p-4 pl-12 bg-white/50 border border-[#111111] focus:outline-none focus:bg-white transition-colors font-serif text-lg"
@@ -445,7 +766,7 @@ const EscritosPage = ({ onEscritoSelect }) => {
                 onClick={() => toggleTag(tag)}
                 className={`px-3 py-1 text-xs font-mono tracking-widest uppercase border border-[#111111] transition-colors ${selectedTags.includes(tag) ? "bg-[#111111] text-white" : "bg-transparent text-[#111111] hover:bg-[#111111]/10"}`}
               >
-                #{tag}
+                #{t(tag)}
               </button>
             ))}
           </div>
@@ -478,18 +799,18 @@ const EscritosPage = ({ onEscritoSelect }) => {
                         </div>
                         <div className="flex-1 pr-6">
                           <h3 className="text-2xl sm:text-3xl font-medium mb-3 group-hover:italic transition-all duration-300 leading-tight">
-                            {item.title}
+                            {pt(item, "title")}
                           </h3>
                           <p className="text-[#555555] font-serif text-lg leading-relaxed mb-4">
-                            {item.summary}
+                            {pt(item, "summary")}
                           </p>
                           <div className="flex flex-wrap gap-2">
-                            {item.tags.map((t) => (
+                            {item.tags.map((tg) => (
                               <span
-                                key={t}
+                                key={tg}
                                 className="text-[10px] font-mono tracking-widest uppercase text-[#888888]"
                               >
-                                #{t}
+                                #{t(tg)}
                               </span>
                             ))}
                           </div>
@@ -519,9 +840,17 @@ const EscritosPage = ({ onEscritoSelect }) => {
             ))}
           {filteredData.length === 0 && (
             <div className="py-12 text-center text-[#666666] font-mono uppercase tracking-widest text-sm">
-              No se encontraron escritos que coincidan con la búsqueda.
+              {t("No se encontraron escritos que coincidan con la búsqueda.")}
             </div>
           )}
+
+          {/* Automatic Soundtrack for Escritos Page */}
+          <ProjectSoundtrackSection
+            projectId="escritos"
+            projectTitle={lang === "en" ? "WRITINGS & ESSAYS · SOUNDTRACK" : "ESCRITOS Y ENSAYOS · BANDA SONORA"}
+            isPhoto={false}
+            isDarkTheme={false}
+          />
         </div>
       </div>
     </div>
@@ -529,7 +858,7 @@ const EscritosPage = ({ onEscritoSelect }) => {
 };
 
 const EscritoDetailPage = ({ escrito, onBack }) => {
-  const { t, pt } = useTranslation();
+  const { t, pt, lang } = useTranslation();
   if (!escrito) return null;
 
   const text = pt(escrito, "text");
@@ -540,23 +869,26 @@ const EscritoDetailPage = ({ escrito, onBack }) => {
       <div className="absolute inset-0 bg-[linear-gradient(rgba(176,176,168,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(176,176,168,0.2)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
       <div className="max-w-4xl mx-auto px-4 sm:px-8 font-sans relative z-10">
         <header className="mb-16 border-b-2 border-[#111111] pb-12 mt-8">
-          <span className="text-xs font-mono text-[#666666] tracking-widest uppercase mb-4 block">
-            {escrito.date}
-          </span>
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <span className="text-xs font-mono text-[#666666] tracking-widest uppercase">
+              {escrito.date}
+            </span>
+            <CopyPermalinkButton theme="light" />
+          </div>
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6 leading-tight uppercase relative inline-block">
             {pt(escrito, "title")}
           </h1>
           <p className="text-xl text-[#555555] font-serif italic max-w-3xl leading-relaxed mb-6">
-            {escrito.summary}
+            {pt(escrito, "summary")}
           </p>
           <div className="flex flex-wrap gap-2">
             {escrito.tags &&
-              escrito.tags.map((t) => (
+              escrito.tags.map((tg) => (
                 <span
-                  key={t}
+                  key={tg}
                   className="px-2 py-1 text-[10px] font-mono tracking-widest uppercase border border-[#dddddd] text-[#666666]"
                 >
-                  #{t}
+                  #{t(tg)}
                 </span>
               ))}
           </div>
@@ -592,7 +924,7 @@ const EscritoDetailPage = ({ escrito, onBack }) => {
         {escrito.images && escrito.images.length > 0 && (
           <div className="mt-16 border-t-2 border-[#111111] pt-16">
             <h3 className="text-sm font-mono tracking-widest text-[#111111] uppercase mb-8">
-              Documentación Visual
+              {t("Documentación Visual")}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
               {escrito.images.map((imgSrc, imgIdx) => (
@@ -600,7 +932,7 @@ const EscritoDetailPage = ({ escrito, onBack }) => {
                   <div className="bg-[#ebebe6] border-2 border-[#111111] p-4 relative transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:shadow-[8px_8px_0_0_#111111]">
                     <OptimizedImage
                       src={imgSrc}
-                      alt={`${escrito.title} - imagen ${imgIdx + 1}`}
+                      alt={`${pt(escrito, "title")} - ${lang === 'en' ? 'image' : 'imagen'} ${imgIdx + 1}`}
                       className="w-full h-auto object-contain mix-blend-multiply"
                       loading="lazy"
                       theme="light"
@@ -625,6 +957,153 @@ window.EscritoDetailPage = EscritoDetailPage;
 const territoriosDigitalesImages = window.territoriosDigitalesImages;
 const defaultProjectsData = window.defaultProjectsData;
 const allProjectsData = window.defaultProjectsData;
+
+// PERMALINK & ROUTING HELPERS
+const getPermalink = (viewState, filterState) => {
+  if (!viewState) return "#/";
+  if (viewState.page === "project" && viewState.projectId) {
+    if (typeof viewState.spread === "number" && viewState.spread > 0) {
+      return `#/proyecto/${viewState.projectId}/pliego/${viewState.spread + 1}`;
+    }
+    return `#/proyecto/${viewState.projectId}`;
+  }
+  if (viewState.page === "carteleria") {
+    return `#/carteleria`;
+  }
+  if (viewState.page === "escrito-detail" && viewState.escritoId) {
+    return `#/escritos/${viewState.escritoId}`;
+  }
+  if (viewState.page === "escritos-arquitectura") {
+    return `#/escritos`;
+  }
+  if (viewState.page === "generacion-ia") {
+    return `#/tutorialia`;
+  }
+  if (viewState.page === "web-design") {
+    return `#/web-design`;
+  }
+  if (viewState.page === "subcategory" && viewState.subcategory) {
+    return `#/subcategoria/${encodeURIComponent(viewState.subcategory.toLowerCase())}`;
+  }
+  if (viewState.page === "architecture" || (viewState.page === "home" && filterState === "architecture")) {
+    return `#/arquitectura`;
+  }
+  if (viewState.page === "design" || (viewState.page === "home" && filterState === "design")) {
+    return `#/diseno`;
+  }
+  if (viewState.page === "photography" || (viewState.page === "home" && filterState === "photography")) {
+    return `#/fotografia`;
+  }
+  if (viewState.page === "scenography" || (viewState.page === "home" && filterState === "scenography")) {
+    return `#/escenografias`;
+  }
+  if (viewState.page === "contact" || (viewState.page === "home" && filterState === "contact")) {
+    return `#/contacto`;
+  }
+  return `#/`;
+};
+
+const parseUrlToState = () => {
+  if (typeof window === "undefined") {
+    return { view: { page: "home", projectId: null }, filter: "all" };
+  }
+
+  let hash = window.location.hash || "";
+  let path = window.location.pathname || "";
+
+  // Normalize route string from hash (preferred e.g. #/proyecto/abc) or pathname (/proyecto/abc)
+  let route = "";
+  if (hash.startsWith("#/")) {
+    route = hash.slice(2);
+  } else if (hash.startsWith("#")) {
+    route = hash.slice(1);
+  } else if (path && path !== "/") {
+    route = path.startsWith("/") ? path.slice(1) : path;
+  }
+
+  route = route.split("?")[0].replace(/^\/+|\/+$/g, "");
+
+  if (!route || route === "todos" || route === "all" || route === "home") {
+    return { view: { page: "home", projectId: null }, filter: "all" };
+  }
+
+  // Category filters
+  if (route === "arquitectura" || route === "architecture") {
+    return { view: { page: "architecture", projectId: null }, filter: "architecture" };
+  }
+  if (route === "diseno" || route === "design" || route === "diseño") {
+    return { view: { page: "design", projectId: null }, filter: "design" };
+  }
+  if (route === "fotografia" || route === "photography" || route === "fotografía") {
+    return { view: { page: "photography", projectId: null }, filter: "photography" };
+  }
+  if (route === "escenografias" || route === "scenography" || route === "escenografías") {
+    return { view: { page: "scenography", projectId: null }, filter: "scenography" };
+  }
+  if (route === "contacto" || route === "contact") {
+    return { view: { page: "contact", projectId: null }, filter: "contact" };
+  }
+
+  // Subcategories
+  if (route.startsWith("subcategoria/") || route.startsWith("subcategory/")) {
+    const rawSubcat = route.split("/")[1] || "";
+    const decoded = decodeURIComponent(rawSubcat);
+    const foundSubcat = typeof window !== "undefined" && window.defaultProjectsData
+      ? window.defaultProjectsData.map((p) => p.subcategory).find((s) => s && s.toLowerCase() === decoded.toLowerCase())
+      : null;
+    const subcategory = foundSubcat || decoded.toUpperCase();
+    return {
+      view: { page: "subcategory", subcategory, projectId: null },
+      filter: "all",
+    };
+  }
+
+  // Specific project or libreto: #/proyecto/:id with optional /pliego/:num or /pagina/:num
+  if (route.startsWith("proyecto/") || route.startsWith("project/")) {
+    const parts = route.split("/");
+    const projectId = parts[1];
+    if (projectId === "carteleria") {
+      return { view: { page: "carteleria", projectId: "carteleria" }, filter: "all" };
+    }
+    let spread = 0;
+    if (parts[2] === "pliego" || parts[2] === "spread" || parts[2] === "pagina" || parts[2] === "page") {
+      const parsedNum = parseInt(parts[3], 10);
+      if (!isNaN(parsedNum) && parsedNum > 0) {
+        spread = parts[2] === "pagina" || parts[2] === "page" ? Math.floor(parsedNum / 2) : parsedNum - 1;
+      }
+    }
+    return { view: { page: "project", projectId, spread }, filter: "all" };
+  }
+
+  // Escritos
+  if (route === "escritos" || route === "textos" || route === "publicaciones" || route === "writings") {
+    return { view: { page: "escritos-arquitectura", projectId: null }, filter: "architecture" };
+  }
+  if (route.startsWith("escritos/") || route.startsWith("textos/")) {
+    const escritoId = route.split("/")[1];
+    return { view: { page: "escrito-detail", escritoId, projectId: null }, filter: "architecture" };
+  }
+
+  // Standalone pages
+  if (route === "tutorialia" || route === "generacion-ia") {
+    return { view: { page: "generacion-ia", projectId: null }, filter: "all" };
+  }
+  if (route === "web-design" || route === "diseno-web") {
+    return { view: { page: "web-design", projectId: null }, filter: "all" };
+  }
+  if (route === "carteleria" || route === "posters") {
+    return { view: { page: "carteleria", projectId: "carteleria" }, filter: "all" };
+  }
+
+  // Direct project ID fallback
+  const isDirectProjectId = typeof window !== "undefined" && window.defaultProjectsData &&
+    window.defaultProjectsData.some((p) => p.id === route);
+  if (isDirectProjectId) {
+    return { view: { page: "project", projectId: route }, filter: "all" };
+  }
+
+  return { view: { page: "home", projectId: null }, filter: "all" };
+};
 
 // COMPONENTS
 const EyeIcon = ({ color = "#00ffff" }) => {
@@ -777,11 +1256,15 @@ const HomeButton = ({ onClick }) => (
 const BackButton = ({ onClick, theme = "dark" }) => {
   const { t } = useTranslation();
   const baseClasses =
-    "fixed top-4 left-4 z-50 font-mono uppercase tracking-widest text-sm px-4 py-2 rounded-full border transition-all duration-300";
+    "fixed top-3.5 sm:top-4 left-3 sm:left-4 z-[140] font-mono uppercase tracking-widest text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-300 cursor-pointer shadow-lg";
   const themeClasses =
-    theme === "dark"
-      ? "text-white bg-black bg-opacity-30 backdrop-blur-sm border-gray-700 hover:bg-opacity-50 hover:border-gray-500"
-      : "text-black bg-white bg-opacity-50 backdrop-blur-sm border-gray-300 hover:bg-opacity-80 hover:border-gray-500";
+    theme === "photography"
+      ? "text-[#6e4418] bg-[#faf7f2]/95 backdrop-blur-md border-[#c8963e]/40 hover:bg-[#f4ede1] hover:border-[#b87d2b] shadow-sm"
+      : theme === "design"
+      ? "text-[#ff0000] bg-black/70 backdrop-blur-md border-[#ff0000]/40 hover:bg-[#ff0000]/20 hover:border-[#ff0000]"
+      : theme === "light"
+      ? "text-black bg-white/80 backdrop-blur-md border-gray-300 hover:bg-white hover:border-gray-500 shadow-sm"
+      : "text-white bg-black/60 backdrop-blur-md border-gray-700 hover:bg-black/80 hover:border-gray-500";
 
   return (
     <button onClick={onClick} className={`${baseClasses} ${themeClasses}`}>
@@ -790,8 +1273,22 @@ const BackButton = ({ onClick, theme = "dark" }) => {
   );
 };
 
-const NetworkGraph = ({ onNodeClick, filter, disruptSignal, zoomTarget, highlightNodeId }) => {
+const NetworkGraph = ({
+  onNodeClick,
+  filter,
+  disruptSignal,
+  zoomTarget,
+  highlightNodeId,
+  allProjectsData: propProjectsData,
+}) => {
   const { t, pt, lang } = useTranslation();
+  const allProjectsData = React.useMemo(() => {
+    if (propProjectsData && propProjectsData.length > 0) return propProjectsData;
+    if (typeof window !== "undefined" && window.defaultProjectsData && window.defaultProjectsData.length > 0) {
+      return window.defaultProjectsData;
+    }
+    return [];
+  }, [propProjectsData]);
   const [graphData, setGraphData] = React.useState({ nodes: [], links: [] });
   const [dimensions, setDimensions] = React.useState({
     width: typeof window !== "undefined" ? window.innerWidth : 800,
@@ -982,6 +1479,13 @@ const NetworkGraph = ({ onNodeClick, filter, disruptSignal, zoomTarget, highligh
         targetCategory: "design",
       },
       {
+        id: "FOTOGRAFÍA",
+        group: 3,
+        isNavLink: true,
+        isCategoryNode: true,
+        targetCategory: "photography",
+      },
+      {
         id: "ESCENOGRAFÍAS",
         group: 2,
         isNavLink: true,
@@ -1033,6 +1537,7 @@ const NetworkGraph = ({ onNodeClick, filter, disruptSignal, zoomTarget, highligh
     const baseLinksRaw = [
       { source: "CENTRAL_HUB", target: "ARQUITECTURA", value: 1 },
       { source: "CENTRAL_HUB", target: "DISEÑO", value: 1 },
+      { source: "CENTRAL_HUB", target: "FOTOGRAFÍA", value: 1 },
       { source: "CENTRAL_HUB", target: "ESCENOGRAFÍAS", value: 1 },
       { source: "CENTRAL_HUB", target: "CONTACTO", value: 1 },
       ...archNodes.map((n) => ({
@@ -1047,6 +1552,7 @@ const NetworkGraph = ({ onNodeClick, filter, disruptSignal, zoomTarget, highligh
       if (project.category === "architecture")
         return project.subcategory || "ARQUITECTURA";
       if (project.category === "design") return project.subcategory || "DISEÑO";
+      if (project.category === "photography") return "FOTOGRAFÍA";
       if (
         project.category === "escenografias" ||
         project.category === "scenography"
@@ -1096,6 +1602,7 @@ const NetworkGraph = ({ onNodeClick, filter, disruptSignal, zoomTarget, highligh
       const categoryMap = {
         architecture: "ARQUITECTURA",
         design: "DISEÑO",
+        photography: "FOTOGRAFÍA",
         scenography: "ESCENOGRAFÍAS",
         escenografias: "ESCENOGRAFÍAS",
       };
@@ -1244,7 +1751,7 @@ const NetworkGraph = ({ onNodeClick, filter, disruptSignal, zoomTarget, highligh
 
             const midGeo = new THREE.SphereGeometry(10, 32, 32);
             const midMat = new THREE.MeshPhongMaterial({
-              color: filter === "design" ? 0xff0000 : 0x00ffff,
+              color: filter === "design" ? 0xff0000 : filter === "photography" ? 0xc8963e : 0x00ffff,
               transparent: true,
               opacity: 0.25,
             });
@@ -1252,7 +1759,7 @@ const NetworkGraph = ({ onNodeClick, filter, disruptSignal, zoomTarget, highligh
 
             const pupilGeo = new THREE.SphereGeometry(4, 32, 32);
             const pupilMat = new THREE.MeshPhongMaterial({
-              color: filter === "design" ? 0xff0000 : 0x00ffff,
+              color: filter === "design" ? 0xff0000 : filter === "photography" ? 0xc8963e : 0x00ffff,
             });
             const pupil = new THREE.Mesh(pupilGeo, pupilMat);
             group.add(pupil);
@@ -1271,12 +1778,12 @@ const NetworkGraph = ({ onNodeClick, filter, disruptSignal, zoomTarget, highligh
 
           if (
             node.isCategoryNode ||
-            ["ARQUITECTURA", "DISEÑO", "ESCENOGRAFÍAS", "CONTACTO"].includes(
+            ["ARQUITECTURA", "DISEÑO", "FOTOGRAFÍA", "ESCENOGRAFÍAS", "CONTACTO"].includes(
               node.id,
             )
           ) {
-            color = 0x00ffff;
-            textColor = "#00ffff";
+            color = node.id === "FOTOGRAFÍA" ? "#c8963e" : 0x00ffff;
+            textColor = node.id === "FOTOGRAFÍA" ? "#c8963e" : "#00ffff";
             radius = 6;
             textHeight = 5;
             
@@ -1284,7 +1791,14 @@ const NetworkGraph = ({ onNodeClick, filter, disruptSignal, zoomTarget, highligh
               color = "#ff0000";
               textColor = "#ff0000";
               radius = 8;
+            } else if (filter === "photography" && node.id === "FOTOGRAFÍA") {
+              color = "#b87d2b";
+              textColor = "#b87d2b";
+              radius = 8;
             }
+          } else if (filter === "photography" && (node.isSubcategory || node.isProject)) {
+             color = "#c8963e";
+             textColor = "#d4a359";
           } else if (filter === "design" && (node.isSubcategory || node.isProject)) {
              color = Math.random() > 0.5 ? "#ff0000" : "#ffcc00";
              textColor = "#ffcc00";
@@ -1433,7 +1947,8 @@ const OrbitalPage = ({
 
       const baseNodes = [{ id: title, isSun: true, fx: 0, fy: 0 }];
 
-      const subcategories = subcategory
+      const isPhotoCategory = category === "photography";
+      const subcategories = subcategory || isPhotoCategory
         ? []
         : [...new Set(projects.map((p) => p.subcategory).filter(Boolean))];
       const subcategoryNodes = subcategories.map((sub) => ({
@@ -1448,9 +1963,9 @@ const OrbitalPage = ({
         isPage: !!p.isPage || !!p.isCategoryNode,
         isCategoryNode: !!p.isCategoryNode,
         projectId: p.id,
-        sun: subcategory ? title : p.subcategory || title,
+        sun: subcategory || isPhotoCategory ? title : p.subcategory || title,
       }));
-      if (isMobile && !subcategory && category !== "escenografias" && category !== "scenography") {
+      if (isMobile && !subcategory && category !== "escenografias" && category !== "scenography" && !isPhotoCategory) {
         projectNodes = [];
       }
 
@@ -1968,6 +2483,9 @@ const InteractiveGridBackground = ({ theme = "dark" }) => {
 };
 
 const ContactPage = () => {
+  const { t, lang } = useTranslation();
+  const isEn = lang === "en";
+
   const CVSection = ({ title, children }) => (
     <div className="mb-8">
       <h3 className="font-mono text-sm sm:text-xl font-bold uppercase tracking-widest text-cyan-400 border-b border-gray-800 pb-2 mb-4">
@@ -1982,7 +2500,7 @@ const ContactPage = () => {
         {title}
       </p>
       <p className="text-[10px] sm:text-sm leading-tight">{period}</p>
-      <p className="text-[10px] sm:text-sm text-gray-500 leading-tight">{place}</p>
+      {place && <p className="text-[10px] sm:text-sm text-gray-500 leading-tight">{place}</p>}
     </div>
   );
   const PublicationEntry = ({ title, details }) => (
@@ -2001,12 +2519,12 @@ const ContactPage = () => {
         <div className="w-full max-w-6xl mx-auto z-10 relative">
           <div className="text-center mb-12 w-full flex flex-col items-center">
             <h1 className="font-mono text-4xl sm:text-5xl md:text-7xl font-bold tracking-wider uppercase text-white mb-6">
-              CONTACTO
+              {t("CONTACTO")}
             </h1>
             <p className="text-sm md:text-base text-gray-400 mb-8 max-w-xl px-4">
-              Para colaboraciones, consultas sobre proyectos o cualquier otra
-              pregunta, por favor, póngase en contacto a través del siguiente
-              correo electrónico.
+              {isEn
+                ? "For collaborations, project inquiries, or any other questions, please get in touch via the email address below."
+                : "Para colaboraciones, consultas sobre proyectos o cualquier otra pregunta, por favor, póngase en contacto a través del siguiente correo electrónico."}
             </p>
             <a
               href="mailto:arquitecturabenito@gmail.com"
@@ -2017,144 +2535,152 @@ const ContactPage = () => {
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10 sm:gap-x-12 lg:gap-x-16">
           <div>
-            <CVSection title="Experiencia">
+            <CVSection title={t("Experiencia")}>
               <CVEntry
                 title={
                   <a href="https://madhel.eu/" target="_blank" rel="noopener noreferrer" className="hover:underline underline-offset-4 decoration-white/50 cursor-pointer">
-                    Prácticas en MADHEL
+                    {isEn ? "Internship at MADHEL" : "Prácticas en MADHEL"}
                   </a>
                 }
-                period="Junio 2026 - Actualidad"
+                period={isEn ? "June 2026 - Present" : "Junio 2026 - Actualidad"}
                 place="Madrid"
               />
               <CVEntry
-                title="Docente en ESMP EPU Fundamentos de la IA en arquitectura"
-                period="Junio 2026 - Julio 2026"
-                place="Perú, Arequipa"
+                title={isEn ? "Lecturer in ESMP EPU - Fundamentals of AI in Architecture" : "Docente en ESMP EPU Fundamentos de la IA en arquitectura"}
+                period={isEn ? "June 2026 - July 2026" : "Junio 2026 - Julio 2026"}
+                place={isEn ? "Peru, Arequipa" : "Perú, Arequipa"}
               />
               <CVEntry
                 title={
                   <a href="https://www.fusterarquitectos.es/madrid/" target="_blank" rel="noopener noreferrer" className="hover:underline underline-offset-4 decoration-white/50 cursor-pointer">
-                    Prácticas en FUSTER + NOHALES Arquitectura
+                    {isEn ? "Internship at FUSTER + NOHALES Architecture" : "Prácticas en FUSTER + NOHALES Arquitectura"}
                   </a>
                 }
-                period="Junio 2025 - Septiembre 2025"
+                period={isEn ? "June 2025 - September 2025" : "Junio 2025 - Septiembre 2025"}
                 place="Madrid"
               />
               <CVEntry
-                title="Becario de profesor de Hª de la arquitectura y el urbanismo"
-                period="Septiembre 2024 - Diciembre 2024"
-                place="ETSAMadrid (3er curso)"
+                title={isEn ? "Teaching Assistant in History of Architecture and Urbanism" : "Becario de profesor de Hª de la arquitectura y el urbanismo"}
+                period={isEn ? "September 2024 - December 2024" : "Septiembre 2024 - Diciembre 2024"}
+                place={isEn ? "ETSAMadrid (3rd year)" : "ETSAMadrid (3er curso)"}
               />
               <CVEntry
-                title="Becario de profesor de Hª del arte y la arquitectura"
-                period="Enero 2024 - Mayo 2024"
-                place="ETSAMadrid (1er curso)"
+                title={isEn ? "Teaching Assistant in History of Art and Architecture" : "Becario de profesor de Hª del arte y la arquitectura"}
+                period={isEn ? "January 2024 - May 2024" : "Enero 2024 - Mayo 2024"}
+                place={isEn ? "ETSAMadrid (1st year)" : "ETSAMadrid (1er curso)"}
               />
               <CVEntry
                 title={
                   <a href="https://velzia.com/" target="_blank" rel="noopener noreferrer" className="hover:underline underline-offset-4 decoration-white/50 cursor-pointer">
-                    Contrato en estudio Chapnik Giessen
+                    {isEn ? "Contract at Chapnik Giessen Studio" : "Contrato en estudio Chapnik Giessen"}
                   </a>
                 }
-                period="Julio 2023 - Septiembre 2023"
-                place="Madrid (Dep. Renders)"
+                period={isEn ? "July 2023 - September 2023" : "Julio 2023 - Septiembre 2023"}
+                place={isEn ? "Madrid (Rendering Dept.)" : "Madrid (Dep. Renders)"}
               />
               <CVEntry
-                title="Prácticas de reportaje arquitectónico para CAPA"
-                period="Enero 2022"
+                title={isEn ? "Architectural photography internship for CAPA" : "Prácticas de reportaje arquitectónico para CAPA"}
+                period={isEn ? "January 2022" : "Enero 2022"}
                 place="Madrid"
               />
               <CVEntry
-                title="Prácticas de reportaje para Cosentino"
-                period="Agosto 2021"
+                title={isEn ? "Photography internship for Cosentino" : "Prácticas de reportaje para Cosentino"}
+                period={isEn ? "August 2021" : "Agosto 2021"}
                 place="Madrid"
               />
               <CVEntry
-                title="Gestión de un voluntariado para la limpieza de playas"
-                period="2019 y 2020"
+                title={isEn ? "Beach cleanup volunteer coordination" : "Gestión de un voluntariado para la limpieza de playas"}
+                period={isEn ? "2019 and 2020" : "2019 y 2020"}
                 place="Mar Menor, Murcia"
               />
             </CVSection>
             
           </div>
           <div>
-            <CVSection title="Formación y Cursos">
+            <CVSection title={t("Formación y Cursos")}>
               <CVEntry
-                title="Curso Revit+BIM"
-                period="Junio 2026"
+                title={isEn ? "Revit + BIM Course" : "Curso Revit+BIM"}
+                period={isEn ? "June 2026" : "Junio 2026"}
                 place="Universidad Europea"
               />
               <CVEntry
-                title="SIHMA II - Seminario de Investigación"
-                period="Septiembre 2024 - Febrero 2025"
+                title={isEn ? "SIHMA II - Research Seminar" : "SIHMA II - Seminario de Investigación"}
+                period={isEn ? "September 2024 - February 2025" : "Septiembre 2024 - Febrero 2025"}
                 place="UPM"
               />
               <CVEntry
-                title="IV Congreso de la AHAU - Ciudad y naturaleza"
-                period="25 y 26 Octubre 2024"
-                place="Monasterio de El Escorial, Madrid"
+                title={isEn ? "4th AHAU Congress - City and Nature" : "IV Congreso de la AHAU - Ciudad y naturaleza"}
+                period={isEn ? "October 25 & 26, 2024" : "25 y 26 Octubre 2024"}
+                place={isEn ? "Monastery of El Escorial, Madrid" : "Monasterio de El Escorial, Madrid"}
               />
               <CVEntry
-                title="Ciclo formativo Artificial Architectures(AA)"
-                period="13, 14 y 15 Noviembre 2024"
+                title={isEn ? "Artificial Architectures (AA) Training Program" : "Ciclo formativo Artificial Architectures(AA)"}
+                period={isEn ? "November 13, 14 & 15, 2024" : "13, 14 y 15 Noviembre 2024"}
                 place="ETSAM, UPM"
               />
               <CVEntry
-                title="Seminario - Workshop BIP Erasmus+ FoodCity"
-                period="Enero 2024 - Febrero 2024"
+                title={isEn ? "Seminar - BIP Erasmus+ FoodCity Workshop" : "Seminario - Workshop BIP Erasmus+ FoodCity"}
+                period={isEn ? "January 2024 - February 2024" : "Enero 2024 - Febrero 2024"}
                 place="Prato/Florence"
               />
               <CVEntry
-                title="SIHMA I - Seminario de Investigación"
-                period="Septiembre 2023 - Febrero 2024"
+                title={isEn ? "SIHMA I - Research Seminar" : "SIHMA I - Seminario de Investigación"}
+                period={isEn ? "September 2023 - February 2024" : "Septiembre 2023 - Febrero 2024"}
                 place="UPM"
               />
               <CVEntry
-                title="V Seminarios de Accesibilidad"
-                period="17 Noviembre 2023"
+                title={isEn ? "5th Accessibility Seminars" : "V Seminarios de Accesibilidad"}
+                period={isEn ? "November 17, 2023" : "17 Noviembre 2023"}
                 place=""
               />
               <CVEntry
-                title="Curso de Rhinoceros 7"
+                title={isEn ? "Rhinoceros 7 Course" : "Curso de Rhinoceros 7"}
                 period="ETSAM 2021"
                 place=""
               />
             </CVSection>
           </div>
           <div>
-<CVSection title="Logros">
+            <CVSection title={t("Logros")}>
               <CVEntry
-                title="Meta XR Lab, fundador y presidente"
-                period="2021 - Actualmente"
+                title={isEn ? "Meta XR Lab, founder and president" : "Meta XR Lab, fundador y presidente"}
+                period={isEn ? "2021 - Present" : "2021 - Actualmente"}
                 place=""
               />
               <CVEntry
-                title="1er premio en el concurso de fotografía: moda y arquitectura"
+                title={isEn ? "1st prize in photography competition: Fashion & Architecture" : "1er premio en el concurso de fotografía: moda y arquitectura"}
                 period="2021"
                 place="CEMEX"
               />
             </CVSection>
-            <CVSection title="Publicaciones">
+            <CVSection title={t("Publicaciones")}>
               <PublicationEntry
-                title="Maquetas de luz: «Light painting» arquitectónico"
+                title={isEn ? "Light models: Architectural «light painting»" : "Maquetas de luz: «Light painting» arquitectónico"}
                 details="(2025), Madrid"
               />
               <PublicationEntry
-                title="El monasterio de El Escorial: una historia medioambiental"
-                details="(2024), Madrid, con Eduardo Prieto"
+                title={isEn ? "The monastery of El Escorial: An environmental history" : "El monasterio de El Escorial: una historia medioambiental"}
+                details={isEn ? "(2024), Madrid, with Eduardo Prieto" : "(2024), Madrid, con Eduardo Prieto"}
               />
               <PublicationEntry
                 title="V de Vigueta n°11"
-                details="(2023) Artículo ilustrado"
+                details={isEn ? "(2023) Illustrated article" : "(2023) Artículo ilustrado"}
               />
               <PublicationEntry
-                title="Estableciendo “puentes” entre la Universidad y el tejido social madrileño"
+                title={isEn ? "Building “bridges” between the University and the Madrid social fabric" : "Estableciendo “puentes” entre la Universidad y el tejido social madrileño"}
                 details="(2023), ETSAM, UPM, Madrid"
               />
             </CVSection>
           </div>
         </div>
+
+        {/* Contact Page Soundtrack */}
+        <ProjectSoundtrackSection
+          projectId="contact"
+          projectTitle={isEn ? "CONTACT · SOUNDTRACK" : "CONTACTO · BANDA SONORA"}
+          isDarkTheme={true}
+        />
+
         <footer className="relative text-xs text-gray-500 z-10 text-center py-4 mt-8">
           © 2024 Benito González Quiñones
         </footer>
@@ -2202,7 +2728,9 @@ const GalleryView = ({
   onSubcategorySelect,
   onFilterChange,
 }) => {
-  const { t, pt } = useTranslation();
+  const { t, pt, lang } = useTranslation();
+  const isEn = lang === "en";
+  const isPhotographyMode = filter === "photography";
   const [activeFolder, setActiveFolder] = React.useState(null);
   const [isFolderMinimized, setIsFolderMinimized] = React.useState(false);
 
@@ -2213,7 +2741,24 @@ const GalleryView = ({
   }, []);
 
   let items = [];
-  if (subcategory) {
+  if (filter === "photography") {
+    // EL APARTADO DE FOTOGRAFÍA NO MUESTRA CARPETAS SINO DIRECTAMENTE ESTOS 4 LIBRETOS EN FORMATO A5
+    const photoProjects = allProjectsData.filter(
+      (p) => p.category === "photography" || p.isLibreto
+    );
+    const desiredOrder = ["vida-en-tetuan", "rapa-das-bestas-2025", "cartagena-2023", "cuaderno-de-campo-2024"];
+    const sortedPhotos = [...photoProjects].sort((a, b) => {
+      const idxA = desiredOrder.indexOf(a.id);
+      const idxB = desiredOrder.indexOf(b.id);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return 0;
+    });
+    sortedPhotos.forEach((p) => {
+      items.push({ ...p, isGroup: false });
+    });
+  } else if (subcategory) {
     items = allProjectsData
       .filter((p) => !p.isPage && p.subcategory === subcategory)
       .map((p) => ({ ...p, isGroup: false }));
@@ -2227,6 +2772,13 @@ const GalleryView = ({
         targetCategory: catId,
       });
       const catProjects = allProjectsData.filter((p) => p.category === catId);
+
+      if (catId === "photography") {
+        catProjects.forEach((p) => {
+          items.push({ ...p, isGroup: false });
+        });
+        return;
+      }
 
       catProjects
         .filter((p) => p.isPage)
@@ -2273,6 +2825,7 @@ const GalleryView = ({
 
     addCategoryGroups("architecture", "ARQUITECTURA");
     addCategoryGroups("design", "DISEÑO");
+    addCategoryGroups("photography", "FOTOGRAFÍA");
     addCategoryGroups("escenografias", "ESCENOGRAFÍAS");
   } else {
     let filterCat =
@@ -2286,7 +2839,9 @@ const GalleryView = ({
     allProjectsData.forEach((p) => {
       if (filterCat && p.category !== filterCat) return;
 
-      if (p.isPage) {
+      if (p.category === "photography" || p.isLibreto) {
+        items.push({ ...p, isGroup: false });
+      } else if (p.isPage) {
         items.push({
           id: p.id,
           title: p.title,
@@ -2315,9 +2870,36 @@ const GalleryView = ({
 
   return (
     <div
-      className="w-full h-full overflow-y-auto hide-scrollbar pt-32 pb-24 px-4 sm:px-8 md:px-16 relative"
-      style={{ backgroundColor: "transparent" }}
+      className={`w-full h-full overflow-y-auto hide-scrollbar pt-16 sm:pt-20 md:pt-28 pb-28 px-4 sm:px-8 md:px-16 relative ${
+        isPhotographyMode ? "bg-[#faf8f4] text-[#2c2419]" : ""
+      }`}
+      style={{
+        backgroundColor: isPhotographyMode ? "#faf8f4" : "transparent",
+        backgroundImage: isPhotographyMode ? "radial-gradient(#d4a359 0.75px, transparent 0.75px)" : "none",
+        backgroundSize: isPhotographyMode ? "28px 28px" : "auto",
+      }}
     >
+      {/* Photography Minimalist Header */}
+      {isPhotographyMode && (
+        <div className="max-w-7xl mx-auto mb-10 text-center animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f4ede2] border border-[#d4a359]/40 text-[#8c5822] font-mono text-[9px] sm:text-[10px] tracking-widest uppercase mb-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#c8963e]"></span>
+            {isEn ? "PHOTO BOOKLETS · ISO A5 PROPORTION" : "LIBRETOS FOTOGRÁFICOS · FORMATO ISO A5"}
+          </div>
+          <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#2a2115] tracking-wide mb-3 uppercase">
+            {t("FOTOGRAFÍA")}
+          </h2>
+          <p className="max-w-2xl mx-auto font-serif text-sm sm:text-base text-[#6e5d48] leading-relaxed">
+            {isEn 
+              ? "Photographic booklets conceived as double-page spreads in closed ISO A5 format. Click any booklet to open the interactive reader." 
+              : "Libretos fotográficos concebidos en pliegos a doble página en formato cerrado ISO A5. Haz clic en cualquier libreto para abrir el lector interactivo."}
+          </p>
+          <div className="w-16 h-[1px] bg-[#d4a359]/50 mx-auto mt-4"></div>
+          <div className="mt-4 flex justify-center">
+            <CopyPermalinkButton theme="photography" label={isEn ? "Share Photography Link" : "Compartir categoría"} />
+          </div>
+        </div>
+      )}
       {activeFolder && !isFolderMinimized && (() => {
         const activeFolderCat = allProjectsData.find(p => p.subcategory === activeFolder)?.category;
         const isDesignMode = filter === "design" || activeFolderCat === "design";
@@ -2333,10 +2915,10 @@ const GalleryView = ({
               {/* Sticky Header with Mac OS controls */}
               <div className={`flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b shrink-0 sticky top-0 z-30 ${isDesignMode ? "border-[#FFCC00] bg-[#0000ff]" : "border-white/10 bg-black/95"}`}>
                 <h2 className={`text-base sm:text-2xl uppercase tracking-widest truncate mr-2 ${isDesignMode ? "text-[#FFCC00] font-bold font-mono" : "text-white font-serif"}`}>
-                  {activeFolder}
+                  {t(activeFolder)}
                 </h2>
                 <div className="flex space-x-3 sm:space-x-2 items-center shrink-0 group">
-                  <button onClick={(e) => { e.stopPropagation(); setIsFolderMinimized(true); }} className="w-6 h-6 sm:w-4 sm:h-4 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors cursor-pointer flex items-center justify-center text-black opacity-80 sm:opacity-60 group-hover:opacity-100" aria-label="Minimize">
+                  <button onClick={(e) => { e.stopPropagation(); setIsFolderMinimized(true); }} className="w-6 h-6 sm:w-4 sm:h-4 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors cursor-pointer flex items-center justify-center text-black opacity-80 sm:opacity-60 group-hover:opacity-100" aria-label={t("Minimizar")}>
                     <svg className="w-3 h-3 sm:w-2 sm:h-2" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M2 7H12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
@@ -2409,7 +2991,7 @@ const GalleryView = ({
             style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
           >
             <span className={`text-xs sm:text-sm tracking-widest uppercase mb-3 sm:mb-4 ${isDesignMode ? "text-[#FFCC00] font-mono font-bold" : "text-white font-serif"}`}>
-              {activeFolder}
+              {t(activeFolder)}
             </span>
             <div className="flex flex-col space-y-2" style={{ writingMode: 'horizontal-tb' }}>
               <button 
@@ -2442,11 +3024,20 @@ const GalleryView = ({
           
           if (item.isGroup) {
             const isMainCategory = item.type === "category";
+            const isPhotoCat = item.targetCategory === "photography";
             const shapeClass = isDesignMode 
               ? designColorGroup 
+              : isPhotoCat
+              ? "rounded-none border-2 sm:border-4 border-[#c8963e]/80 bg-[#fbf9f4]/90 shadow-[0_4px_25px_rgba(200,150,62,0.18)]"
               : isMainCategory
               ? "rounded-none border-2 sm:border-4 border-white/70 bg-white/5"
               : "rounded-full border border-white/10 bg-white/5";
+
+            const titleColor = isDesignMode 
+              ? "text-[#FFCC00] group-hover:text-[#FF0000]" 
+              : isPhotoCat
+              ? "text-[#8c5822] group-hover:text-[#b87d2b]"
+              : "text-white/95 group-hover:text-cyan-400";
 
             return (
               <div
@@ -2487,7 +3078,7 @@ const GalleryView = ({
                           cy="50"
                           r="49"
                           fill="none"
-                          stroke={isDesignMode ? "rgba(255, 0, 0, 0.8)" : "rgba(34, 211, 238, 0.8)"}
+                          stroke={isDesignMode ? "rgba(255, 0, 0, 0.8)" : isPhotoCat ? "rgba(200, 150, 62, 0.8)" : "rgba(34, 211, 238, 0.8)"}
                           strokeWidth={isDesignMode ? "3" : "1"}
                           strokeDasharray="30 400"
                           strokeLinecap="round"
@@ -2497,11 +3088,59 @@ const GalleryView = ({
                   </>
                 )}
                 <h3
-                  className={`text-center uppercase font-serif font-bold text-base sm:text-lg md:text-xl lg:text-2xl tracking-wider leading-tight px-3 sm:px-6 select-none transition-colors duration-300 relative z-10 drop-shadow-md ${isDesignMode ? "text-[#FFCC00] group-hover:text-[#FF0000]" : "text-white/95 group-hover:text-cyan-400"}`}
+                  className={`text-center uppercase font-serif font-bold text-base sm:text-lg md:text-xl lg:text-2xl tracking-wider leading-tight px-3 sm:px-6 select-none transition-colors duration-300 relative z-10 drop-shadow-md ${titleColor}`}
                   style={{ fontFamily: "'Cormorant Garamond', serif" }}
                 >
                   {pt(item, "title")}
                 </h3>
+              </div>
+            );
+          }
+
+          const isPhotography = item.category === "photography" || item.isLibreto || filter === "photography";
+          if (isPhotography) {
+            return (
+              <div
+                key={item.id}
+                className="group relative cursor-pointer transition-all duration-500 flex flex-col justify-between aspect-[148/210] w-full max-w-[280px] mx-auto bg-[#faf7f2] border border-[#d4a359]/40 hover:border-[#b87d2b] shadow-md hover:shadow-2xl hover:-translate-y-1 rounded-sm overflow-hidden"
+                onClick={() => onProjectSelect(item.id)}
+              >
+                {/* Left booklet spine effect */}
+                <div className="absolute left-0 top-0 bottom-0 w-3 sm:w-3.5 bg-gradient-to-r from-[#8c5822] to-[#b87d2b] z-20 shadow-[2px_0_6px_rgba(0,0,0,0.18)] flex flex-col justify-between py-3 items-center">
+                  <div className="w-[1px] h-full bg-white/35"></div>
+                </div>
+
+                {/* Cover Image (first image of A5) */}
+                <div className="relative w-full h-full overflow-hidden pl-3 sm:pl-3.5 bg-[#fdfbf7]">
+                  {item.coverImage || item.normalImage ? (
+                    <OptimizedImage
+                      src={item.coverImage || item.normalImage}
+                      alt={item.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      containerClassName="w-full h-full"
+                      theme="photography"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center font-mono text-xs text-[#8c5822]">
+                      ISO A5
+                    </div>
+                  )}
+
+                  {/* Top Tag */}
+                  <div className="absolute top-2.5 right-2.5 z-20 px-2 py-0.5 bg-black/70 backdrop-blur-md rounded-full border border-white/20 text-white font-mono text-[8px] sm:text-[9px] uppercase tracking-wider">
+                    LIBRETO A5
+                  </div>
+
+                  {/* Bottom title banner in minimalist white & ochre */}
+                  <div className="absolute bottom-0 left-0 right-0 p-2.5 sm:p-3 bg-gradient-to-t from-black/90 via-black/75 to-transparent z-20 text-left pl-3 sm:pl-4">
+                    <span className="block font-mono text-[8px] sm:text-[9px] text-[#e0a94e] tracking-widest uppercase mb-0.5">
+                      {pt(item, "subcategory") || "FOTOGRAFÍA"} · {item.year || "2024–2025"}
+                    </span>
+                    <h3 className="font-serif font-bold text-sm sm:text-base text-white group-hover:text-[#f5d594] transition-colors leading-tight drop-shadow-md">
+                      {pt(item, "title")}
+                    </h3>
+                  </div>
+                </div>
               </div>
             );
           }
@@ -2533,12 +3172,69 @@ const GalleryView = ({
           );
         })}
       </div>
+
+      {/* INSTAGRAM LINK BUTTONS AT THE END OF PUBLICATIONS */}
+      {filter === "photography" && (
+        <div className="max-w-7xl mx-auto w-full flex flex-col items-center justify-center mt-16 mb-8 pt-10 border-t border-[#d4a359]/30 animate-fade-in">
+          <p className="font-mono text-[9px] sm:text-[10px] uppercase tracking-widest text-[#8c5822] mb-3 text-center">
+            {isEn ? "EXPLORE FULL ANALOG ARCHIVE ON INSTAGRAM" : "EXPLORAR ARCHIVO ANALÓGICO COMPLETO EN INSTAGRAM"}
+          </p>
+          <a
+            href="https://www.instagram.com/camaradebenito/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-[#f4ede2] hover:bg-[#ebdec9] border border-[#c8963e]/70 text-[#6e4418] font-mono text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 cursor-pointer"
+          >
+            <svg className="w-5 h-5 text-[#8c5822] group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span className="font-bold">@camaradebenito</span>
+            <span className="text-[#8c5822]/60 hidden sm:inline">· {isEn ? "Photography on Instagram" : "Fotografía en Instagram"}</span>
+            <svg className="w-4 h-4 text-[#8c5822] group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+        </div>
+      )}
+
+      {(filter === "architecture" || filter === "design") && (
+        <div className={`max-w-7xl mx-auto w-full flex flex-col items-center justify-center mt-16 mb-8 pt-10 ${filter === "design" ? "border-t border-[#FFCC00]/40" : "border-t border-white/10"} animate-fade-in`}>
+          <p className={`font-mono text-[9px] sm:text-[10px] uppercase tracking-widest mb-3 text-center ${filter === "design" ? "text-[#FFCC00]" : "text-gray-400"}`}>
+            {isEn ? "EXPLORE MORE ARCHITECTURAL & DESIGN WORKS" : "EXPLORAR MÁS PROYECTOS DE ARQUITECTURA Y DISEÑO"}
+          </p>
+          <a
+            href="https://www.instagram.com/arquitecturabenito/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={
+              filter === "design"
+                ? "group inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-[#0000ff] hover:bg-[#0000ff]/90 border-2 border-[#FFCC00] text-[#FFCC00] font-mono text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 shadow-[4px_4px_0px_#FF0000] hover:scale-105 cursor-pointer"
+                : "group inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 hover:border-cyan-400 text-white font-mono text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 shadow-lg hover:shadow-cyan-400/20 hover:scale-105 backdrop-blur-md cursor-pointer"
+            }
+          >
+            <svg className={`w-5 h-5 ${filter === "design" ? "text-[#FFCC00]" : "text-cyan-400"} group-hover:scale-110 transition-transform`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span className="font-bold">@arquitecturabenito</span>
+            <span className={`${filter === "design" ? "text-[#FFCC00]/70" : "text-gray-400"} hidden sm:inline`}>
+              · {filter === "design" ? (isEn ? "Design on Instagram" : "Diseño en Instagram") : (isEn ? "Architecture on Instagram" : "Arquitectura en Instagram")}
+            </span>
+            <svg className={`w-4 h-4 ${filter === "design" ? "text-[#FF0000]" : "text-cyan-400"} group-hover:translate-x-1 transition-transform`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+        </div>
+      )}
     </div>
   );
 };
 
 const CarteleriaPage = ({ project }) => {
-  const { t, pt } = useTranslation();
+  const { t, pt, lang } = useTranslation();
   const [modalImage, setModalImage] = React.useState(null);
 
   if (!project) return null;
@@ -2572,7 +3268,7 @@ const CarteleriaPage = ({ project }) => {
 
         <div className="mb-16">
           <h2 className="text-3xl font-bold uppercase tracking-wider mb-6 text-white">
-            Descripción
+            {t("Descripción")}
           </h2>
           <div className="border-l-2 border-cyan-400 pl-6">
             <p className="text-gray-400 leading-relaxed">
@@ -2583,7 +3279,7 @@ const CarteleriaPage = ({ project }) => {
 
         <div>
           <h2 className="text-3xl font-bold uppercase tracking-wider mb-6 text-white">
-            Galería de Carteles
+            {t("Galería de Carteles")}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {postersToDisplay.map((src, index) => (
@@ -2594,7 +3290,7 @@ const CarteleriaPage = ({ project }) => {
               >
                 <OptimizedImage
                   src={src}
-                  alt={`Cartel ${index + 1}`}
+                  alt={lang === 'en' ? `Poster ${index + 1}` : `Cartel ${index + 1}`}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-auto object-cover transition-transform duration-300 transform group-hover:scale-105 rounded-md shadow-lg"
@@ -2605,6 +3301,13 @@ const CarteleriaPage = ({ project }) => {
         </div>
       </main>
 
+      {/* Cartelería Soundtrack */}
+      <ProjectSoundtrackSection
+        projectId="carteleria"
+        projectTitle={pt(project, "title") || (lang === "en" ? "POSTER DESIGN" : "CARTELERÍA")}
+        isDarkTheme={true}
+      />
+
       {modalImage && (
         <div
           className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4 animate-fade-in"
@@ -2612,7 +3315,7 @@ const CarteleriaPage = ({ project }) => {
         >
           <OptimizedImage
             src={modalImage}
-            alt="Vista ampliada del cartel"
+            alt={lang === 'en' ? "Enlarged poster view" : "Vista ampliada del cartel"}
             className="max-w-full max-h-full object-contain"
             onClick={(e) => e.stopPropagation()}
           />
@@ -2629,7 +3332,8 @@ const CarteleriaPage = ({ project }) => {
 };
 
 const AIStudioPage = () => {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
+  const isEn = lang === "en";
   const [activeTool, setActiveTool] = React.useState("intro");
 
   const LinkEntry = ({ href, children }) => (
@@ -2697,10 +3401,10 @@ const AIStudioPage = () => {
       <div className="max-w-5xl mx-auto z-10 relative px-4 sm:px-8">
         <header className="pt-24 pb-12 text-center">
           <h1 className="text-4xl sm:text-6xl font-bold font-mono uppercase tracking-tighter text-white mb-4">
-            TUTORIAL IA
+            {isEn ? "AI TUTORIAL" : "TUTORIAL IA"}
           </h1>
           <p className="text-cyan-400 font-mono text-sm tracking-widest uppercase">
-            Arquitectura, Diseño y Herramientas Generativas
+            {isEn ? "Architecture, Design and Generative Tools" : "Arquitectura, Diseño y Herramientas Generativas"}
           </p>
         </header>
 
@@ -2734,26 +3438,26 @@ const AIStudioPage = () => {
         <main className="animate-fade-in-up">
           {activeTool === "intro" && (
             <div className="space-y-12">
-              <Section title="Bienvenidos al Curso">
+              <Section title={isEn ? "Welcome to the Workshop" : "Bienvenidos al Curso"}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                   <div className="space-y-6 text-lg leading-relaxed">
                     <p>
-                      En este curso exploraremos cómo la{" "}
-                      <span className="text-white font-bold">
-                        Inteligencia Artificial
-                      </span>{" "}
-                      está transformando el flujo de trabajo en arquitectura y
-                      diseño.
+                      {isEn ? (
+                        <React.Fragment>In this workshop, we will explore how <span className="text-white font-bold">Artificial Intelligence</span> is revolutionizing architectural workflows and spatial design.</React.Fragment>
+                      ) : (
+                        <React.Fragment>En este curso exploraremos cómo la <span className="text-white font-bold">Inteligencia Artificial</span> está transformando el flujo de trabajo en arquitectura y diseño.</React.Fragment>
+                      )}
                     </p>
                     <p>
-                      No se trata solo de generar imágenes, sino de entender
-                      cómo usar estas herramientas para potenciar nuestra
-                      creatividad y optimizar procesos de ideación.
+                      {isEn
+                        ? "It is not merely about producing images, but understanding how to harness these neural tools to amplify creative potential and streamline design ideation."
+                        : "No se trata solo de generar imágenes, sino de entender cómo usar estas herramientas para potenciar nuestra creatividad y optimizar procesos de ideación."}
                     </p>
                     <div className="p-4 bg-cyan-900/20 border-l-4 border-cyan-400 rounded-r-lg">
                       <p className="text-sm italic text-cyan-200">
-                        "La IA no reemplaza al diseñador, el diseñador que usa
-                        IA reemplaza al que no la usa."
+                        {isEn
+                          ? '"AI will not replace architects; architects who master AI will replace those who do not."'
+                          : '"La IA no reemplaza al diseñador, el diseñador que usa IA reemplaza al que no la usa."'}
                       </p>
                     </div>
                   </div>
@@ -2762,7 +3466,7 @@ const AIStudioPage = () => {
                       <div className="absolute -inset-1 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
                       <OptimizedImage
                         src="imagenes/gif-animacion-ia.gif"
-                        alt="IA Concept"
+                        alt={isEn ? "AI Concept Animation" : "IA Concept"}
                         className="relative rounded-lg shadow-2xl w-full max-w-sm border border-white/10"
                       />
                     </div>
@@ -2770,7 +3474,7 @@ const AIStudioPage = () => {
                 </div>
               </Section>
 
-              <Section title="Nuestras Herramientas">
+              <Section title={isEn ? "Our Tools" : "Nuestras Herramientas"}>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                   <div
                     className="p-6 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors cursor-pointer"
@@ -2778,8 +3482,9 @@ const AIStudioPage = () => {
                   >
                     <h3 className="text-cyan-400 font-bold mb-2">FOOCUS</h3>
                     <p className="text-sm text-gray-400">
-                      Poder absoluto con simplicidad. Ideal para resultados
-                      rápidos de alta calidad.
+                      {isEn
+                        ? "Pure power paired with simplicity. Ideal for rapid, high-fidelity conceptual results."
+                        : "Poder absoluto con simplicidad. Ideal para resultados rápidos de alta calidad."}
                     </p>
                   </div>
                   <div
@@ -2788,8 +3493,9 @@ const AIStudioPage = () => {
                   >
                     <h3 className="text-cyan-400 font-bold mb-2">COMFY UI</h3>
                     <p className="text-sm text-gray-400">
-                      Flujos de trabajo basados en nodos. Control total y
-                      personalización granular.
+                      {isEn
+                        ? "Node-based generative architecture. Absolute control and granular customization."
+                        : "Flujos de trabajo basados en nodos. Control total y personalización granular."}
                     </p>
                   </div>
                   <div
@@ -2798,50 +3504,48 @@ const AIStudioPage = () => {
                   >
                     <h3 className="text-cyan-400 font-bold mb-2">WEB UI</h3>
                     <p className="text-sm text-gray-400">
-                      El estándar de la comunidad. Versátil y compatible con
-                      miles de extensiones.
+                      {isEn
+                        ? "The open community standard. Versatile and compatible with thousands of extensions."
+                        : "El estándar de la comunidad. Versátil y compatible con miles de extensiones."}
                     </p>
                   </div>
                 </div>
               </Section>
 
-              <Section title="Conceptos Clave">
+              <Section title={isEn ? "Key Concepts" : "Conceptos Clave"}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="p-6 bg-gray-900/50 rounded-xl border border-white/10">
                     <h3 className="text-cyan-400 font-bold mb-3 flex items-center gap-2">
-                      <span className="text-xl">📝</span> Prompts (Positivo y
-                      Negativo)
+                      <span className="text-xl">📝</span> {isEn ? "Prompts (Positive and Negative)" : "Prompts (Positivo y Negativo)"}
                     </h3>
                     <p className="text-sm text-gray-400">
-                      Es el texto que usamos para comunicarnos con la IA. El{" "}
-                      <span className="text-white font-bold">Positivo</span>{" "}
-                      describe lo que queremos ver, mientras que el{" "}
-                      <span className="text-white font-bold">Negativo</span> le
-                      indica qué elementos o defectos debe evitar.
+                      {isEn ? (
+                        <React.Fragment>The textual instructions used to communicate intent to the AI. <span className="text-white font-bold">Positive</span> outlines the visual elements to create, while <span className="text-white font-bold">Negative</span> specifies artifacts, defects, or styles to exclude.</React.Fragment>
+                      ) : (
+                        <React.Fragment>Es el texto que usamos para comunicarnos con la IA. El <span className="text-white font-bold">Positivo</span> describe lo que queremos ver, mientras que el <span className="text-white font-bold">Negativo</span> le indica qué elementos o defectos debe evitar.</React.Fragment>
+                      )}
                     </p>
                   </div>
 
                   <div className="p-6 bg-gray-900/50 rounded-xl border border-white/10">
                     <h3 className="text-cyan-400 font-bold mb-3 flex items-center gap-2">
-                      <span className="text-xl">⚙️</span> Preprocesador
+                      <span className="text-xl">⚙️</span> {isEn ? "Preprocessor" : "Preprocesador"}
                     </h3>
                     <p className="text-sm text-gray-400">
-                      Herramienta que analiza una imagen base (ej. un croquis o
-                      render sin materiales) para extraer información
-                      geométrica, como bordes (Canny/Lineart) o profundidad
-                      (Depth), antes de pasársela a la IA.
+                      {isEn
+                        ? "A module that analyzes a reference image (such as an architectural sketch or clay 3D model) to extract geometric edges (Canny/Lineart) or spatial depth (Depth) before neural diffusion."
+                        : "Herramienta que analiza una imagen base (ej. un croquis o render sin materiales) para extraer información geométrica, como bordes (Canny/Lineart) o profundidad (Depth), antes de pasársela a la IA."}
                     </p>
                   </div>
 
                   <div className="p-6 bg-gray-900/50 rounded-xl border border-white/10">
                     <h3 className="text-cyan-400 font-bold mb-3 flex items-center gap-2">
-                      <span className="text-xl">⚖️</span> Weight (Peso)
+                      <span className="text-xl">⚖️</span> {isEn ? "Weight" : "Weight (Peso)"}
                     </h3>
                     <p className="text-sm text-gray-400">
-                      Determina la influencia de una imagen de referencia o
-                      ControlNet sobre la generación final. Un peso de 1.0
-                      obliga a la IA a respetar la forma al máximo, mientras que
-                      0.3 le da más libertad creativa.
+                      {isEn
+                        ? "Determines the exact influence of a reference image or ControlNet map on generation. A weight of 1.0 strictly preserves geometry, whereas 0.3 allows greater creative interpretation."
+                        : "Determina la influencia de una imagen de referencia o ControlNet sobre la generación final. Un peso de 1.0 obliga a la IA a respetar la forma al máximo, mientras que 0.3 le da más libertad creativa."}
                     </p>
                   </div>
 
@@ -2850,35 +3554,35 @@ const AIStudioPage = () => {
                       <span className="text-xl">🧠</span> Denoising Strength
                     </h3>
                     <p className="text-sm text-gray-400">
-                      En procesos de modificación (Image-to-Image o Inpainting),
-                      define cuánto se alterará la imagen original. Valores
-                      bajos (0.2-0.4) cambian sutilmente texturas; valores altos
-                      (0.7-1.0) rediseñan por completo.
+                      {isEn
+                        ? "In Image-to-Image or Inpainting pipelines, defines how drastically the source is altered. Low values (0.2–0.4) subtly enhance textures; higher values (0.7–1.0) completely redraw the structure."
+                        : "En procesos de modificación (Image-to-Image o Inpainting), define cuánto se alterará la imagen original. Valores bajos (0.2-0.4) cambian sutilmente texturas; valores altos (0.7-1.0) rediseñan por completo."}
                     </p>
                   </div>
 
                   <div className="p-6 bg-gray-900/50 rounded-xl border border-white/10 md:col-span-2">
                     <h3 className="text-cyan-400 font-bold mb-3 flex items-center gap-2">
-                      <span className="text-xl">✨</span> Otros Parámetros
-                      Importantes
+                      <span className="text-xl">✨</span> {isEn ? "Other Core Parameters" : "Otros Parámetros Importantes"}
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm mt-4">
                       <div>
                         <strong className="text-white block mb-1">
-                          Checkpoint / Modelo Base:
+                          {isEn ? "Checkpoint / Base Model:" : "Checkpoint / Modelo Base:"}
                         </strong>
                         <span className="text-gray-400">
-                          Es el "cerebro". Contiene todo el conocimiento visual
-                          preentrenado (ej. SDXL, SD 1.5).
+                          {isEn
+                            ? "The core neural foundation containing all pretrained visual knowledge (e.g., SDXL, SD 1.5)."
+                            : "Es el \"cerebro\". Contiene todo el conocimiento visual preentrenado (ej. SDXL, SD 1.5)."}
                         </span>
                       </div>
                       <div>
                         <strong className="text-white block mb-1">
-                          Steps (Pasos):
+                          {isEn ? "Steps:" : "Steps (Pasos):"}
                         </strong>
                         <span className="text-gray-400">
-                          Iteraciones que realiza la IA para limpiar el ruido y
-                          generar detalles. Lo normal es entre 20 y 30.
+                          {isEn
+                            ? "Number of iterative denoising passes to sculpt fidelity and fine details (commonly 20 to 30)."
+                            : "Iteraciones que realiza la IA para limpiar el ruido y generar detalles. Lo normal es entre 20 y 30."}
                         </span>
                       </div>
                       <div>
@@ -2886,8 +3590,9 @@ const AIStudioPage = () => {
                           CFG Scale:
                         </strong>
                         <span className="text-gray-400">
-                          Qué tanto caso le hace la IA a tu prompt frente a su
-                          propia "imaginación" (valores comunes: 5 a 7).
+                          {isEn
+                            ? "How strictly the diffusion process adheres to your prompt versus creative hallucination (standard: 5 to 7)."
+                            : "Qué tanto caso le hace la IA a tu prompt frente a su propia \"imaginación\" (valores comunes: 5 a 7)."}
                         </span>
                       </div>
                     </div>
@@ -2895,20 +3600,16 @@ const AIStudioPage = () => {
                 </div>
               </Section>
 
-              <Section title="Conceptos Avanzados">
+              <Section title={isEn ? "Advanced Architecture Concepts" : "Conceptos Avanzados"}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="p-6 bg-cyan-900/10 rounded-xl border border-cyan-800/30">
                     <h3 className="text-cyan-400 font-bold mb-3 flex items-center gap-2">
-                      <span className="text-xl">🧬</span> LoRA (Low-Rank
-                      Adaptation)
+                      <span className="text-xl">🧬</span> LoRA (Low-Rank Adaptation)
                     </h3>
                     <p className="text-sm text-gray-400">
-                      Son "micro-modelos" que se añaden al modelo principal para
-                      enseñarle conceptos muy específicos sin tener que
-                      reentrenar todo desde cero. En arquitectura, se usan para
-                      inyectar estilos de arquitectos concretos (ej. Zaha
-                      Hadid), materiales específicos (hormigón visto perfecto) o
-                      tipos concretos de vegetación.
+                      {isEn
+                        ? "Specialized micro-weights injected into base models to teach specific architectural vocabularies without retraining from scratch—ideal for mastering signature styles (e.g., Zaha Hadid), tactile materials (board-formed concrete), or endemic botany."
+                        : "Son \"micro-modelos\" que se añaden al modelo principal para enseñarle conceptos muy específicos sin tener que reentrenar todo desde cero. En arquitectura, se usan para inyectar estilos de arquitectos concretos (ej. Zaha Hadid), materiales específicos (hormigón visto perfecto) o tipos concretos de vegetación."}
                     </p>
                   </div>
 
@@ -2917,186 +3618,153 @@ const AIStudioPage = () => {
                       <span className="text-xl">🕸️</span> ControlNet Superior
                     </h3>
                     <p className="text-sm text-gray-400">
-                      A diferencia del Image-to-Image tradicional, ControlNet
-                      usa mapas precisos para "obligar" a la IA a respetar un
-                      dibujo espacial. Existen varios tipos clave:{" "}
-                      <span className="text-white font-bold">
-                        Canny/Lineart
-                      </span>{" "}
-                      (para trazos),{" "}
-                      <span className="text-white font-bold">Depth</span> (para
-                      mapas de profundidad extraídos de 3D) y{" "}
-                      <span className="text-white font-bold">MLSD</span>{" "}
-                      (especializado en líneas rectas y fugas de arquitectura).
+                      {isEn ? (
+                        <React.Fragment>Unlike naive image-to-image blending, ControlNet binds generative diffusion to explicit spatial conditions: <span className="text-white font-bold">Canny/Lineart</span> (for linework), <span className="text-white font-bold">Depth</span> (for 3D spatial buffers), and <span className="text-white font-bold">MLSD</span> (for crisp architectural vanishing lines).</React.Fragment>
+                      ) : (
+                        <React.Fragment>A diferencia del Image-to-Image tradicional, ControlNet usa mapas precisos para \"obligar\" a la IA a respetar un dibujo espacial. Existen varios tipos clave: <span className="text-white font-bold">Canny/Lineart</span> (para trazos), <span className="text-white font-bold">Depth</span> (para mapas de profundidad extraídos de 3D) y <span className="text-white font-bold">MLSD</span> (especializado en líneas rectas y fugas de arquitectura).</React.Fragment>
+                      )}
                     </p>
                   </div>
 
                   <div className="p-6 bg-cyan-900/10 rounded-xl border border-cyan-800/30">
                     <h3 className="text-cyan-400 font-bold mb-3 flex items-center gap-2">
-                      <span className="text-xl">🔍</span> Upscaling (Escalado
-                      Latente)
+                      <span className="text-xl">🔍</span> {isEn ? "Upscaling (Latent Super-Resolution)" : "Upscaling (Escalado Latente)"}
                     </h3>
                     <p className="text-sm text-gray-400">
-                      La IA genera de forma óptima a resoluciones medias (ej.
-                      1024x1024). Para renders de presentación 4K, usamos
-                      algoritmos de escalado (Ultimate SD Upscale, ControlNet
-                      Tile) que no se limitan a agrandar los píxeles, sino que
-                      "alucinan" e insertan detalles arquitectónicos finos
-                      (juntas, texturas, hojas) en alta resolución.
+                      {isEn
+                        ? "Diffusion models perform best at native sizes (1024x1024). For 4K competition sheets, tile-based upscalers synthesize micro-architectural elements (cladding joints, foliage, subtle caustics) rather than stretching pixels."
+                        : "La IA genera de forma óptima a resoluciones medias (ej. 1024x1024). Para renders de presentación 4K, usamos algoritmos de escalado (Ultimate SD Upscale, ControlNet Tile) que no se limitan a agrandar los píxeles, sino que \"alucinan\" e insertan detalles arquitectónicos finos (juntas, texturas, hojas) en alta resolución."}
                     </p>
                   </div>
 
                   <div className="p-6 bg-cyan-900/10 rounded-xl border border-cyan-800/30">
                     <h3 className="text-cyan-400 font-bold mb-3 flex items-center gap-2">
-                      <span className="text-xl">🌱</span> Seed (Semilla de
-                      Ruido)
+                      <span className="text-xl">🌱</span> Seed
                     </h3>
                     <p className="text-sm text-gray-400">
-                      Todo proceso generativo empieza con ruido aleatorio, y la
-                      "Seed" es el número que define exactamente ese ruido. Si
-                      usas el mismo Prompt, Ajustes y la misma Seed, obtendrás
-                      el mismo resultado. Es la técnica clave para hacer cambios
-                      sutiles sin que todo el edificio cambie de composición al
-                      volver a darle a Generar.
+                      {isEn
+                        ? "Every generative run begins with Gaussian noise seeded by an integer. Locking the Seed preserves global massing and perspective, allowing progressive material and lighting iterations."
+                        : "Todo proceso generativo empieza con ruido aleatorio, y la \"Seed\" es el número que define exactamente ese ruido. Si usas el mismo Prompt, Ajustes y la misma Seed, obtendrás el mismo resultado. Es la técnica clave para hacer cambios sutiles sin que todo el edificio cambie de composición al volver a darle a Generar."}
                     </p>
                   </div>
                 </div>
               </Section>
 
-              <Section title="ControlNet: Tipos y Modelos">
+              <Section title={isEn ? "ControlNet: Types and Modalities" : "ControlNet: Tipos y Modelos"}>
                 <div className="space-y-6 text-sm text-gray-400 leading-relaxed">
                   <p>
-                    ControlNet es una arquitectura de red neuronal que permite
-                    controlar espacialmente grandes modelos de difusión mediante
-                    mapas precisos. Aquí se explican los tipos más importantes:
+                    {isEn
+                      ? "ControlNet is a neural network architecture designed to spatially constrain large latent diffusion models with structural conditioning maps. Key modalities include:"
+                      : "ControlNet es una arquitectura de red neuronal que permite controlar espacialmente grandes modelos de difusión mediante mapas precisos. Aquí se explican los tipos más importantes:"}
                   </p>
 
                   <div className="space-y-4">
                     <h4 className="text-white font-bold text-base border-b border-white/10 pb-2">
-                      1. Detección de Bordes y Contornos
+                      {isEn ? "1. Edge and Outline Extraction" : "1. Detección de Bordes y Contornos"}
                     </h4>
                     <ul className="space-y-3">
                       <li>
                         <strong className="text-cyan-400">Canny:</strong>{" "}
-                        Utiliza el algoritmo homónimo para extraer contornos
-                        precisos de una imagen. Es ideal para replicar la
-                        estructura exacta de un objeto, un vehículo o una
-                        persona.
+                        {isEn
+                          ? "Uses edge detection to extract precise contour vectors, ideal for preserving technical silhouettes and structural profiles."
+                          : "Utiliza el algoritmo homónimo para extraer contornos precisos de una imagen. Es ideal para replicar la estructura exacta de un objeto, un vehículo o una persona."}
                       </li>
                       <li>
                         <strong className="text-cyan-400">Lineart:</strong>{" "}
-                        Transforma una imagen en un dibujo de líneas limpias
-                        tipo arte lineal.
+                        {isEn
+                          ? "Converts plans and elevations into clean line art, rendering directly upon technical linework."
+                          : "Transforma una imagen en un dibujo de líneas limpias tipo arte lineal."}
                       </li>
                       <li>
                         <strong className="text-cyan-400">Scribble:</strong>{" "}
-                        Funciona a partir de bocetos y garabatos básicos,
-                        permitiendo que la IA interprete dibujos simples y los
-                        convierta en imágenes fotorrealistas.
+                        {isEn
+                          ? "Processes rapid conceptual gestures and freehand sketches, converting rough outlines into realistic spatial renderings."
+                          : "Funciona a partir de bocetos y garabatos básicos, permitiendo que la IA interprete dibujos simples y los convierta en imágenes fotorrealistas."}
                       </li>
                     </ul>
                   </div>
 
                   <div className="space-y-4">
                     <h4 className="text-white font-bold text-base border-b border-white/10 pb-2">
-                      2. Estructura y Composición
+                      {isEn ? "2. Structure and Spatial Depth" : "2. Estructura y Composición"}
                     </h4>
                     <ul className="space-y-3">
                       <li>
                         <strong className="text-cyan-400">OpenPose:</strong>{" "}
-                        Detecta y localiza las articulaciones, el rostro y las
-                        manos de los sujetos humanos en la imagen de control.
-                        Garantiza que los personajes generados mantengan
-                        exactamente la misma postura.
+                        {isEn
+                          ? "Extracts skeletal joints and human figure postures to populate renders with scale figures in accurate poses."
+                          : "Detecta y localiza las articulaciones, el rostro y las manos de los sujetos humanos en la imagen de control. Garantiza que los personajes generados mantengan exactamente la misma postura."}
                       </li>
                       <li>
-                        <strong className="text-cyan-400">Depth:</strong> Genera
-                        un mapa en escala de grises que representa la distancia
-                        de los elementos en la escena (objetos cercanos en
-                        blanco, fondos lejanos en oscuro). Sirve para mantener
-                        la composición 3D y el espacio.
+                        <strong className="text-cyan-400">Depth:</strong>{" "}
+                        {isEn
+                          ? "Produces a continuous greyscale z-buffer representing scene depth (foreground in white, distant horizon in black), locking 3D parallax."
+                          : "Genera un mapa en escala de grises que representa la distancia de los elementos en la escena (objetos cercanos en blanco, fondos lejanos en oscuro). Sirve para mantener la composición 3D y el espacio."}
                       </li>
                       <li>
                         <strong className="text-cyan-400">Normal Map:</strong>{" "}
-                        Extrae información de las texturas, luces y relieves,
-                        preservando la orientación y volumen exacto de los
-                        objetos.
+                        {isEn
+                          ? "Captures surface normals to preserve light bounce, relief, and volumetric curvature across facades."
+                          : "Extrae información de las texturas, luces y relieves, preservando la orientación y volumen exacto de los objetos."}
                       </li>
                     </ul>
                   </div>
 
                   <div className="space-y-4">
                     <h4 className="text-white font-bold text-base border-b border-white/10 pb-2">
-                      3. Modificaciones Avanzadas y Reescalado
+                      {isEn ? "3. Advanced Modifications and Scaling" : "3. Modificaciones Avanzadas y Reescalado"}
                     </h4>
                     <ul className="space-y-3">
                       <li>
-                        <strong className="text-cyan-400">
-                          Tile (Desenfoque):
-                        </strong>{" "}
-                        Analiza la imagen original por fragmentos (tiles) para
-                        realizar ampliaciones de alta resolución (upscaling)
-                        añadiendo detalles sin cambiar la estructura.
+                        <strong className="text-cyan-400">Tile:</strong>{" "}
+                        {isEn
+                          ? "Slices canvas into tiles to inject fine detail during super-resolution without altering global layout."
+                          : "Analiza la imagen original por fragmentos (tiles) para realizar ampliaciones de alta resolución (upscaling) añadiendo detalles sin cambiar la estructura."}
                       </li>
                       <li>
-                        <strong className="text-cyan-400">
-                          Seg (Segmentation):
-                        </strong>{" "}
-                        Crea un mapa de colores donde cada color representa un
-                        elemento semántico (ej. azul para el cielo, rojo para el
-                        coche, verde para el césped). Es ideal para
-                        reestructurar escenarios respetando la composición.
+                        <strong className="text-cyan-400">Seg (Segmentation):</strong>{" "}
+                        {isEn
+                          ? "Assigns semantic colors to programmatic zones (sky, glazing, concrete, grass), enabling exact layout partitioning."
+                          : "Crea un mapa de colores donde cada color representa un elemento semántico (ej. azul para el cielo, rojo para el coche, verde para el césped). Es ideal para reestructurar escenarios respetando la composición."}
                       </li>
                       <li>
                         <strong className="text-cyan-400">Reference:</strong>{" "}
-                        Utiliza el color, la composición y el estilo directo de
-                        una imagen de referencia sin necesidad de extraer un
-                        mapa geométrico previo.
+                        {isEn
+                          ? "Transfers palette, ambient light, and mood from an inspirational photograph without requiring explicit geometry."
+                          : "Utiliza el color, la composición y el estilo directo de una imagen de referencia sin necesidad de extraer un mapa geométrico previo."}
                       </li>
                       <li>
-                        <strong className="text-cyan-400">
-                          Modelos Union:
-                        </strong>{" "}
-                        Son modelos avanzados (como Union Pro) que agrupan
-                        varias de estas funciones en un solo modelo, permitiendo
-                        alternar entre modos como Canny, Depth o Pose sin tener
-                        que cargar un modelo distinto para cada uno.
+                        <strong className="text-cyan-400">Union Models:</strong>{" "}
+                        {isEn
+                          ? "Unified multi-control architectures (e.g., Union Pro) that handle multiple modalities (Canny, Depth, Pose) within a single loaded model."
+                          : "Son modelos avanzados (como Union Pro) que agrupan varias de estas funciones en un solo modelo, permitiendo alternar entre modos como Canny, Depth o Pose sin tener que cargar un modelo distinto para cada uno."}
                       </li>
                     </ul>
                   </div>
                 </div>
               </Section>
 
-              <Section title="Otros Conceptos Clave">
+              <Section title={isEn ? "Core Engine Components" : "Otros Conceptos Clave"}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="p-6 bg-cyan-900/10 rounded-xl border border-cyan-800/30">
                     <h3 className="text-cyan-400 font-bold mb-3 flex items-center gap-2">
                       <span className="text-xl">🎛️</span> KSampler
                     </h3>
                     <p className="text-sm text-gray-400">
-                      El KSampler (o simplemente Sampler) es el algoritmo
-                      encargado de guiar el proceso de "denoising" (eliminación
-                      de ruido) paso a paso. Define la estrategia matemática que
-                      usa la IA para ir desde el ruido inicial hasta la imagen
-                      final. Diferentes samplers (como Euler a, DPM++ 2M Karras,
-                      o LMS) ofrecen resultados ligeramente diferentes en
-                      términos de texturas, suavidad y velocidad.
+                      {isEn
+                        ? "The algorithmic solver executing iterative denoising steps. Different schedulers (Euler a, DPM++ 2M Karras, UniPC) alter convergence speeds and textural sharpness."
+                        : "El KSampler (o simplemente Sampler) es el algoritmo encargado de guiar el proceso de \"denoising\" (eliminación de ruido) paso a paso. Define la estrategia matemática que usa la IA para ir desde el ruido inicial hasta la imagen final. Diferentes samplers (como Euler a, DPM++ 2M Karras, o LMS) ofrecen resultados ligeramente diferentes en términos de texturas, suavidad y velocidad."}
                     </p>
                   </div>
 
                   <div className="p-6 bg-cyan-900/10 rounded-xl border border-cyan-800/30">
                     <h3 className="text-cyan-400 font-bold mb-3 flex items-center gap-2">
-                      <span className="text-xl">🎨</span> VAE (Variational
-                      Autoencoder)
+                      <span className="text-xl">🎨</span> VAE (Variational Autoencoder)
                     </h3>
                     <p className="text-sm text-gray-400">
-                      El VAE actúa como el traductor de color y luz de la
-                      imagen. Es el componente final encargado de decodificar la
-                      información que la IA ha procesado en su "espacio latente"
-                      (donde hace los cálculos) para convertirla en píxeles
-                      visibles. Un buen VAE asegura que la imagen tenga colores
-                      vibrantes, negros profundos y evite el aspecto lavado o
-                      grisáceo.
+                      {isEn
+                        ? "The neural codec that transforms compressed latent mathematics into final RGB pixel space, ensuring correct contrast, deep blacks, and natural color grading."
+                        : "El VAE actúa como el traductor de color y luz de la imagen. Es el componente final encargado de decodificar la información que la IA ha procesado en su \"espacio latente\" (donde hace los cálculos) para convertirla en píxeles visibles. Un buen VAE asegura que la imagen tenga colores vibrantes, negros profundos y evite el aspecto lavado o grisáceo."}
                     </p>
                   </div>
                 </div>
@@ -3106,87 +3774,94 @@ const AIStudioPage = () => {
 
           {activeTool === "foocus" && (
             <div className="space-y-8">
-              <Section title="Tutorial FOOOCUS">
+              <Section title={isEn ? "FOOOCUS Tutorial" : "Tutorial FOOOCUS"}>
                 <div className="mb-8">
                   <p className="mb-4">
-                    Fooocus es un rediseño de Stable Diffusion centrado en la
-                    calidad y la facilidad de uso.
+                    {isEn
+                      ? "Fooocus reimagines Stable Diffusion with a streamlined UI focused on prompt expansion and immediate architectural quality."
+                      : "Fooocus es un rediseño de Stable Diffusion centrado en la calidad y la facilidad de uso."}
                   </p>
                   <LinkEntry href="https://colab.research.google.com/github/lllyasviel/Fooocus/blob/main/fooocus_colab.ipynb">
-                    Abrir en Google Colab
+                    {isEn ? "Open in Google Colab" : "Abrir en Google Colab"}
                   </LinkEntry>
                 </div>
 
                 <div className="space-y-16">
-                  <SubSection title="1. INICIAR FOOOCUS">
+                  <SubSection title={isEn ? "1. LAUNCH FOOOCUS" : "1. INICIAR FOOOCUS"}>
                     <p>
-                      Ejecuta la celda en Colab y espera a que aparezca el
-                      enlace "gradio.live".
+                      {isEn
+                        ? "Execute the Colab cell and wait for the public gradio.live link to appear."
+                        : "Ejecuta la celda en Colab y espera a que aparezca el enlace \"gradio.live\"."}
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <OptimizedImage
                         src="imagenes/focus 1.png"
-                        alt="Paso 1"
+                        alt={isEn ? "Step 1" : "Paso 1"}
                         className="rounded-lg border border-white/10"
                       />
                       <OptimizedImage
                         src="imagenes/focus 2.png"
-                        alt="Paso 2"
+                        alt={isEn ? "Step 2" : "Paso 2"}
                         className="rounded-lg border border-white/10"
                       />
                     </div>
                   </SubSection>
 
-                  <SubSection title="2. GENERAR CON TEXTO">
+                  <SubSection title={isEn ? "2. GENERATE FROM TEXT" : "2. GENERAR CON TEXTO"}>
                     <p>
-                      Escribe tu prompt en la caja inferior y pulsa "Generate".
+                      {isEn
+                        ? "Enter your architectural prompt into the bottom box and press 'Generate'."
+                        : "Escribe tu prompt en la caja inferior y pulsa \"Generate\"."}
                     </p>
                     <OptimizedImage
                       src="imagenes/focus 3.png"
-                      alt="Text to Image"
+                      alt={isEn ? "Text to Image" : "Text to Image"}
                       className="rounded-lg border border-white/10 w-full"
                     />
                   </SubSection>
 
-                  <SubSection title="3. IMÁGENES DE REFERENCIA">
+                  <SubSection title={isEn ? "3. REFERENCE IMAGES" : "3. IMÁGENES DE REFERENCIA"}>
                     <p>
-                      Usa "Input Image" para guiar la generación con una
-                      estructura o estilo previo.
+                      {isEn
+                        ? "Use 'Input Image' to condition output on an existing model or massing study."
+                        : "Usa \"Input Image\" para guiar la generación con una estructura o estilo previo."}
                     </p>
                     <div className="space-y-4">
                       <OptimizedImage
                         src="imagenes/focus 4.png"
-                        alt="Ref 1"
+                        alt={isEn ? "Reference 1" : "Ref 1"}
                         className="rounded-lg border border-white/10 w-full"
                       />
                       <OptimizedImage
                         src="imagenes/focus 5.png"
-                        alt="Ref 2"
+                        alt={isEn ? "Reference 2" : "Ref 2"}
                         className="rounded-lg border border-white/10 w-full"
                       />
                     </div>
                   </SubSection>
 
-                  <SubSection title="4. INPAINTING">
+                  <SubSection title={isEn ? "4. INPAINTING" : "4. INPAINTING"}>
                     <p>
-                      Pinta sobre las zonas que quieras modificar de una imagen
-                      existente.
+                      {isEn
+                        ? "Brush over areas you want to modify without affecting the surrounding context."
+                        : "Pinta sobre las zonas que quieras modificar de una imagen existente."}
                     </p>
                     <OptimizedImage
                       src="imagenes/focus 6.png"
-                      alt="Inpaint"
+                      alt={isEn ? "Inpainting" : "Inpaint"}
                       className="rounded-lg border border-white/10 w-full"
                     />
                   </SubSection>
 
-                  <SubSection title="5. AJUSTES AVANZADOS">
+                  <SubSection title={isEn ? "5. ADVANCED SETTINGS" : "5. AJUSTES AVANZADOS"}>
                     <p>
-                      Controla el aspect ratio, número de imágenes y estilos
-                      artísticos.
+                      {isEn
+                        ? "Fine-tune aspect ratios, sample counts, and stylistic presets."
+                        : "Controla el aspect ratio, número de imágenes y estilos artísticos."}
                     </p>
                     <OptimizedImage
                       src="imagenes/focus 7.png"
-                      alt="Ajustes"
+                      alt={isEn ? "Settings" : "Ajustes"}
                       className="rounded-lg border border-white/10 w-full"
                     />
                   </SubSection>
@@ -3197,63 +3872,63 @@ const AIStudioPage = () => {
 
           {activeTool === "comfy" && (
             <div className="space-y-8">
-              <Section title="Tutorial ComfyUI">
+              <Section title={isEn ? "ComfyUI Tutorial" : "Tutorial ComfyUI"}>
                 <div className="mb-8">
                   <p className="mb-4">
-                    ComfyUI utiliza un sistema de nodos que permite visualizar y
-                    entender exactamente cómo se procesa la imagen.
+                    {isEn
+                      ? "ComfyUI employs an explicit visual node graph, giving you precise control over each phase of latent space generation."
+                      : "ComfyUI utiliza un sistema de nodos que permite visualizar y entender exactamente cómo se procesa la imagen."}
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <LinkEntry href="https://comfy.org/cloud/">
                       Comfy Cloud
                     </LinkEntry>
                     <LinkEntry href="https://comfyui-wiki.com/es/tutorial/basic/creating-your-first-image-by-the-first-time">
-                      Tutorial Básico Oficial
+                      {isEn ? "Official Tutorial" : "Tutorial Básico Oficial"}
                     </LinkEntry>
                   </div>
                 </div>
 
                 <div className="space-y-12">
-                  <SubSection title="1. El Lenguaje del Arquitecto (Prompting)">
+                  <SubSection title={isEn ? "1. Architectural Prompting Syntax" : "1. El Lenguaje del Arquitecto (Prompting)"}>
                     <p className="mb-4">
-                      El primer paso es aprender a "hablarle" a la IA para
-                      obtener resultados espaciales coherentes.
+                      {isEn
+                        ? "Communicate with precision using a structured spatial syntax:"
+                        : "El primer paso es aprender a \"hablarle\" a la IA para obtener resultados espaciales coherentes."}
                     </p>
                     <div className="space-y-6">
                       <div className="bg-gray-900/50 p-4 rounded-lg border border-cyan-900/30">
                         <h4 className="text-green-400 font-bold mb-2">
-                          Prompt Positivo
+                          {isEn ? "Positive Prompt" : "Prompt Positivo"}
                         </h4>
                         <p className="text-sm mb-2">
-                          Debe seguir una jerarquía:
+                          {isEn ? "Follow a disciplined architectural hierarchy:" : "Debe seguir una jerarquía:"}
                         </p>
                         <code className="block bg-black/50 p-3 rounded text-sm text-cyan-200 mb-2">
-                          [Sujeto arquitectónico] + [Estilo/Arquitecto] +
-                          [Materiales] + [Iluminación] + [Calidad de render]
+                          {isEn
+                            ? "[Architectural Subject] + [Architect/Style] + [Materials] + [Atmosphere/Lighting] + [Lens/Fidelity]"
+                            : "[Sujeto arquitectónico] + [Estilo/Arquitecto] + [Materiales] + [Iluminación] + [Calidad de render]"}
                         </code>
                         <p className="text-sm italic text-gray-400">
                           <span className="font-bold text-gray-300">
-                            Ejemplo:
+                            {isEn ? "Example:" : "Ejemplo:"}
                           </span>{" "}
-                          "Modernist pavilion in Arequipa, sillar stone walls,
-                          large glass windows, sunset lighting, cinematic
-                          photography, 8k."
+                          "Modernist pavilion in Arequipa, sillar stone walls, large glass windows, sunset lighting, cinematic photography, 8k."
                         </p>
                       </div>
 
                       <div className="bg-gray-900/50 p-4 rounded-lg border border-red-900/30">
                         <h4 className="text-red-400 font-bold mb-2">
-                          Prompt Negativo
+                          {isEn ? "Negative Prompt" : "Prompt Negativo"}
                         </h4>
                         <p className="text-sm mb-2">
-                          Filtra lo que no queremos.
+                          {isEn ? "Filters unwanted visual artifacts." : "Filtra lo que no queremos."}
                         </p>
                         <p className="text-sm italic text-gray-400">
                           <span className="font-bold text-gray-300">
-                            Básico:
+                            {isEn ? "Baseline:" : "Básico:"}
                           </span>{" "}
-                          "low quality, blurry, deformed architecture, messy
-                          layout, unrealistic shadows."
+                          "low quality, blurry, deformed architecture, messy layout, unrealistic shadows."
                         </p>
                       </div>
                     </div>
@@ -3261,65 +3936,62 @@ const AIStudioPage = () => {
                       <div className="relative group overflow-hidden rounded-lg border border-white/10">
                         <OptimizedImage
                           src="imagenes/tutorialcomfy1.png"
-                          alt="Ejemplo de Prompting"
+                          alt={isEn ? "Prompting Example" : "Ejemplo de Prompting"}
                           className="w-full h-auto object-cover"
                         />
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-center pointer-events-none">
                           <p className="text-cyan-400 font-mono text-sm border border-cyan-400/50 p-3 rounded bg-black/50">
-                            💡 Arrastra esta imagen a ComfyUI para cargar este
-                            flujo de trabajo automáticamente
+                            {isEn
+                              ? "💡 Drag this image directly into ComfyUI to load this workflow automatically"
+                              : "💡 Arrastra esta imagen a ComfyUI para cargar este flujo de trabajo automáticamente"}
                           </p>
                         </div>
                       </div>
                       <p className="text-xs text-gray-500 mt-2 text-center">
-                        Flujo básico de Text-to-Image. Arrastra la imagen a
-                        ComfyUI.
+                        {isEn ? "Basic Text-to-Image workflow. Drag image into ComfyUI." : "Flujo básico de Text-to-Image. Arrastra la imagen a ComfyUI."}
                       </p>
                     </div>
                   </SubSection>
 
-                  <SubSection title="2. ControlNet: El Respeto a la Geometría">
+                  <SubSection title={isEn ? "2. ControlNet: Geometric Precision" : "2. ControlNet: El Respeto a la Geometría"}>
                     <p className="mb-4">
-                      Para un estudiante de arquitectura, la IA no debe ser
-                      aleatoria; debe seguir su dibujo. Usaremos el modelo Canny
-                      o Lineart.
+                      {isEn
+                        ? "Ensure the neural model strictly honors your hand sketch or CAD elevation using Canny edge conditioning."
+                        : "Para un estudiante de arquitectura, la IA no debe ser aleatoria; debe seguir su dibujo. Usaremos el modelo Canny o Lineart."}
                     </p>
                     <ul className="list-none space-y-4 text-sm mb-6">
                       <li className="flex items-start">
                         <span className="text-cyan-400 font-bold w-32 shrink-0">
-                          Cargar Imagen:
+                          {isEn ? "Load Image:" : "Cargar Imagen:"}
                         </span>
                         <span className="text-gray-300">
-                          Sube un boceto a mano alzada o un dibujo técnico
-                          simple.
+                          {isEn ? "Import an elevation sketch or technical linework." : "Sube un boceto a mano alzada o un dibujo técnico simple."}
                         </span>
                       </li>
                       <li className="flex items-start">
                         <span className="text-cyan-400 font-bold w-32 shrink-0">
-                          Pre-procesador:
+                          {isEn ? "Preprocessor:" : "Pre-procesador:"}
                         </span>
                         <span className="text-gray-300">
-                          Selecciona{" "}
-                          <strong className="text-white">Canny</strong> para
-                          detectar bordes precisos.
+                          {isEn ? "Select Canny to isolate structural outlines." : "Selecciona Canny para detectar bordes precisos."}
                         </span>
                       </li>
                       <li className="flex items-start">
                         <span className="text-cyan-400 font-bold w-32 shrink-0">
-                          Peso (Weight):
+                          {isEn ? "Weight:" : "Peso (Weight):"}
                         </span>
                         <span className="text-gray-300">
-                          Ajusta a <strong className="text-white">1.0</strong>{" "}
-                          para que la IA siga fielmente tu dibujo.
+                          {isEn ? "Set to 1.0 for unwavering fidelity to your drawing." : "Ajusta a 1.0 para que la IA siga fielmente tu dibujo."}
                         </span>
                       </li>
                       <li className="flex items-start bg-cyan-900/20 p-3 rounded border border-cyan-800/30 mt-2">
                         <span className="text-cyan-300 font-bold w-32 shrink-0">
-                          Resultado:
+                          {isEn ? "Result:" : "Resultado:"}
                         </span>
                         <span className="text-cyan-100">
-                          La IA generará materiales y luces sobre tu propia
-                          volumetría, no sobre una inventada.
+                          {isEn
+                            ? "Renders materials and light directly onto your exact volumetric geometry."
+                            : "La IA generará materiales y luces sobre tu propia volumetría, no sobre una inventada."}
                         </span>
                       </li>
                     </ul>
@@ -3327,37 +3999,39 @@ const AIStudioPage = () => {
                       <div className="relative group overflow-hidden rounded-lg border border-white/10">
                         <OptimizedImage
                           src="imagenes/tutorialcomfy2.png"
-                          alt="Ejemplo de ControlNet"
+                          alt={isEn ? "ControlNet Example" : "Ejemplo de ControlNet"}
                           className="w-full h-auto object-cover"
                         />
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-center pointer-events-none">
                           <p className="text-cyan-400 font-mono text-sm border border-cyan-400/50 p-3 rounded bg-black/50">
-                            💡 Arrastra esta imagen a ComfyUI para cargar este
-                            flujo de trabajo automáticamente
+                            {isEn
+                              ? "💡 Drag this image directly into ComfyUI to load this workflow automatically"
+                              : "💡 Arrastra esta imagen a ComfyUI para cargar este flujo de trabajo automáticamente"}
                           </p>
                         </div>
                       </div>
                       <p className="text-xs text-gray-500 mt-2 text-center">
-                        Flujo con ControlNet Canny. Arrastra la imagen a
-                        ComfyUI.
+                        {isEn ? "ControlNet Canny workflow. Drag image into ComfyUI." : "Flujo con ControlNet Canny. Arrastra la imagen a ComfyUI."}
                       </p>
                     </div>
                   </SubSection>
 
-                  <SubSection title="3. Inpaint: Edición Quirúrgica">
+                  <SubSection title={isEn ? "3. Inpainting: Surgical Iteration" : "3. Inpaint: Edición Quirúrgica"}>
                     <p className="mb-4">
-                      ¿Qué pasa si el edificio es perfecto pero la ventana no te
-                      gusta? No hay que generar todo de nuevo.
+                      {isEn
+                        ? "Target specific building elements (such as fenestration or cladding) without re-rendering the whole scene."
+                        : "¿Qué pasa si el edificio es perfecto pero la ventana no te gusta? No hay que generar todo de nuevo."}
                     </p>
                     <div className="space-y-4 text-sm mb-6">
                       <div className="bg-gray-900 p-4 rounded-lg flex flex-col gap-2">
                         <h4 className="text-white font-bold flex items-center gap-2">
                           <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
-                          Herramienta Máscara
+                          {isEn ? "Masking Brush" : "Herramienta Máscara"}
                         </h4>
                         <p className="text-gray-400">
-                          Pinta sobre la zona específica que deseas cambiar (ej.
-                          cambiar una puerta de madera por una de metal).
+                          {isEn
+                            ? "Paint precisely over the element to redesign (e.g. replacing timber louvers with clear curtain wall glazing)."
+                            : "Pinta sobre la zona específica que deseas cambiar (ej. cambiar una puerta de madera por una de metal)."}
                         </p>
                       </div>
 
@@ -3371,7 +4045,9 @@ const AIStudioPage = () => {
                               0.4 - 0.5
                             </span>
                             <span className="text-gray-400">
-                              Cambios sutiles que respetan la forma original.
+                              {isEn
+                                ? "Subtle surface alterations preserving baseline contours."
+                                : "Cambios sutiles que respetan la forma original."}
                             </span>
                           </div>
                           <div className="border border-white/10 p-3 rounded">
@@ -3379,8 +4055,9 @@ const AIStudioPage = () => {
                               0.7 - 0.8
                             </span>
                             <span className="text-gray-400">
-                              Cambios drásticos (permite a la IA rediseñar esa
-                              zona por completo).
+                              {isEn
+                                ? "Drastic architectural redesign within the selected mask."
+                                : "Cambios drásticos (permite a la IA rediseñar esa zona por completo)."}
                             </span>
                           </div>
                         </div>
@@ -3390,18 +4067,19 @@ const AIStudioPage = () => {
                       <div className="relative group overflow-hidden rounded-lg border border-white/10">
                         <OptimizedImage
                           src="imagenes/tutorialcomfy3.png"
-                          alt="Ejemplo de Inpaint"
+                          alt={isEn ? "Inpainting Example" : "Ejemplo de Inpaint"}
                           className="w-full h-auto object-cover"
                         />
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-center pointer-events-none">
                           <p className="text-cyan-400 font-mono text-sm border border-cyan-400/50 p-3 rounded bg-black/50">
-                            💡 Arrastra esta imagen a ComfyUI para cargar este
-                            flujo de trabajo automáticamente
+                            {isEn
+                              ? "💡 Drag this image directly into ComfyUI to load this workflow automatically"
+                              : "💡 Arrastra esta imagen a ComfyUI para cargar este flujo de trabajo automáticamente"}
                           </p>
                         </div>
                       </div>
                       <p className="text-xs text-gray-500 mt-2 text-center">
-                        Flujo de Inpainting. Arrastra la imagen a ComfyUI.
+                        {isEn ? "Inpainting workflow. Drag image into ComfyUI." : "Flujo de Inpainting. Arrastra la imagen a ComfyUI."}
                       </p>
                     </div>
                   </SubSection>
@@ -3412,60 +4090,61 @@ const AIStudioPage = () => {
 
           {activeTool === "webui" && (
             <div className="space-y-8">
-              <Section title="Tutorial Web UI (A1111)">
+              <Section title={isEn ? "Web UI (A1111) Tutorial" : "Tutorial Web UI (A1111)"}>
                 <div className="mb-8">
                   <p className="mb-4">
-                    Stable Diffusion Web UI (Automatic1111) es la interfaz más
-                    popular y con mayor ecosistema de extensiones.
+                    {isEn
+                      ? "Stable Diffusion Web UI (Automatic1111) remains a primary reference suite with extensive community extensions."
+                      : "Stable Diffusion Web UI (Automatic1111) es la interfaz más popular y con mayor ecosistema de extensiones."}
                   </p>
                   <LinkEntry href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">
-                    Repositorio en GitHub
+                    {isEn ? "GitHub Repository" : "Repositorio en GitHub"}
                   </LinkEntry>
                 </div>
 
                 <div className="space-y-12">
-                  <SubSection title="INTERFAZ PRINCIPAL">
+                  <SubSection title={isEn ? "MAIN WORKBENCH" : "INTERFAZ PRINCIPAL"}>
                     <ol className="list-decimal pl-5 space-y-4">
                       <li>
                         <span className="text-white font-bold">
                           Checkpoint Selection:
                         </span>{" "}
-                        Arriba a la izquierda, elige tu modelo.
+                        {isEn ? "Choose your fine-tuned base model from the top-left dropdown." : "Arriba a la izquierda, elige tu modelo."}
                       </li>
                       <li>
                         <span className="text-white font-bold">
                           txt2img Tab:
                         </span>{" "}
-                        La pestaña principal para generar desde texto.
+                        {isEn ? "Primary generation tab from text prompts." : "La pestaña principal para generar desde texto."}
                       </li>
                       <li>
                         <span className="text-white font-bold">Prompts:</span>{" "}
-                        El cuadro superior es para lo que quieres ver. El
-                        inferior para lo que NO quieres (Negative Prompt).
+                        {isEn ? "Top field for target description; bottom for negative exclusions." : "El cuadro superior es para lo que quieres ver. El inferior para lo que NO quieres (Negative Prompt)."}
                       </li>
                       <li>
                         <span className="text-white font-bold">Sampling:</span>{" "}
-                        "DPM++ 2M Karras" es una opción excelente y rápida.
+                        {isEn ? "'DPM++ 2M Karras' delivers exceptional speed and textural clarity." : "\"DPM++ 2M Karras\" es una opción excelente y rápida."}
                       </li>
                       <li>
                         <span className="text-white font-bold">Generate:</span>{" "}
-                        Pulsa el gran botón naranja.
+                        {isEn ? "Click the primary button to render." : "Pulsa el gran botón naranja."}
                       </li>
                     </ol>
                   </SubSection>
 
                   <SubSection title="CONTROLNET">
                     <p>
-                      La herramienta más potente para arquitectos. Permite
-                      calcar la geometría de un dibujo, una foto o un render
-                      previo para aplicarle nuevos materiales o estilos.
+                      {isEn
+                        ? "Crucial for architects: trace contours from technical CAD, sketches, or clay 3D renders and texture them photorealistically."
+                        : "La herramienta más potente para arquitectos. Permite calcar la geometría de un dibujo, una foto o un render previo para aplicarle nuevos materiales o estilos."}
                     </p>
                     <div className="p-4 bg-cyan-900/10 border border-cyan-800/30 rounded-lg">
                       <p className="text-sm">
-                        En el curso nos enfocaremos especialmente en los modelos{" "}
-                        <span className="text-cyan-400">Canny</span> y{" "}
-                        <span className="text-cyan-400">MLSD</span> para control
-                        de líneas arquitectónicas.
+                        {isEn ? (
+                          <React.Fragment>We specifically prioritize <span className="text-cyan-400">Canny</span> and <span className="text-cyan-400">MLSD</span> for architectural perspective alignment.</React.Fragment>
+                        ) : (
+                          <React.Fragment>En el curso nos enfocaremos especialmente en los modelos <span className="text-cyan-400">Canny</span> y <span className="text-cyan-400">MLSD</span> para control de líneas arquitectónicas.</React.Fragment>
+                        )}
                       </p>
                     </div>
                   </SubSection>
@@ -3476,15 +4155,22 @@ const AIStudioPage = () => {
         </main>
       </div>
 
+      {/* AI Studio Soundtrack */}
+      <ProjectSoundtrackSection
+        projectId="generacion-ia"
+        projectTitle={isEn ? "AI WORKSHOP · SOUNDTRACK" : "TUTORIAL IA · BANDA SONORA"}
+        isDarkTheme={true}
+      />
+
       <footer className="relative text-xs text-gray-600 z-10 text-center py-12 mt-12 border-t border-white/5">
-        © 2024 Benito González Quiñones · Workshop IA & Arquitectura
+        © 2024 Benito González Quiñones · {isEn ? "AI & Architecture Workshop" : "Workshop IA & Arquitectura"}
       </footer>
     </div>
   );
 };
 
 const ImageCarousel = ({ images, title }) => {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
   const [currentIndex, setCurrentIndex] = React.useState(0);
 
   const goToPrevious = () => {
@@ -3514,7 +4200,7 @@ const ImageCarousel = ({ images, title }) => {
           >
             <OptimizedImage
               src={img}
-              alt={`${title} - Imagen ${index + 1}`}
+              alt={`${title} - ${lang === "en" ? "Image" : "Imagen"} ${index + 1}`}
               className="w-full h-full object-contain"
               containerClassName="w-full h-full"
             />
@@ -3523,7 +4209,7 @@ const ImageCarousel = ({ images, title }) => {
         <button
           onClick={goToPrevious}
           className="absolute top-1/2 left-4 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/70 transition-all z-10 backdrop-blur-sm"
-          aria-label="Imagen anterior"
+          aria-label={lang === "en" ? "Previous image" : "Imagen anterior"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -3543,7 +4229,7 @@ const ImageCarousel = ({ images, title }) => {
         <button
           onClick={goToNext}
           className="absolute top-1/2 right-4 -translate-y-1/2 bg-black/40 text-white p-3 rounded-full hover:bg-black/70 transition-all z-10 backdrop-blur-sm"
-          aria-label="Siguiente imagen"
+          aria-label={lang === "en" ? "Next image" : "Siguiente imagen"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -3573,7 +4259,7 @@ const ImageCarousel = ({ images, title }) => {
           >
             <OptimizedImage
               src={img}
-              alt={`Miniatura ${index + 1}`}
+              alt={lang === "en" ? `Thumbnail ${index + 1}` : `Miniatura ${index + 1}`}
               className={`w-20 h-14 object-cover rounded-md transition-all border-2 ${currentIndex === index ? "border-cyan-400 scale-110" : "border-transparent opacity-60 hover:opacity-100"}`}
               containerClassName="w-20 h-14 rounded-md"
             />
@@ -3585,6 +4271,7 @@ const ImageCarousel = ({ images, title }) => {
 };
 
 const WebDesignPage = () => {
+  const { t, lang } = useTranslation();
   const webs = [
     { url: "https://inter-easy.vercel.app/", title: "Inter Easy" },
     { url: "https://doca.aq.upm.es/", title: "DOCA UPM" },
@@ -3596,13 +4283,13 @@ const WebDesignPage = () => {
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 pt-32 pb-16">
         <div className="mb-16">
           <h1 className="text-4xl md:text-6xl font-light font-mono text-white tracking-widest uppercase mb-4">
-            DISEÑO WEB
+            {t("DISEÑO WEB")}
           </h1>
           <div className="h-[1px] w-24 bg-red-500 mb-8"></div>
           <p className="text-lg md:text-xl font-mono text-gray-400 max-w-2xl leading-relaxed">
-            Exploración y desarrollo de interfaces digitales. Sitios web
-            diseñados y desarrollados a medida, priorizando la experiencia de
-            usuario y una estética limpia y funcional.
+            {lang === "en"
+              ? "Exploration and development of digital interfaces. Bespoke websites designed and developed with a focus on user experience and clean, functional aesthetics."
+              : "Exploración y desarrollo de interfaces digitales. Sitios web diseñados y desarrollados a medida, priorizando la experiencia de usuario y una estética limpia y funcional."}
           </p>
         </div>
 
@@ -3619,7 +4306,7 @@ const WebDesignPage = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm font-mono text-gray-400 hover:text-white transition-colors"
                 >
-                  Visitar sitio web
+                  {t("Visitar sitio web")}
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -3650,9 +4337,16 @@ const WebDesignPage = () => {
         </div>
       </main>
 
+      {/* Web Design Soundtrack */}
+      <ProjectSoundtrackSection
+        projectId="web-design"
+        projectTitle={isEn ? "WEB DESIGN · SOUNDTRACK" : "DISEÑO WEB · BANDA SONORA"}
+        isDarkTheme={true}
+      />
+
       <footer className="bg-black text-gray-600 text-center p-6 mt-12 border-t border-gray-900 z-10 relative">
         <p className="text-xs font-mono">
-          © 2024 Benito González Quiñones - Todos los derechos reservados -
+          © 2024 Benito González Quiñones - {t("Todos los derechos reservados")} -
           arquitecturabenito@gmail.com
         </p>
       </footer>
@@ -3764,6 +4458,1255 @@ const HorizontalImageCarousel = ({ media, isDarkTheme }) => {
                       }
                       `}
       </style>
+    </div>
+  );
+};
+
+// --- LIBRETO DOUBLE-PAGE VIEWER & PDF RENDERER (WHITES & OCHRES) ---
+
+const PdfPageCanvas = ({ pdfDoc, pageNumber, className = "" }) => {
+  const canvasRef = React.useRef(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+
+  React.useEffect(() => {
+    let isCancelled = false;
+    let renderTask = null;
+
+    const renderPage = async () => {
+      if (!pdfDoc || !pageNumber || pageNumber < 1 || pageNumber > pdfDoc.numPages) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError(null);
+        const page = await pdfDoc.getPage(pageNumber);
+        if (isCancelled || !canvasRef.current) return;
+
+        const canvas = canvasRef.current;
+        const context = canvas.getContext("2d");
+
+        const unscaledViewport = page.getViewport({ scale: 1.0 });
+        const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+        const targetWidth = Math.min(window.innerWidth > 1024 ? 900 : 600, window.innerWidth);
+        const scale = (targetWidth / unscaledViewport.width) * dpr;
+        const viewport = page.getViewport({ scale });
+
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+
+        renderTask = page.render({
+          canvasContext: context,
+          viewport: viewport,
+        });
+
+        await renderTask.promise;
+        if (!isCancelled) setLoading(false);
+      } catch (err) {
+        if (!isCancelled && err?.name !== "RenderingCancelledException") {
+          console.error("PDF render error:", err);
+          setError(err.message || "Error al renderizar página");
+          setLoading(false);
+        }
+      }
+    };
+
+    renderPage();
+
+    return () => {
+      isCancelled = true;
+      if (renderTask) {
+        try {
+          renderTask.cancel();
+        } catch (_) {}
+      }
+    };
+  }, [pdfDoc, pageNumber]);
+
+  return (
+    <div className={`relative w-full h-full flex items-center justify-center bg-[#faf8f4] overflow-hidden ${className}`}>
+      {loading && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#fdfbf7]/90 z-20">
+          <div className="w-7 h-7 border-2 border-[#c8963e] border-t-transparent rounded-full animate-spin mb-2"></div>
+          <span className="font-mono text-[10px] uppercase tracking-widest text-[#8c5822]">
+            Cargando pág. {pageNumber}...
+          </span>
+        </div>
+      )}
+      {error ? (
+        <div className="p-4 text-center font-mono text-xs text-[#8c5822]">
+          <p>No se pudo renderizar la página {pageNumber}</p>
+        </div>
+      ) : (
+        <canvas ref={canvasRef} className="w-full h-full object-contain select-none" />
+      )}
+    </div>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// PROJECT SOUNDTRACK & MUSIC PLAYER ENGINE
+// ---------------------------------------------------------------------------
+const parseMusicUrl = (rawUrl) => {
+  if (!rawUrl || typeof rawUrl !== "string") return null;
+  const url = rawUrl.trim();
+
+  // Spotify pattern (supports track, album, playlist, episode, and localized paths like intl-es)
+  const spotifyMatch = url.match(/spotify\.com\/(?:[a-zA-Z]{2}(?:-[a-zA-Z]{2,4})?\/)?(track|album|playlist|episode)\/([a-zA-Z0-9]+)/i);
+  if (spotifyMatch) {
+    const type = spotifyMatch[1];
+    const id = spotifyMatch[2];
+    return {
+      provider: "spotify",
+      type,
+      id,
+      embedUrl: `https://open.spotify.com/embed/${type}/${id}?utm_source=generator&theme=0&autoplay=1`,
+      directUrl: url,
+    };
+  }
+
+  // SoundCloud pattern
+  if (url.includes("soundcloud.com")) {
+    return {
+      provider: "soundcloud",
+      embedUrl: `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true`,
+      directUrl: url,
+    };
+  }
+
+  // Direct Audio file (.mp3, .wav, .ogg, /musica/...)
+  return {
+    provider: "audio",
+    audioSrc: url,
+    directUrl: url,
+  };
+};
+
+const ProjectSoundtrackSection = ({
+  projectId,
+  projectTitle,
+  isPhoto = false,
+  isDarkTheme = true,
+}) => {
+  const { lang } = React.useContext(LanguageContext) || { lang: "es" };
+  const isEn = lang === "en";
+  const songUrl = (projectMusic && projectMusic[projectId]) || (window.projectMusicConfig && window.projectMusicConfig[projectId]) || "";
+  const musicData = React.useMemo(() => parseMusicUrl(songUrl), [songUrl]);
+  const audioRef = React.useRef(null);
+  const [isPlaying, setIsPlaying] = React.useState(true);
+  const [copied, setCopied] = React.useState(false);
+
+  // Auto-play trigger when navigating to project / page
+  React.useEffect(() => {
+    setIsPlaying(true);
+
+    if (musicData?.provider === "audio" && audioRef.current) {
+      audioRef.current.currentTime = 0;
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch(() => {
+            // Modern browser policy: if blocked before first interaction, listen to any user touch/click/key
+            const handleFirstGesture = () => {
+              if (audioRef.current) {
+                audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+              }
+              window.removeEventListener("click", handleFirstGesture);
+              window.removeEventListener("touchstart", handleFirstGesture);
+              window.removeEventListener("keydown", handleFirstGesture);
+            };
+            window.addEventListener("click", handleFirstGesture, { once: true });
+            window.addEventListener("touchstart", handleFirstGesture, { once: true });
+            window.addEventListener("keydown", handleFirstGesture, { once: true });
+          });
+      }
+    }
+  }, [projectId, musicData]);
+
+  const handleCopyLink = () => {
+    if (!songUrl) return;
+    navigator.clipboard.writeText(songUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+
+  if (!songUrl && !musicData) {
+    return null;
+  }
+
+  return (
+    <section
+      aria-label="Reproductor de música del proyecto"
+      className={`w-full max-w-5xl mx-auto my-10 sm:my-14 p-4 sm:p-7 rounded-2xl border transition-all duration-300 shadow-xl z-20 relative ${
+        isPhoto
+          ? "bg-[#fdfbf7] border-[#d4a359]/60 text-[#2a2115]"
+          : isDarkTheme
+          ? "bg-[#090b0e] border-white/15 text-white shadow-cyan-950/20"
+          : "bg-white border-gray-200 text-gray-900"
+      }`}
+    >
+      {/* Header bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-inherit/20">
+        <div className="flex items-center gap-3">
+          {/* Animated sound equalizer bars */}
+          <div className="flex items-end gap-1 h-6 w-7 p-1 rounded-sm bg-black/20">
+            <span className="w-1 bg-[#1DB954] rounded-full animate-pulse h-4"></span>
+            <span className="w-1 bg-[#1DB954] rounded-full animate-pulse h-6 delay-75"></span>
+            <span className="w-1 bg-[#1DB954] rounded-full animate-pulse h-3 delay-150"></span>
+            <span className="w-1 bg-[#1DB954] rounded-full animate-pulse h-5 delay-100"></span>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase font-bold text-[#1DB954] flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#1DB954] animate-ping"></span>
+                {isEn ? "PROJECT SOUNDTRACK · AUTOPLAY ON" : "BANDA SONORA · REPRODUCCIÓN AUTOMÁTICA"}
+              </span>
+              <span className="text-[10px] opacity-40">|</span>
+              <span className="font-mono text-[9px] uppercase tracking-wider opacity-70">
+                {isPhoto ? "LIBRETO A5" : "PROYECTO"}
+              </span>
+            </div>
+            <h4 className="font-serif sm:font-mono text-sm sm:text-base font-bold uppercase tracking-wide truncate max-w-md mt-0.5">
+              {projectTitle || projectId}
+            </h4>
+          </div>
+        </div>
+
+        {/* Action badges: Open in Spotify & Copy Link */}
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          {musicData?.provider === "spotify" && (
+            <a
+              href={musicData.directUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#1DB954] hover:bg-[#1aa34a] text-black font-mono text-[10px] font-bold tracking-wider uppercase transition-all shadow-sm hover:scale-105 cursor-pointer"
+              title={isEn ? "Open track in Spotify" : "Abrir canción en Spotify"}
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+              </svg>
+              <span>Spotify ↗</span>
+            </a>
+          )}
+
+          <button
+            onClick={handleCopyLink}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-mono uppercase tracking-wider transition-all cursor-pointer ${
+              copied
+                ? "bg-green-600 border-green-500 text-white"
+                : isPhoto
+                ? "bg-[#f4ede2] border-[#d4a359]/60 text-[#8c5822] hover:bg-[#ede3d1]"
+                : "bg-white/10 border-white/20 text-gray-300 hover:bg-white/20"
+            }`}
+            title={isEn ? "Copy music link to clipboard" : "Copiar enlace de música"}
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+            </svg>
+            <span>{copied ? (isEn ? "Copied!" : "¡Copiado!") : (isEn ? "Copy Link" : "Copiar Link")}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Embedded Player Body */}
+      <div className="w-full overflow-hidden rounded-xl bg-black/40 shadow-inner">
+        {musicData?.provider === "spotify" ? (
+          <iframe
+            title={`Spotify player for ${projectTitle || projectId}`}
+            src={musicData.embedUrl}
+            width="100%"
+            height="152"
+            frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="eager"
+            className="w-full border-0 block rounded-xl"
+          />
+        ) : musicData?.provider === "soundcloud" ? (
+          <iframe
+            title={`SoundCloud player for ${projectTitle || projectId}`}
+            src={musicData.embedUrl}
+            width="100%"
+            height="152"
+            scrolling="no"
+            frameBorder="no"
+            allow="autoplay"
+            className="w-full border-0 block rounded-xl"
+          />
+        ) : (
+          <div className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-black/60 rounded-xl">
+            <audio
+              ref={audioRef}
+              src={musicData?.audioSrc}
+              autoPlay
+              controls
+              playsInline
+              className="w-full"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Footer helper note showing code file location */}
+      <div className="mt-3 pt-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 font-mono text-[9px] opacity-60">
+        <span className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#1DB954]"></span>
+          <span>{isEn ? "Configured in:" : "Configurado en:"} <code className="px-1 py-0.5 rounded bg-black/20 font-bold">src/projectMusicConfig.js</code></span>
+        </span>
+        <span className="hidden sm:inline italic">
+          {isEn ? "Paste any Spotify track URL to associate with this project" : "Pega cualquier enlace de Spotify junto al nombre de este proyecto"}
+        </span>
+      </div>
+    </section>
+  );
+};
+
+const LibretoViewer = ({
+  project,
+  allProjectsData = [],
+  onProjectSelect,
+  onBack,
+}) => {
+  const { t, pt, lang } = useTranslation();
+  const fileInputRef = React.useRef(null);
+  const containerRef = React.useRef(null);
+  const isEn = lang === "en";
+
+  // State
+  const [currentSpread, setCurrentSpread] = React.useState(0);
+  const [viewMode, setViewMode] = React.useState("spread"); // "spread" | "single"
+  const [uploadedPdfDoc, setUploadedPdfDoc] = React.useState(null);
+  const [uploadedPdfName, setUploadedPdfName] = React.useState("");
+  const [uploadedTotalPages, setUploadedTotalPages] = React.useState(0);
+  const [isProcessingPdf, setIsProcessingPdf] = React.useState(false);
+  const [notification, setNotification] = React.useState(null);
+  const [showThumbnails, setShowThumbnails] = React.useState(false);
+  const [isFullscreen, setIsFullscreen] = React.useState(false);
+  const [isDragging, setIsDragging] = React.useState(false);
+
+  // Mobile & Desktop Double-Page Manual Zoom and Pan state
+  const [zoomLevel, setZoomLevel] = React.useState(1);
+  const [panOffset, setPanOffset] = React.useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = React.useState(false);
+  const touchStartRef = React.useRef({ x: 0, y: 0, panX: 0, panY: 0, moved: false });
+  const mouseStartRef = React.useRef({ x: 0, y: 0, panX: 0, panY: 0, moved: false });
+
+  // Reset zoom & pan on spread or project change
+  React.useEffect(() => {
+    setZoomLevel(1);
+    setPanOffset({ x: 0, y: 0 });
+  }, [currentSpread, project?.id]);
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        panX: panOffset.x,
+        panY: panOffset.y,
+        moved: false,
+      };
+      if (zoomLevel > 1) {
+        setIsPanning(true);
+      }
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 1) {
+      const dx = e.touches[0].clientX - touchStartRef.current.x;
+      const dy = e.touches[0].clientY - touchStartRef.current.y;
+      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
+        touchStartRef.current.moved = true;
+      }
+      if (zoomLevel > 1) {
+        setPanOffset({
+          x: touchStartRef.current.panX + dx,
+          y: touchStartRef.current.panY + dy,
+        });
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsPanning(false);
+  };
+
+  const handleMouseDown = (e) => {
+    mouseStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      panX: panOffset.x,
+      panY: panOffset.y,
+      moved: false,
+    };
+    if (zoomLevel > 1) {
+      setIsPanning(true);
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (isPanning && zoomLevel > 1) {
+      const dx = e.clientX - mouseStartRef.current.x;
+      const dy = e.clientY - mouseStartRef.current.y;
+      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
+        mouseStartRef.current.moved = true;
+      }
+      setPanOffset({
+        x: mouseStartRef.current.panX + dx,
+        y: mouseStartRef.current.panY + dy,
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsPanning(false);
+  };
+
+  // Reset scroll on project change
+  React.useEffect(() => {
+    setCurrentSpread(0);
+    setUploadedPdfDoc(null);
+    setUploadedPdfName("");
+    setUploadedTotalPages(0);
+    if (containerRef.current) {
+      containerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [project?.id]);
+
+  // Keyboard navigation
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "ArrowRight") {
+        handleNext();
+      } else if (e.key === "ArrowLeft") {
+        handlePrev();
+      } else if (e.key === "Escape" && isFullscreen) {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
+        setIsFullscreen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  });
+
+  const notify = (msg) => {
+    setNotification(msg);
+    setTimeout(() => setNotification(null), 4000);
+  };
+
+  // PDF Upload handler
+  const handleFileUpload = async (file) => {
+    if (!file) return;
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      notify(isEn ? "Please upload a valid PDF file" : "Por favor sube un archivo PDF válido");
+      return;
+    }
+
+    try {
+      setIsProcessingPdf(true);
+      const arrayBuffer = await file.arrayBuffer();
+
+      if (!window.pdfjsLib) {
+        throw new Error("Motor PDF no disponible");
+      }
+
+      const loadingTask = window.pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+      const pdf = await loadingTask.promise;
+
+      setUploadedPdfDoc(pdf);
+      setUploadedPdfName(file.name);
+      setUploadedTotalPages(pdf.numPages);
+      setCurrentSpread(0);
+      setIsProcessingPdf(false);
+      notify(
+        isEn
+          ? `PDF "${file.name}" loaded (${pdf.numPages} pages) in double-page spread`
+          : `PDF "${file.name}" cargado (${pdf.numPages} páginas) como libro a doble página`
+      );
+    } catch (err) {
+      console.error("Error loading uploaded PDF:", err);
+      setIsProcessingPdf(false);
+      notify(isEn ? "Failed to parse PDF file" : "Error al procesar el archivo PDF");
+    }
+  };
+
+  const handleRestoreOriginal = () => {
+    setUploadedPdfDoc(null);
+    setUploadedPdfName("");
+    setUploadedTotalPages(0);
+    setCurrentSpread(0);
+    notify(isEn ? "Restored original curated booklet" : "Libreto original restaurado");
+  };
+
+  // Drag and drop handlers
+  const onDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+  const onDragLeave = () => {
+    setIsDragging(false);
+  };
+  const onDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFileUpload(e.dataTransfer.files[0]);
+    }
+  };
+
+  // Fullscreen toggle
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => setIsFullscreen(true)).catch(() => {});
+    } else {
+      document.exitFullscreen().then(() => setIsFullscreen(false)).catch(() => {});
+    }
+  };
+
+  // Calculate spreads
+  // Using uploaded PDF or built-in pages
+  const builtinPages = project?.pages || [
+    { pageNum: 1, type: "cover", title: pt(project, "title"), image: project?.coverImage || project?.normalImage },
+    { pageNum: 2, type: "colophon", title: "NOTA EDITORIAL", content_es: pt(project, "description"), content_en: pt(project, "description") },
+    { pageNum: 3, type: "photo", title: pt(project, "title"), image: project?.coverImage || project?.normalImage, caption_es: pt(project, "summary") },
+  ];
+
+  const totalPagesCount = uploadedPdfDoc ? uploadedTotalPages : builtinPages.length;
+
+  // In double-page mode:
+  // Spread 0: Left: null (Flyleaf), Right: Page 1 (Cover)
+  // Spread 1: Left: Page 2, Right: Page 3
+  // Spread 2: Left: Page 4, Right: Page 5
+  // ...
+  const totalSpreads = Math.ceil((totalPagesCount + 1) / 2);
+
+  const getSpreadPages = (spreadIdx) => {
+    if (spreadIdx === 0) {
+      return { left: null, right: 1 };
+    }
+    const leftPage = spreadIdx * 2;
+    const rightPage = leftPage + 1 <= totalPagesCount ? leftPage + 1 : null;
+    return { left: leftPage, right: rightPage };
+  };
+
+  const currentPages = viewMode === "spread" 
+    ? getSpreadPages(currentSpread) 
+    : { single: currentSpread + 1 };
+
+  const handleNext = () => {
+    if (viewMode === "spread") {
+      if (currentSpread < totalSpreads - 1) {
+        setCurrentSpread((prev) => prev + 1);
+      }
+    } else {
+      if (currentSpread < totalPagesCount - 1) {
+        setCurrentSpread((prev) => prev + 1);
+      }
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentSpread > 0) {
+      setCurrentSpread((prev) => prev - 1);
+    }
+  };
+
+  const jumpToPage = (pageNum) => {
+    if (viewMode === "spread") {
+      if (pageNum === 1) {
+        setCurrentSpread(0);
+      } else {
+        setCurrentSpread(Math.floor(pageNum / 2));
+      }
+    } else {
+      setCurrentSpread(Math.max(0, Math.min(pageNum - 1, totalPagesCount - 1)));
+    }
+  };
+
+  // Other photography libretos
+  const photoLibretos = allProjectsData.filter(
+    (p) => (p.category === "photography" || p.isLibreto) && p.id !== project?.id
+  );
+
+  // Render internal page content (built-in)
+  const renderBuiltinPage = (pageNumber, isLeft) => {
+    if (!pageNumber) {
+      // Empty flyleaf / inside front or back cover
+      return (
+        <div className="w-full h-full bg-[#f6f2e9] flex flex-col justify-between p-8 sm:p-12 text-[#8c5822]/40 select-none">
+          <div className="font-mono text-[9px] uppercase tracking-widest">
+            {pt(project, "title")} · Formato ISO A5
+          </div>
+          <div className="text-center my-auto flex flex-col items-center justify-center opacity-60">
+            <div className="w-10 h-10 border border-[#d4a359]/40 rotate-45 mb-4 flex items-center justify-center">
+              <span className="font-serif italic text-xs text-[#8c5822]">B</span>
+            </div>
+            <p className="font-mono text-[10px] tracking-widest text-[#8c5822]/70 uppercase">
+              Archivo Fotográfico Benito G. Quiñones
+            </p>
+          </div>
+          <div className="font-mono text-[8px] text-right tracking-widest text-[#8c5822]/50">
+            {isEn ? "Inside Leaf · 148 × 210 mm" : "Guarda Interior · 148 × 210 mm"}
+          </div>
+        </div>
+      );
+    }
+
+    const pageData = builtinPages.find((p) => p.pageNum === pageNumber) || builtinPages[pageNumber - 1];
+    if (!pageData) {
+      return (
+        <div className="w-full h-full bg-[#fdfbf7] flex items-center justify-center font-mono text-xs text-[#8c5822]">
+          Página {pageNumber}
+        </div>
+      );
+    }
+
+    // Cover Page
+    if (pageData.type === "cover" || pageNumber === 1) {
+      return (
+        <div className="w-full h-full bg-[#fdfbf7] flex flex-col justify-between p-6 sm:p-10 relative overflow-hidden select-none">
+          {/* Subtle ochre geometric frame */}
+          <div className="absolute inset-3 sm:inset-5 border border-[#d4a359]/40 pointer-events-none"></div>
+          <div className="absolute inset-4 sm:inset-6 border border-[#d4a359]/20 pointer-events-none"></div>
+
+          {/* Top metadata */}
+          <div className="relative z-10 flex justify-between items-center text-[#8c5822] font-mono text-[9px] sm:text-[10px] tracking-widest uppercase">
+            <span>{pt(project, "subcategory") || "DOCUMENTAL"}</span>
+            <span className="px-2 py-0.5 rounded-full bg-[#f4ede2] border border-[#d4a359]/40">
+              LIBRETO A5
+            </span>
+          </div>
+
+          {/* Center Cover Artwork */}
+          <div className="relative z-10 my-auto py-4 flex flex-col items-center text-center">
+            <div className="w-full max-h-[42vh] aspect-[4/3] mb-6 overflow-hidden rounded-xs border border-[#d4a359]/30 shadow-md bg-[#faf7f2]">
+              {pageData.image || project?.coverImage || project?.normalImage ? (
+                <OptimizedImage
+                  src={pageData.image || project?.coverImage || project?.normalImage}
+                  alt={pt(project, "title")}
+                  className="w-full h-full object-cover"
+                  containerClassName="w-full h-full"
+                  theme="photography"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center font-mono text-xs text-[#8c5822]">
+                  PORTADA A5
+                </div>
+              )}
+            </div>
+
+            <h1 className="font-serif font-bold text-2xl sm:text-3xl md:text-4xl text-[#2a2115] tracking-wide uppercase leading-tight mb-2">
+              {pt(project, "title")}
+            </h1>
+            <p className="font-mono text-xs sm:text-sm text-[#8c5822] tracking-widest uppercase">
+              {project?.year || "2024–2025"}
+            </p>
+          </div>
+
+          {/* Bottom Author Stamp */}
+          <div className="relative z-10 pt-4 border-t border-[#d4a359]/30 flex justify-between items-end text-[#786b59] font-mono text-[9px] sm:text-[10px]">
+            <div>
+              <span className="block font-bold text-[#8c5822] tracking-wider">BENITO GONZÁLEZ QUIÑONES</span>
+              <span className="text-[8px] sm:text-[9px] tracking-widest text-[#a89680]">ARQUITECTO &amp; FOTÓGRAFO</span>
+            </div>
+            <div className="text-right tracking-widest text-[#8c5822]">
+              ISO A5 · MADRID
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Colophon / Editorial Note
+    if (pageData.type === "colophon" || pageData.type === "text") {
+      const title = isEn && pageData.title_en ? pageData.title_en : pageData.title;
+      const content = isEn && pageData.content_en ? pageData.content_en : (pageData.content_es || pt(project, "description"));
+      return (
+        <div className="w-full h-full bg-[#fdfbf7] flex flex-col justify-between p-6 sm:p-12 text-[#2c2419] select-text">
+          {/* Header */}
+          <div className="flex justify-between items-center pb-4 border-b border-[#d4a359]/30 font-mono text-[9px] text-[#8c5822] tracking-widest uppercase">
+            <span>{pt(project, "title")}</span>
+            <span>{isLeft ? `PÁG. ${pageNumber}` : `${pageNumber}`}</span>
+          </div>
+
+          {/* Content */}
+          <div className="my-auto max-w-md mx-auto py-6">
+            {title && (
+              <h2 className="font-serif font-bold text-xl sm:text-2xl text-[#2a2115] tracking-wider uppercase mb-6 pb-2 border-b-2 border-[#c8963e]">
+                {title}
+              </h2>
+            )}
+            <div className="space-y-4">
+              {content ? (
+                content.split("\n\n").map((para, i) => (
+                  <p key={i} className="font-serif text-sm sm:text-base leading-relaxed text-[#443829] text-justify">
+                    {i === 0 ? (
+                      <span className="float-left text-3xl sm:text-4xl leading-none font-serif font-bold text-[#8c5822] mr-2">
+                        {para.charAt(0)}
+                      </span>
+                    ) : null}
+                    {i === 0 ? para.slice(1) : para}
+                  </p>
+                ))
+              ) : (
+                <p className="font-serif text-sm sm:text-base leading-relaxed text-[#443829]">
+                  {pt(project, "description")}
+                </p>
+              )}
+            </div>
+
+            {pageData.meta && (
+              <div className="mt-8 pt-4 border-t border-[#d4a359]/20 font-mono text-[9px] sm:text-[10px] text-[#8c5822] tracking-widest uppercase">
+                {pageData.meta}
+              </div>
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="flex justify-between items-center pt-4 border-t border-[#d4a359]/20 font-mono text-[9px] text-[#8c5822]/70">
+            <span>ISO A5 · 148 × 210 MM</span>
+            <span>— {pageNumber} —</span>
+          </div>
+        </div>
+      );
+    }
+
+    // Photo Page
+    return (
+      <div className="w-full h-full bg-[#fdfbf7] flex flex-col justify-between p-4 sm:p-8 select-none">
+        {/* Header */}
+        <div className="flex justify-between items-center pb-2 font-mono text-[8px] sm:text-[9px] text-[#8c5822] tracking-widest uppercase">
+          <span>{pt(project, "title")}</span>
+          <span>{pageData.title || `LÁMINA ${pageNumber}`}</span>
+        </div>
+
+        {/* Photo Container */}
+        <div className="my-auto relative flex-1 flex flex-col items-center justify-center p-2 sm:p-4">
+          <div className="relative w-full h-full max-h-[62vh] overflow-hidden rounded-xs border border-[#d4a359]/30 shadow-sm bg-[#f8f5ee] flex items-center justify-center">
+            {pageData.image || project?.coverImage || project?.normalImage ? (
+              <OptimizedImage
+                src={pageData.image || project?.coverImage || project?.normalImage}
+                alt={pageData.title || pt(project, "title")}
+                className="w-full h-full object-contain"
+                containerClassName="w-full h-full"
+                theme="photography"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center font-mono text-xs text-[#8c5822]">
+                FOTOGRAFÍA A5 · PÁG. {pageNumber}
+              </div>
+            )}
+          </div>
+
+          {/* Photo caption */}
+          {(pageData.caption_es || pageData.caption_en || pageData.title) && (
+            <div className="w-full mt-3 px-1 text-left">
+              <p className="font-mono text-[9px] sm:text-[10px] text-[#5c4a33] tracking-wide leading-relaxed">
+                <span className="font-bold text-[#8c5822] mr-2">
+                  {pageData.title || `0${pageNumber}`}
+                </span>
+                {isEn && pageData.caption_en ? pageData.caption_en : (pageData.caption_es || pageData.title)}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-between items-center pt-2 font-mono text-[8px] sm:text-[9px] text-[#8c5822]/60">
+          <span>{isLeft ? "PÁGINA IZQUIERDA" : "PÁGINA DERECHA"}</span>
+          <span>— {pageNumber} —</span>
+        </div>
+      </div>
+    );
+  };
+
+  // Render Left Page
+  const renderLeftPage = () => {
+    if (uploadedPdfDoc) {
+      if (!currentPages.left) {
+        return (
+          <div className="w-full h-full bg-[#f6f2e9] flex flex-col justify-between p-8 text-[#8c5822]/50 font-mono text-xs select-none">
+            <div className="uppercase tracking-widest">{uploadedPdfName}</div>
+            <div className="text-center my-auto">
+              <p className="text-[10px] uppercase tracking-widest mb-1 text-[#8c5822]">Pliego Interior</p>
+              <p className="text-[8px] text-[#a89680]">Formato ISO A5 · Doble Página</p>
+            </div>
+            <div className="text-right text-[9px]">— Guarda —</div>
+          </div>
+        );
+      }
+      return <PdfPageCanvas pdfDoc={uploadedPdfDoc} pageNumber={currentPages.left} />;
+    }
+
+    return renderBuiltinPage(currentPages.left, true);
+  };
+
+  // Render Right Page
+  const renderRightPage = () => {
+    if (uploadedPdfDoc) {
+      if (!currentPages.right) {
+        return (
+          <div className="w-full h-full bg-[#f6f2e9] flex flex-col justify-between p-8 text-[#8c5822]/50 font-mono text-xs select-none">
+            <div className="uppercase tracking-widest">{uploadedPdfName}</div>
+            <div className="text-center my-auto text-[10px] uppercase tracking-widest text-[#8c5822]">
+              Fin del Libreto
+            </div>
+            <div className="text-right text-[9px]">— Contraportada —</div>
+          </div>
+        );
+      }
+      return <PdfPageCanvas pdfDoc={uploadedPdfDoc} pageNumber={currentPages.right} />;
+    }
+
+    return renderBuiltinPage(currentPages.right, false);
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="w-full min-h-screen bg-[#faf8f4] text-[#2c2419] overflow-x-hidden relative animate-fade-in flex flex-col justify-between"
+      style={{
+        backgroundImage: "radial-gradient(#d4a359 0.75px, transparent 0.75px)",
+        backgroundSize: "28px 28px",
+      }}
+    >
+      {/* Back Button */}
+      <BackButton onClick={onBack} theme="photography" />
+
+      {/* Toast Notification */}
+      {notification && (
+        <div className="fixed top-16 sm:top-20 left-1/2 -translate-x-1/2 z-[160] px-4 py-2.5 rounded-full bg-[#faf7f2] border border-[#c8963e] shadow-xl text-[#6e4418] font-mono text-xs flex items-center gap-2 animate-bounce">
+          <span className="w-2 h-2 rounded-full bg-[#c8963e]"></span>
+          <span>{notification}</span>
+        </div>
+      )}
+
+      {/* Top Header & Minimalist Controls */}
+      <header className="relative z-30 pt-16 sm:pt-20 pb-4 px-4 sm:px-8 max-w-7xl mx-auto w-full flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#d4a359]/30">
+        <div>
+          <div className="inline-flex items-center gap-2 font-mono text-[9px] sm:text-[10px] text-[#8c5822] uppercase tracking-widest mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#c8963e]"></span>
+            <span>{isEn ? "CLOSED PDF · SMALL A5 MAGAZINE" : "PDF CERRADO · PEQUEÑA REVISTA A5"}</span>
+            <span className="text-[#c8963e]/50">|</span>
+            <span>{pt(project, "subcategory") || "FOTOGRAFÍA"}</span>
+          </div>
+          <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-[#2a2115] tracking-wide uppercase leading-tight">
+            {pt(project, "title")}
+          </h1>
+        </div>
+
+        {/* Action Controls in minimalist ochre style */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {/* Share Permalink Button */}
+          <CopyPermalinkButton theme="photography" />
+
+          {/* Closed PDF Badge & Direct Download Button */}
+          <a
+            href={project?.pdfUrl || `/documentos/${project?.id}.pdf`}
+            download={project?.pdfUrl ? project.pdfUrl.split("/").pop() : `${project?.id}.pdf`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#faf7f2] border border-[#c8963e] hover:border-[#8c5822] hover:bg-[#f4ede1] text-[#6e4418] font-mono text-xs uppercase tracking-wider transition-all duration-200 shadow-sm flex items-center gap-2 cursor-pointer"
+            title={isEn ? `Download closed PDF: ${project?.pdfUrl ? project.pdfUrl.split("/").pop() : `${project?.id}.pdf`}` : `Descargar libreto en PDF cerrado: ${project?.pdfUrl ? project.pdfUrl.split("/").pop() : `${project?.id}.pdf`}`}
+          >
+            <svg className="w-4 h-4 text-[#8c5822]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span className="font-bold">{project?.pdfUrl ? project.pdfUrl.split("/").pop() : `${project?.id}.pdf`}</span>
+            <span className="text-[10px] text-[#8c5822]/80 bg-[#f4ede2] px-1.5 py-0.5 rounded-full border border-[#d4a359]/40">{isEn ? "PDF" : "A5"}</span>
+          </a>
+
+          {/* Spread / Single Page Toggle */}
+          <div className="hidden sm:inline-flex p-0.5 rounded-full bg-[#f4ede2] border border-[#d4a359]/40">
+            <button
+              onClick={() => setViewMode("spread")}
+              className={`px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-wider transition-all ${
+                viewMode === "spread"
+                  ? "bg-[#c8963e] text-white font-bold shadow-sm"
+                  : "text-[#8c5822] hover:text-[#5c4a33]"
+              }`}
+            >
+              {isEn ? "Spread" : "Doble Página"}
+            </button>
+            <button
+              onClick={() => setViewMode("single")}
+              className={`px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-wider transition-all ${
+                viewMode === "single"
+                  ? "bg-[#c8963e] text-white font-bold shadow-sm"
+                  : "text-[#8c5822] hover:text-[#5c4a33]"
+              }`}
+            >
+              {isEn ? "Single Page" : "Página Simple"}
+            </button>
+          </div>
+
+          {/* Thumbnails toggle */}
+          <button
+            onClick={() => setShowThumbnails(!showThumbnails)}
+            className={`p-2 rounded-full border transition-all ${
+              showThumbnails
+                ? "bg-[#c8963e] text-white border-[#c8963e]"
+                : "bg-[#faf7f2] border-[#d4a359]/40 text-[#8c5822] hover:border-[#b87d2b]"
+            }`}
+            title={isEn ? "Toggle thumbnails" : "Mostrar miniaturas"}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+          </button>
+
+          {/* Fullscreen button */}
+          <button
+            onClick={toggleFullscreen}
+            className="p-2 rounded-full bg-[#faf7f2] border border-[#d4a359]/40 text-[#8c5822] hover:border-[#b87d2b] transition-all"
+            title={isEn ? "Fullscreen" : "Pantalla completa"}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      {/* Main Double-Page Book Reader Stage */}
+      <main className="relative z-20 flex-1 flex flex-col items-center justify-center px-2 sm:px-6 py-6 md:py-10 max-w-[1400px] mx-auto w-full">
+        {/* Navigation Arrows (Desktop) */}
+        <div className="w-full flex items-center justify-between gap-2 sm:gap-6">
+          {/* Prev Button */}
+          <button
+            onClick={handlePrev}
+            disabled={currentSpread === 0}
+            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#faf7f2]/90 border border-[#d4a359]/40 hover:border-[#b87d2b] shadow-md flex items-center justify-center text-[#8c5822] transition-all duration-200 cursor-pointer ${
+              currentSpread === 0 ? "opacity-30 cursor-not-allowed" : "hover:scale-105 hover:bg-[#f4ede1]"
+            }`}
+            aria-label="Pliego anterior"
+          >
+            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          {/* THE BOOK COMPONENT */}
+          <div className="flex-1 flex flex-col justify-center items-center my-2 w-full overflow-hidden">
+            {/* Double-Page Spread Manual Zoom & Reset Toolbar */}
+            {viewMode === "spread" && (
+              <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:py-1.5 rounded-full bg-[#f4ede2]/95 border border-[#d4a359]/40 shadow-sm backdrop-blur-xs text-[#8c5822] font-mono text-xs mb-3 z-30 select-none">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setZoomLevel((prev) => {
+                      const next = Math.max(1, prev - 0.5);
+                      if (next === 1) setPanOffset({ x: 0, y: 0 });
+                      return next;
+                    });
+                  }}
+                  disabled={zoomLevel <= 1}
+                  className="w-7 h-7 rounded-full flex items-center justify-center border border-[#d4a359]/40 hover:bg-[#faf7f2] disabled:opacity-30 cursor-pointer text-sm font-bold transition-colors"
+                  title={isEn ? "Zoom Out" : "Reducir zoom"}
+                >
+                  −
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setZoomLevel(1);
+                    setPanOffset({ x: 0, y: 0 });
+                  }}
+                  className="px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wider hover:bg-[#faf7f2] transition-colors cursor-pointer"
+                  title={isEn ? "Reset zoom" : "Ajustar al pliego"}
+                >
+                  {Math.round(zoomLevel * 100)}%
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setZoomLevel((prev) => Math.min(3, prev + 0.5));
+                  }}
+                  disabled={zoomLevel >= 3}
+                  className="w-7 h-7 rounded-full flex items-center justify-center border border-[#d4a359]/40 hover:bg-[#faf7f2] disabled:opacity-30 cursor-pointer text-sm font-bold transition-colors"
+                  title={isEn ? "Zoom In" : "Ampliar zoom"}
+                >
+                  +
+                </button>
+
+                {zoomLevel > 1 && (
+                  <span className="text-[10px] uppercase tracking-wider text-[#8c5822]/80 pl-2 border-l border-[#d4a359]/40">
+                    {isEn ? "Drag to explore" : "Arrastra el pliego"}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {viewMode === "spread" ? (
+              /* DOUBLE-PAGE SPREAD CONTAINER (2 x ISO A5) */
+              <div
+                className="relative flex w-full max-w-[1100px] aspect-[296/210] rounded-xs shadow-[0_25px_60px_-15px_rgba(140,88,34,0.22),0_10px_25px_rgba(0,0,0,0.06)] border border-[#d4a359]/40 bg-[#fdfbf7] select-none transition-transform duration-200"
+                style={{
+                  transform: `scale(${zoomLevel}) translate(${panOffset.x / zoomLevel}px, ${panOffset.y / zoomLevel}px)`,
+                  transformOrigin: "center center",
+                  cursor: zoomLevel > 1 ? (isPanning ? "grabbing" : "grab") : "default",
+                  boxShadow:
+                    "0 30px 60px -15px rgba(140,88,34,0.25), 0 0 0 1px rgba(212,163,89,0.3) inset",
+                }}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+              >
+                {/* Book outer edge pages stack illusion */}
+                <div className="absolute -bottom-2 left-3 right-3 h-2 bg-[#ece4d5] rounded-b-sm border-b border-[#d4a359]/40 z-0 opacity-80 pointer-events-none"></div>
+                <div className="absolute -bottom-3.5 left-6 right-6 h-1.5 bg-[#dfd6c4] rounded-b-sm border-b border-[#d4a359]/30 z-0 opacity-60 pointer-events-none"></div>
+
+                {/* LEFT PAGE (Verso) */}
+                <div
+                  className="relative z-10 w-1/2 h-full cursor-pointer overflow-hidden border-r border-[#d4a359]/20"
+                  onClick={() => {
+                    if (zoomLevel > 1 && (touchStartRef.current.moved || mouseStartRef.current.moved)) {
+                      return;
+                    }
+                    handlePrev();
+                  }}
+                  title={isEn ? "Click to turn previous" : "Clic para ir al pliego anterior"}
+                >
+                  {/* Spine inner curve shadow on right edge of left page */}
+                  <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-14 bg-gradient-to-l from-black/15 via-black/5 to-transparent pointer-events-none z-30"></div>
+                  {renderLeftPage()}
+                </div>
+
+                {/* CENTRAL GUTTER / BOOK BINDING SEAM */}
+                <div className="relative z-20 w-[4px] bg-gradient-to-r from-black/25 via-black/40 to-black/25 shadow-[0_0_8px_rgba(0,0,0,0.35)] flex flex-col justify-between py-2 items-center">
+                  <div className="w-[1px] h-full bg-[#f4ede2]/40"></div>
+                </div>
+
+                {/* RIGHT PAGE (Recto) */}
+                <div
+                  className="relative z-10 w-1/2 h-full cursor-pointer overflow-hidden border-l border-[#d4a359]/20"
+                  onClick={() => {
+                    if (zoomLevel > 1 && (touchStartRef.current.moved || mouseStartRef.current.moved)) {
+                      return;
+                    }
+                    handleNext();
+                  }}
+                  title={isEn ? "Click to turn next" : "Clic para ir al pliego siguiente"}
+                >
+                  {/* Spine inner curve shadow on left edge of right page */}
+                  <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-14 bg-gradient-to-r from-black/15 via-black/5 to-transparent pointer-events-none z-30"></div>
+                  {renderRightPage()}
+                </div>
+              </div>
+            ) : (
+              /* SINGLE PAGE CONTAINER (ISO A5) */
+              <div
+                className="relative flex w-full max-w-[550px] aspect-[148/210] rounded-xs shadow-[0_25px_50px_-12px_rgba(140,88,34,0.25)] border border-[#d4a359]/40 bg-[#fdfbf7] overflow-hidden"
+              >
+                {/* Left booklet spine */}
+                <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-[#8c5822] to-[#b87d2b] z-20 shadow-[2px_0_6px_rgba(0,0,0,0.18)]"></div>
+                <div className="w-full h-full pl-3">
+                  {uploadedPdfDoc ? (
+                    <PdfPageCanvas pdfDoc={uploadedPdfDoc} pageNumber={currentSpread + 1} />
+                  ) : (
+                    renderBuiltinPage(currentSpread + 1, false)
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Next Button */}
+          <button
+            onClick={handleNext}
+            disabled={viewMode === "spread" ? currentSpread >= totalSpreads - 1 : currentSpread >= totalPagesCount - 1}
+            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#faf7f2]/90 border border-[#d4a359]/40 hover:border-[#b87d2b] shadow-md flex items-center justify-center text-[#8c5822] transition-all duration-200 cursor-pointer ${
+              (viewMode === "spread" ? currentSpread >= totalSpreads - 1 : currentSpread >= totalPagesCount - 1)
+                ? "opacity-30 cursor-not-allowed"
+                : "hover:scale-105 hover:bg-[#f4ede1]"
+            }`}
+            aria-label="Pliego siguiente"
+          >
+            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Reader Status Bar & Page Scrubber */}
+        <div className="mt-4 sm:mt-6 w-full max-w-xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-2 rounded-full bg-[#f4ede2]/90 border border-[#d4a359]/40 shadow-sm text-xs font-mono text-[#8c5822]">
+          <div className="flex items-center gap-2">
+            <span className="font-bold">
+              {viewMode === "spread"
+                ? currentSpread === 0
+                  ? isEn ? "Cover · Spread 1 of " + totalSpreads : "Portada · Pliego 1 de " + totalSpreads
+                  : isEn
+                  ? `Pages ${currentPages.left || ""}-${currentPages.right || ""} of ${totalPagesCount}`
+                  : `Páginas ${currentPages.left || ""}-${currentPages.right || ""} de ${totalPagesCount}`
+                : isEn
+                ? `Page ${currentSpread + 1} of ${totalPagesCount}`
+                : `Página ${currentSpread + 1} de ${totalPagesCount}`}
+            </span>
+          </div>
+
+          {/* Quick Slider */}
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <input
+              type="range"
+              min={0}
+              max={viewMode === "spread" ? totalSpreads - 1 : totalPagesCount - 1}
+              value={currentSpread}
+              onChange={(e) => setCurrentSpread(parseInt(e.target.value, 10))}
+              className="w-full sm:w-36 accent-[#b87d2b] cursor-pointer"
+            />
+            <span className="text-[10px] uppercase tracking-wider text-[#a89680]">
+              ISO A5
+            </span>
+          </div>
+        </div>
+
+        {/* Thumbnails Strip (Expandable) */}
+        {showThumbnails && (
+          <div className="mt-6 w-full max-w-5xl mx-auto p-4 rounded-xl bg-[#faf7f2] border border-[#d4a359]/40 shadow-xl animate-fade-in">
+            <div className="flex justify-between items-center mb-3 px-2">
+              <span className="font-mono text-xs uppercase tracking-widest text-[#8c5822] font-bold">
+                {isEn ? "Booklet Spreads / Thumbnails" : "Pliegos del Libreto / Miniaturas"}
+              </span>
+              <button
+                onClick={() => setShowThumbnails(false)}
+                className="text-[#8c5822] hover:text-[#5c4a33] text-xs font-mono"
+              >
+                ✕ {isEn ? "Close" : "Cerrar"}
+              </button>
+            </div>
+            <div className="flex items-center gap-3 overflow-x-auto pb-3 pt-1 px-2 hide-scrollbar">
+              {Array.from({ length: totalSpreads }).map((_, idx) => {
+                const spreadPages = getSpreadPages(idx);
+                const isActive = currentSpread === idx;
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setCurrentSpread(idx);
+                      setShowThumbnails(false);
+                    }}
+                    className={`shrink-0 w-28 sm:w-32 aspect-[296/210] rounded-xs border transition-all cursor-pointer p-1 flex flex-col justify-between ${
+                      isActive
+                        ? "border-[#b87d2b] bg-[#f4ede2] shadow-md scale-105"
+                        : "border-[#d4a359]/30 bg-[#fdfbf7] hover:border-[#b87d2b]"
+                    }`}
+                  >
+                    <div className="flex-1 flex gap-0.5 overflow-hidden">
+                      <div className="w-1/2 h-full bg-[#f6f2e9] flex items-center justify-center font-mono text-[8px] text-[#8c5822]">
+                        {spreadPages.left ? spreadPages.left : "—"}
+                      </div>
+                      <div className="w-[1px] h-full bg-[#d4a359]/40"></div>
+                      <div className="w-1/2 h-full bg-[#fdfbf7] flex items-center justify-center font-mono text-[8px] text-[#8c5822] font-bold">
+                        {spreadPages.right ? spreadPages.right : "—"}
+                      </div>
+                    </div>
+                    <div className="text-center font-mono text-[8px] text-[#8c5822] mt-1 uppercase">
+                      {idx === 0 ? (isEn ? "Cover" : "Portada") : `P. ${spreadPages.left}-${spreadPages.right || ""}`}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Bottom Collection Strip: Other 3 Libretos */}
+      <footer className="relative z-20 py-8 px-4 sm:px-8 border-t border-[#d4a359]/30 bg-[#faf8f4]/80 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <span className="font-mono text-[9px] uppercase tracking-widest text-[#8c5822] block">
+                {isEn ? "AUTHOR COLLECTION" : "COLECCIÓN DE AUTOR"}
+              </span>
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#2a2115]">
+                {isEn ? "Other Photo Booklets (ISO A5)" : "Otros Libretos Fotográficos (ISO A5)"}
+              </h3>
+            </div>
+            <button
+              onClick={onBack}
+              className="font-mono text-xs uppercase tracking-wider text-[#8c5822] hover:text-[#5c4a33] underline"
+            >
+              {isEn ? "Back to gallery" : "Volver a la galería"}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {photoLibretos.map((lib) => (
+              <div
+                key={lib.id}
+                onClick={() => onProjectSelect(lib.id)}
+                className="group relative cursor-pointer p-2.5 rounded-xs border border-[#d4a359]/30 bg-[#fdfbf7] hover:border-[#b87d2b] hover:shadow-md transition-all flex items-center gap-3"
+              >
+                <div className="w-12 sm:w-14 aspect-[148/210] rounded-xs overflow-hidden border border-[#d4a359]/40 shrink-0 bg-[#f4ede2]">
+                  {lib.coverImage || lib.normalImage ? (
+                    <img
+                      src={lib.coverImage || lib.normalImage}
+                      alt={pt(lib, "title")}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center font-mono text-[7px] text-[#8c5822]">
+                      A5
+                    </div>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <span className="block font-mono text-[8px] text-[#8c5822] tracking-wider uppercase">
+                    {pt(lib, "subcategory") || "LIBRETO"} · {lib.year || "2024"}
+                  </span>
+                  <h4 className="font-serif font-bold text-xs sm:text-sm text-[#2a2115] truncate group-hover:text-[#8c5822] transition-colors">
+                    {pt(lib, "title")}
+                  </h4>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Automatic Music Player at the end of the libreto page */}
+          <ProjectSoundtrackSection
+            projectId={project?.id}
+            projectTitle={pt(project, "title")}
+            isPhoto={true}
+          />
+
+          <div className="mt-8 flex justify-center">
+            <a
+              href="https://www.instagram.com/camaradebenito/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-[#f4ede2] hover:bg-[#ebdec9] border border-[#c8963e]/70 text-[#6e4418] font-mono text-xs uppercase tracking-widest transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 cursor-pointer"
+            >
+              <svg className="w-4 h-4 text-[#8c5822]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              <span className="font-bold">@camaradebenito</span>
+              <span className="text-[#8c5822]/70 hidden sm:inline">· {isEn ? "Photography on Instagram" : "Fotografía en Instagram"}</span>
+            </a>
+          </div>
+
+          <div className="mt-6 text-center font-mono text-[9px] text-[#a89680]">
+            © {new Date().getFullYear()} Benito González Quiñones · Libretos Fotográficos A5 · Todos los derechos reservados
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
@@ -3948,6 +5891,9 @@ const ProjectDetailPage = ({
           >
             {pt(project, 'title')}
           </h1>
+          <div className="mt-4 flex justify-center">
+            <CopyPermalinkButton theme={theme} />
+          </div>
         </header>
 
         <div className="w-full">
@@ -3978,7 +5924,7 @@ const ProjectDetailPage = ({
             <h2
               className={`text-2xl sm:text-3xl font-bold font-mono uppercase tracking-wider mb-8 text-center ${isDarkTheme ? "text-gray-400" : "text-gray-600"}`}
             >
-              Documentación Adjunta
+              {t("Documentación Adjunta")}
             </h2>
             <div
               className={`w-full h-[80vh] min-h-[600px] rounded-sm overflow-hidden shadow-2xl border ${isDarkTheme ? "border-gray-800 bg-gray-900" : "border-gray-200 bg-gray-50"}`}
@@ -4006,8 +5952,7 @@ const ProjectDetailPage = ({
                   <p
                     className={`mb-6 font-mono text-sm ${isDarkTheme ? "text-gray-400" : "text-gray-600"}`}
                   >
-                    El archivo PDF no se ha encontrado o tu navegador no soporta
-                    la previsualización.
+                    {t("El archivo PDF no se ha encontrado o tu navegador no soporta la previsualización.")}
                   </p>
                   <a
                     href={project.pdf}
@@ -4015,7 +5960,7 @@ const ProjectDetailPage = ({
                     rel="noopener noreferrer"
                     className={`inline-block px-8 py-4 border ${isDarkTheme ? "border-gray-600 text-white hover:bg-white hover:text-black" : "border-gray-400 text-black hover:bg-black hover:text-white"} rounded-full font-mono text-sm uppercase tracking-widest transition-colors`}
                   >
-                    Descargar o Abrir PDF
+                    {t("Descargar o Abrir PDF")}
                   </a>
                 </div>
               </object>
@@ -4043,7 +5988,7 @@ const ProjectDetailPage = ({
                 <span
                   className={`block text-xs font-mono uppercase tracking-widest ${isDarkTheme ? "text-gray-500" : "text-gray-400"}`}
                 >
-                  Prev
+                  {t("Prev")}
                 </span>
               </div>
               <p
@@ -4068,7 +6013,7 @@ const ProjectDetailPage = ({
                 <span
                   className={`block text-xs font-mono uppercase tracking-widest ${isDarkTheme ? "text-gray-500" : "text-gray-400"}`}
                 >
-                  Next
+                  {t("Next")}
                 </span>
                 <div
                   className={`w-8 h-[1px] ${isDarkTheme ? "bg-red-500" : "bg-red-600"} transition-all duration-500 group-hover:w-16`}
@@ -4086,11 +6031,35 @@ const ProjectDetailPage = ({
         </nav>
       )}
 
+      {/* SoundTrack Player at the end of the project page */}
+      <ProjectSoundtrackSection
+        projectId={project?.id}
+        projectTitle={pt(project, "title")}
+        isDarkTheme={isDarkTheme}
+      />
+
+      <div className="w-full py-8 flex justify-center border-t border-dashed border-gray-800 z-10 relative">
+        <a
+          href="https://www.instagram.com/arquitecturabenito/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 hover:border-cyan-400 text-white font-mono text-xs uppercase tracking-widest transition-all duration-300 shadow-md hover:scale-105 cursor-pointer backdrop-blur-md"
+        >
+          <svg className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span className="font-bold">@arquitecturabenito</span>
+          <span className="text-gray-400 hidden sm:inline">· {lang === "en" ? "Architecture & Design on Instagram" : "Arquitectura y Diseño en Instagram"}</span>
+        </a>
+      </div>
+
       <footer
         className={`${isDarkTheme ? "bg-black text-gray-600" : "bg-gray-50 text-gray-600"} text-center p-6 mt-0 z-10 relative`}
       >
         <p className="text-xs">
-          © 2024 Benito González Quiñones - Todos los derechos reservados -
+          © 2024 Benito González Quiñones - {t("Todos los derechos reservados")} -
           arquitecturabenito@gmail.com
         </p>
       </footer>
@@ -4104,27 +6073,47 @@ const FilterControls = ({
   currentSubcategory,
 }) => {
   const { t } = useTranslation();
+  const { lang, setLang } = React.useContext(LanguageContext);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
   const filters = [
     { key: "all", label: "TODOS" },
     { key: "architecture", label: "ARQUITECTURA" },
     { key: "design", label: "DISEÑO" },
+    { key: "photography", label: "FOTOGRAFÍA" },
     { key: "escenografias", label: "ESCENOGRAFÍAS" },
     { key: "contact", label: "CONTACTO" },
   ];
 
-  const contactFilter = { key: "contact", label: "Contacto" };
+  const activeFilterObj = filters.find((f) => f.key === currentFilter) || filters[0];
+  const activeLabel = activeFilterObj ? activeFilterObj.label : "TODOS";
+  const isPhoto = currentFilter === "photography";
+  const isDesign = currentFilter === "design";
+
+  // Close menu on Escape
+  React.useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape") setIsMenuOpen(false);
+    };
+    if (isMenuOpen) {
+      window.addEventListener("keydown", handleKey);
+      return () => window.removeEventListener("keydown", handleKey);
+    }
+  }, [isMenuOpen]);
 
   return (
     <React.Fragment>
-      {/* Desktop and Mobile Top Bar */}
+      {/* Desktop Top Bar */}
       <div className="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-20 space-x-2 bg-black/30 backdrop-blur-sm p-1.5 rounded-full items-center justify-center border border-white/10 shadow-lg">
         {filters.map((filter) => (
           <div key={filter.key} className="flex flex-col items-center relative">
             <button
               onClick={() => onFilterChange(filter.key)}
-              className={`px-3 py-1 text-xs sm:text-sm font-mono uppercase tracking-wider rounded-full transition-all duration-200 ${
+              className={`px-3 py-1 text-xs sm:text-sm font-mono uppercase tracking-wider rounded-full transition-all duration-200 cursor-pointer ${
                 currentFilter === filter.key
-                  ? "bg-cyan-400 text-black shadow-lg"
+                  ? filter.key === "photography"
+                    ? "bg-[#c8963e] text-black font-bold shadow-lg shadow-[#c8963e]/40"
+                    : "bg-cyan-400 text-black shadow-lg"
                   : "text-white hover:bg-white/20"
               }`}
             >
@@ -4139,141 +6128,275 @@ const FilterControls = ({
                     borderRadius: "100px",
                   }}
                 >
-                  {currentSubcategory}
+                  {t(currentSubcategory)}
                 </span>
               </div>
             )}
           </div>
         ))}
-      </div>
-      {/* Mobile */}
-      <div className="md:hidden fixed top-0 left-0 right-0 max-w-[100vw] z-20 bg-black/80 backdrop-blur-md border-b border-white/10">
-        <div className="flex flex-wrap justify-center gap-1.5 px-2 py-2 w-full">
-        {filters.map((filter) => (
-          <div
-            key={filter.key}
-            className="flex flex-col items-center relative"
-          >
-            <button
-              onClick={() => onFilterChange(filter.key)}
-              className={`px-2 py-1 text-[9px] sm:text-[10px] font-mono uppercase tracking-wider rounded-full transition-all duration-200 ${
-                currentFilter === filter.key
-                  ? "bg-cyan-400 text-black shadow-lg"
-                  : "text-white hover:bg-white/20"
-              }`}
-            >
-              {t(filter.label)}
-            </button>
-            {currentFilter === filter.key && currentSubcategory && (
-              <div className="absolute top-[105%] mt-0.5 flex justify-center w-full pointer-events-none">
-                <span
-                  className="text-gray-300 font-mono text-[8px] uppercase tracking-widest px-1.5 py-0.5 whitespace-nowrap"
-                  style={{
-                    border: "1px dashed rgba(255, 255, 255, 0.4)",
-                    borderRadius: "100px",
-                  }}
-                >
-                  {currentSubcategory}
-                </span>
-              </div>
-            )}
-          </div>
-        ))}
-        </div>
       </div>
 
-      {/* Shared Bottom Contact Button */}
-      <div className="fixed bottom-6 left-0 w-full z-20 flex justify-center p-2 pointer-events-none">
+      {/* Unified Mobile Header Bar (height 56px / h-14) */}
+      <header
+        className={`md:hidden fixed top-0 left-0 right-0 h-14 z-50 flex items-center justify-between px-3.5 backdrop-blur-md border-b transition-colors duration-300 ${
+          isPhoto
+            ? "bg-[#faf8f4]/95 border-[#d4a359]/30 text-[#2c2419]"
+            : isDesign
+            ? "bg-black/90 border-[#ff0000]/40 text-white"
+            : "bg-[#08080a]/90 border-white/10 text-white"
+        }`}
+      >
+        {/* Left: Brand Identity */}
         <button
-          key={contactFilter.key}
-          onClick={() => onFilterChange(contactFilter.key)}
-          className={`pointer-events-auto px-4 py-2 sm:px-5 sm:py-2.5 font-mono text-[10px] sm:text-xs uppercase tracking-wider rounded-full bg-black bg-opacity-50 border transition-all duration-300 backdrop-blur-sm ${
-            currentFilter === contactFilter.key
-              ? "text-black bg-white border-white"
-              : "border-gray-700 text-gray-400 hover:bg-white/10 hover:border-gray-500 hover:text-white"
+          onClick={() => {
+            onFilterChange("all");
+            setIsMenuOpen(false);
+          }}
+          className="flex flex-col text-left cursor-pointer focus:outline-hidden"
+          aria-label="Ir al inicio"
+        >
+          <span
+            className={`font-mono text-xs font-bold tracking-wider uppercase leading-tight ${
+              isPhoto ? "text-[#b87d2b]" : isDesign ? "text-[#ff0000]" : "text-white"
+            }`}
+          >
+            Benito G. Quiñones
+          </span>
+          <span
+            className={`font-mono text-[8px] tracking-[0.2em] uppercase mt-0.5 leading-none ${
+              isPhoto ? "text-[#8c5822]/70" : isDesign ? "text-[#ff0000]/70" : "text-gray-400"
+            }`}
+          >
+            Portfolio
+          </span>
+        </button>
+
+        {/* Center: Dropdown Category Selector Button */}
+        <div className="relative">
+          <button
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider border transition-all duration-200 cursor-pointer shadow-sm ${
+              isPhoto
+                ? "bg-[#c8963e] text-black border-[#b87d2b] font-bold shadow-[#c8963e]/30"
+                : isDesign
+                ? "bg-[#ff0000] text-white border-[#ff0000] font-bold shadow-[#ff0000]/30"
+                : currentFilter === "all"
+                ? "bg-white/10 hover:bg-white/20 border-white/20 text-white"
+                : "bg-cyan-400 text-black border-cyan-300 font-bold shadow-cyan-400/30"
+            }`}
+            aria-expanded={isMenuOpen}
+            aria-label="Menú desplegable de categorías"
+          >
+            <span className="max-w-[110px] truncate">{t(activeLabel)}</span>
+            <svg
+              className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                isMenuOpen ? "rotate-180" : ""
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Right: Language Toggle */}
+        <div
+          className={`flex items-center rounded-full p-0.5 border ${
+            isPhoto
+              ? "bg-[#f4ede2] border-[#d4a359]/40 text-[#8c5822]"
+              : isDesign
+              ? "bg-[#000033]/80 border-[#ff0000]/40 text-white"
+              : "bg-white/10 border-white/15 text-white"
           }`}
         >
-          {contactFilter.label}
-        </button>
-      </div>
+          <button
+            onClick={() => setLang("es")}
+            className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold transition-all cursor-pointer ${
+              lang === "es"
+                ? isPhoto
+                  ? "bg-[#c8963e] text-white shadow-xs"
+                  : isDesign
+                  ? "bg-[#ff0000] text-white shadow-xs"
+                  : "bg-white text-black shadow-xs"
+                : "opacity-60 hover:opacity-100"
+            }`}
+          >
+            ES
+          </button>
+          <button
+            onClick={() => setLang("en")}
+            className={`px-2 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold transition-all cursor-pointer ${
+              lang === "en"
+                ? isPhoto
+                  ? "bg-[#c8963e] text-white shadow-xs"
+                  : isDesign
+                  ? "bg-[#ff0000] text-white shadow-xs"
+                  : "bg-white text-black shadow-xs"
+                : "opacity-60 hover:opacity-100"
+            }`}
+          >
+            EN
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Category Dropdown Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden">
+          {/* Backdrop overlay */}
+          <div
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs animate-fade-in"
+            onClick={() => setIsMenuOpen(false)}
+          />
+
+          {/* Drawer Menu */}
+          <div
+            className={`fixed top-14 left-0 right-0 z-50 border-b shadow-2xl p-4 animate-slide-down transition-all duration-200 ${
+              isPhoto
+                ? "bg-[#faf8f4] border-[#d4a359]/40 text-[#2c2419]"
+                : isDesign
+                ? "bg-[#020216]/95 border-[#ff0000]/40 text-white backdrop-blur-xl"
+                : "bg-[#0a0a0c]/95 border-white/15 text-white backdrop-blur-xl"
+            }`}
+          >
+            <div className="max-w-md mx-auto flex flex-col gap-1.5">
+              <div
+                className={`flex items-center justify-between pb-2 mb-1 border-b text-[10px] font-mono uppercase tracking-widest ${
+                  isPhoto ? "border-[#d4a359]/20 text-[#8c5822]/70" : "border-white/10 text-gray-400"
+                }`}
+              >
+                <span>{lang === "en" ? "Categories" : "Categorías"}</span>
+                <span>{filters.length} {lang === "en" ? "Sections" : "Secciones"}</span>
+              </div>
+
+              {filters.map((filter) => {
+                const isActive = currentFilter === filter.key;
+                return (
+                  <button
+                    key={filter.key}
+                    onClick={() => {
+                      onFilterChange(filter.key);
+                      setIsMenuOpen(false);
+                    }}
+                    className={`w-full min-h-[46px] px-4 py-2.5 rounded-lg flex items-center justify-between text-left font-mono text-xs sm:text-sm uppercase tracking-wider transition-all duration-150 cursor-pointer ${
+                      isActive
+                        ? filter.key === "photography"
+                          ? "bg-[#c8963e] text-black font-bold shadow-md shadow-[#c8963e]/30"
+                          : filter.key === "design"
+                          ? "bg-[#ff0000] text-white font-bold shadow-md shadow-[#ff0000]/30"
+                          : "bg-cyan-400 text-black font-bold shadow-md"
+                        : isPhoto
+                        ? "hover:bg-[#f4ede1] text-[#6e4418]"
+                        : "hover:bg-white/10 text-gray-200"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          isActive
+                            ? filter.key === "photography" || filter.key === "all"
+                              ? "bg-black"
+                              : "bg-white"
+                            : "bg-transparent border border-current opacity-40"
+                        }`}
+                      />
+                      <span>{t(filter.label)}</span>
+                    </div>
+                    {isActive && currentSubcategory && (
+                      <span className="text-[10px] font-mono tracking-widest px-2 py-0.5 rounded-full bg-black/20 border border-current">
+                        {t(currentSubcategory)}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </React.Fragment>
   );
 };
 
-const NavigationOverlay = () => (
-  <div
-    className="fixed inset-0 bg-[#050505] z-[120] flex flex-col justify-center items-center p-6 md:p-12 overflow-hidden"
-    style={{
-      backgroundImage:
-        "radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px)",
-      backgroundSize: "30px 30px",
-    }}
-  >
-    <div className="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
-      <svg
-        className="w-full h-full absolute inset-0 origin-center animate-spin"
-        viewBox="0 0 100 100"
-        style={{
-          animationDuration: "3s",
-          animationTimingFunction: "linear",
-          animationIterationCount: "infinite",
-        }}
-      >
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          fill="none"
-          stroke="rgba(255, 255, 255, 0.1)"
-          strokeWidth="1"
-        />
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          fill="none"
-          stroke="rgba(34, 211, 238, 0.8)"
-          strokeWidth="2"
-          strokeDasharray="40 240"
-          strokeLinecap="round"
-        />
-        <circle
-          cx="50"
-          cy="50"
-          r="35"
-          fill="none"
-          stroke="rgba(255, 255, 255, 0.1)"
-          strokeWidth="1"
-        />
-        <circle
-          cx="50"
-          cy="50"
-          r="35"
-          fill="none"
-          stroke="rgba(34, 211, 238, 0.5)"
-          strokeWidth="2"
-          strokeDasharray="20 200"
-          strokeLinecap="round"
+const NavigationOverlay = () => {
+  const { t } = useTranslation();
+  return (
+    <div
+      className="fixed inset-0 bg-[#050505] z-[120] flex flex-col justify-center items-center p-6 md:p-12 overflow-hidden"
+      style={{
+        backgroundImage:
+          "radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px)",
+        backgroundSize: "30px 30px",
+      }}
+    >
+      <div className="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
+        <svg
+          className="w-full h-full absolute inset-0 origin-center animate-spin"
+          viewBox="0 0 100 100"
           style={{
-            animationDirection: "reverse",
-            animationDuration: "2s",
-            transformOrigin: "center",
+            animationDuration: "3s",
+            animationTimingFunction: "linear",
+            animationIterationCount: "infinite",
           }}
-        />
-      </svg>
+        >
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+            stroke="rgba(255, 255, 255, 0.1)"
+            strokeWidth="1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+            stroke="rgba(34, 211, 238, 0.8)"
+            strokeWidth="2"
+            strokeDasharray="40 240"
+            strokeLinecap="round"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="35"
+            fill="none"
+            stroke="rgba(255, 255, 255, 0.1)"
+            strokeWidth="1"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r="35"
+            fill="none"
+            stroke="rgba(34, 211, 238, 0.5)"
+            strokeWidth="2"
+            strokeDasharray="20 200"
+            strokeLinecap="round"
+            style={{
+              animationDirection: "reverse",
+              animationDuration: "2s",
+              transformOrigin: "center",
+            }}
+          />
+        </svg>
 
-      {/* Central pulsing node */}
-      <div className="w-4 h-4 bg-cyan-400 rounded-full animate-ping absolute"></div>
-      <div className="w-2 h-2 bg-white rounded-full absolute z-10"></div>
-    </div>
+        {/* Central pulsing node */}
+        <div className="w-4 h-4 bg-cyan-400 rounded-full animate-ping absolute"></div>
+        <div className="w-2 h-2 bg-white rounded-full absolute z-10"></div>
+      </div>
 
-    <div className="mt-12 text-center pointer-events-none z-20">
-      <span className="text-sm md:text-base font-mono text-cyan-400 tracking-[0.3em] uppercase animate-pulse">
-        &gt; Navegando el interespacio...
-      </span>
+      <div className="mt-12 text-center pointer-events-none z-20">
+        <span className="text-sm md:text-base font-mono text-cyan-400 tracking-[0.3em] uppercase animate-pulse">
+          {t("> Navegando el interespacio...")}
+        </span>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ModeSelectionScreen = ({ onSelect }) => {
   const { t } = useTranslation();
@@ -4301,10 +6424,10 @@ const ModeSelectionScreen = ({ onSelect }) => {
     >
       <div className="flex flex-col items-center justify-center space-y-3 md:space-y-4 mb-8 md:mb-12 pointer-events-none w-full max-w-5xl text-center">
         <div className="text-cyan-400 font-mono tracking-widest text-xs md:text-sm uppercase opacity-90 border-b border-cyan-400/30 inline-block pb-1">
-          Portfolio digital de Benito G. Quiñones
+          {t("Portfolio digital de Benito G. Quiñones")}
         </div>
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-mono uppercase tracking-widest text-white drop-shadow-lg leading-tight">
-          ¿Cómo prefieres ordenar la información?
+          {t("¿Cómo prefieres ordenar la información?")}
         </h1>
       </div>
 
@@ -4368,10 +6491,10 @@ const ModeSelectionScreen = ({ onSelect }) => {
           </div>
 
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-mono tracking-widest text-gray-300 group-hover:text-cyan-400 transition-colors uppercase">
-            Constelación
+            {t("Constelación")}
           </h2>
           <p className="mt-2 md:mt-4 text-gray-500 font-mono tracking-wider text-[10px] sm:text-xs md:text-sm uppercase group-hover:text-cyan-200">
-            Exploración relacional interactiva
+            {t("Exploración relacional interactiva")}
           </p>
         </button>
 
@@ -4408,7 +6531,7 @@ const ModeSelectionScreen = ({ onSelect }) => {
           <rect x="53" y="30" width="22" height="28" rx="2" />
         </svg>
         <span className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-gray-400 group-hover:text-cyan-400 transition-colors text-center w-full">
-          porfolio
+          {t("porfolio")}
         </span>
       </a>
     </div>
@@ -4539,7 +6662,7 @@ const ConstellationSidebars = ({ currentFilter, onProjectSelect, onProjectHover 
               onClick={() => onProjectSelect(p.id)}
               onMouseEnter={() => onProjectHover && onProjectHover(p.id)}
               onMouseLeave={() => onProjectHover && onProjectHover(null)}
-              className={`text-left text-[10px] xl:text-xs ${currentFilter === 'design' ? 'text-[#ffcc00] hover:text-[#ff0000]' : 'text-gray-500 hover:text-cyan-400'} font-mono uppercase tracking-widest transition-colors pointer-events-auto`}
+              className={`text-left text-[10px] xl:text-xs ${currentFilter === 'design' ? 'text-[#ffcc00] hover:text-[#ff0000]' : currentFilter === 'photography' ? 'text-[#c8963e] hover:text-[#8c5822]' : 'text-gray-500 hover:text-cyan-400'} font-mono uppercase tracking-widest transition-colors pointer-events-auto`}
             >
               {pt(p, "title")}
             </button>
@@ -4556,7 +6679,7 @@ const ConstellationSidebars = ({ currentFilter, onProjectSelect, onProjectHover 
               onClick={() => onProjectSelect(p.id)}
               onMouseEnter={() => onProjectHover && onProjectHover(p.id)}
               onMouseLeave={() => onProjectHover && onProjectHover(null)}
-              className={`text-right text-[10px] xl:text-xs ${currentFilter === 'design' ? 'text-[#ffcc00] hover:text-[#ff0000]' : 'text-gray-500 hover:text-cyan-400'} font-mono uppercase tracking-widest transition-colors pointer-events-auto w-full`}
+              className={`text-right text-[10px] xl:text-xs ${currentFilter === 'design' ? 'text-[#ffcc00] hover:text-[#ff0000]' : currentFilter === 'photography' ? 'text-[#c8963e] hover:text-[#8c5822]' : 'text-gray-500 hover:text-cyan-400'} font-mono uppercase tracking-widest transition-colors pointer-events-auto w-full`}
             >
               {pt(p, "title")}
             </button>
@@ -4573,6 +6696,10 @@ const BrandLogo = ({ theme = "dark", compact = false }) => {
     titleColor = "text-[#ff0000]";
     subColor = "text-[#ff0000]";
     shadow = "0 2px 10px rgba(0,0,0,0.3)";
+  } else if (theme === "photography") {
+    titleColor = "text-[#b87d2b]";
+    subColor = "text-[#8c5822]";
+    shadow = "0 1px 4px rgba(184,125,43,0.15)";
   } else if (theme === "light") {
     titleColor = "text-black";
     subColor = "text-gray-600";
@@ -4584,8 +6711,8 @@ const BrandLogo = ({ theme = "dark", compact = false }) => {
   }
 
   const containerClasses = compact
-    ? "fixed top-6 right-4 md:top-6 md:right-8 z-[100] text-right pointer-events-none drop-shadow-lg"
-    : "fixed top-[70px] left-4 md:top-8 md:left-8 z-[100] text-left pointer-events-none drop-shadow-lg";
+    ? "fixed top-3.5 right-20 sm:right-28 md:top-6 md:right-32 z-[100] text-right pointer-events-none drop-shadow-lg hidden sm:block"
+    : "hidden md:block fixed md:top-8 md:left-8 z-[100] text-left pointer-events-none drop-shadow-lg";
     
   const h1Classes = compact
     ? `text-[10px] md:text-xs font-mono tracking-[0.1em] uppercase ${titleColor}`
@@ -4611,60 +6738,109 @@ const BrandLogo = ({ theme = "dark", compact = false }) => {
 const LanguageToggle = ({ compact, theme = "dark" }) => {
   const { lang, setLang } = React.useContext(LanguageContext);
   
-  // Si BrandLogo es compact, está en top-right. Entonces Toggle va en top-left.
-  // Si BrandLogo no es compact, está en top-left. Entonces Toggle va en top-right.
+  // Posición consistente en la parte superior derecha en todas las páginas
   const positionClasses = compact
-    ? "fixed bottom-6 left-4 md:bottom-8 md:left-8" // moved to bottom-left to avoid Back button
-    : "fixed top-[70px] right-4 md:top-8 md:right-8";
+    ? "fixed top-3.5 sm:top-4 right-3 sm:right-4 md:top-6 md:right-8 z-[140]"
+    : "hidden md:flex fixed md:top-8 md:right-8 z-[140]";
 
-  let activeColor = "text-white border-white";
-  let inactiveHover = "text-gray-500 hover:text-white";
-  let separatorColor = "text-white opacity-30";
-  
+  let capsuleBg = "bg-black/75 border-white/20 text-white shadow-[0_4px_25px_rgba(0,0,0,0.6)]";
+  let activeBtn = "bg-white/25 text-white font-bold shadow-sm";
+  let inactiveBtn = "text-white/60 hover:text-white hover:bg-white/10";
+  let iconColor = "text-white/70";
+
   if (theme === "design") {
-    activeColor = "text-[#ff0000] border-[#ff0000]";
-    inactiveHover = "text-[#ff0000]/50 hover:text-[#ff0000]";
-    separatorColor = "text-[#ff0000] opacity-30";
+    capsuleBg = "bg-[#000033]/90 border-[#ff0000]/40 text-white shadow-[0_4px_25px_rgba(255,0,0,0.3)]";
+    activeBtn = "bg-[#ff0000]/30 text-[#ff0000] border border-[#ff0000]/50 font-bold shadow-sm";
+    inactiveBtn = "text-white/60 hover:text-[#ff0000] hover:bg-[#ff0000]/10";
+    iconColor = "text-[#ff0000]/80";
+  } else if (theme === "photography") {
+    capsuleBg = "bg-[#faf7f2]/95 border-[#c8963e]/40 text-[#4a3b22] shadow-[0_4px_25px_rgba(184,125,43,0.12)]";
+    activeBtn = "bg-[#c8963e]/25 text-[#8c5822] border border-[#c8963e]/50 font-bold shadow-sm";
+    inactiveBtn = "text-[#8c7e6b] hover:text-[#8c5822] hover:bg-[#c8963e]/10";
+    iconColor = "text-[#b87d2b]";
   } else if (theme === "light") {
-    activeColor = "text-black border-black";
-    inactiveHover = "text-gray-400 hover:text-black";
-    separatorColor = "text-black opacity-30";
+    capsuleBg = "bg-white/90 border-black/15 text-black shadow-[0_4px_25px_rgba(0,0,0,0.08)]";
+    activeBtn = "bg-black/15 text-black font-bold shadow-sm";
+    inactiveBtn = "text-black/50 hover:text-black hover:bg-black/5";
+    iconColor = "text-black/60";
   }
 
   return (
-    <div className={`z-[110] flex gap-2 ${positionClasses} pointer-events-auto`}>
+    <div
+      className={`z-[150] flex items-center p-0.5 sm:p-1 rounded-full border backdrop-blur-md transition-all duration-300 pointer-events-auto ${positionClasses} ${capsuleBg}`}
+      role="region"
+      aria-label="Language selector / Selector de idioma"
+    >
+      <div className="flex items-center px-1 sm:px-1.5 pointer-events-none select-none">
+        <svg
+          className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${iconColor}`}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+      </div>
       <button
-        onClick={() => setLang('es')}
-        className={`text-[10px] md:text-xs font-mono px-1 md:px-2 py-0.5 md:py-1 transition-colors ${lang === 'es' ? 'border-b ' + activeColor : inactiveHover}`}
+        type="button"
+        onClick={() => setLang("es")}
+        aria-pressed={lang === "es"}
+        title="Cambiar idioma a Español"
+        className={`text-[10px] sm:text-xs font-mono uppercase tracking-wider px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition-all duration-200 cursor-pointer ${
+          lang === "es" ? activeBtn : inactiveBtn
+        }`}
       >
         ES
       </button>
-      <span className={`text-[10px] md:text-xs py-0.5 md:py-1 ${separatorColor}`}>|</span>
       <button
-        onClick={() => setLang('en')}
-        className={`text-[10px] md:text-xs font-mono px-1 md:px-2 py-0.5 md:py-1 transition-colors ${lang === 'en' ? 'border-b ' + activeColor : inactiveHover}`}
+        type="button"
+        onClick={() => setLang("en")}
+        aria-pressed={lang === "en"}
+        title="Switch language to English"
+        className={`text-[10px] sm:text-xs font-mono uppercase tracking-wider px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition-all duration-200 cursor-pointer ${
+          lang === "en" ? activeBtn : inactiveBtn
+        }`}
       >
         EN
       </button>
     </div>
   );
 };
+
 const App = () => {
-  const [lang, setLang] = React.useState("es");
+  const [lang, setLang] = React.useState(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("portfolio_lang");
+        if (saved === "en" || saved === "es") return saved;
+      }
+    } catch (e) {}
+    return "es";
+  });
   const { t } = useTranslation(lang);
 
   React.useEffect(() => {
     document.documentElement.lang = lang;
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("portfolio_lang", lang);
+      }
+    } catch (e) {}
   }, [lang]);
-  const [view, setView] = React.useState({ page: "home", projectId: null });
-  const [filter, setFilter] = React.useState("all");
+  const initialRoute = React.useMemo(() => parseUrlToState(), []);
+  const [view, setView] = React.useState(initialRoute.view);
+  const [filter, setFilter] = React.useState(initialRoute.filter);
   const [zoomTarget, setZoomTarget] = React.useState(null);
   const [hoveredProjectImage, setHoveredProjectImage] = React.useState(null);
   const [slideshowImage, setSlideshowImage] = React.useState(null);
   const [bgImage, setBgImage] = React.useState(null);
   const [bgOpacity, setBgOpacity] = React.useState(0);
   const [disruptSignal, setDisruptSignal] = React.useState(0);
-  const [isGalleryMode, setIsGalleryMode] = React.useState(false);
+  const [isGalleryMode, setIsGalleryMode] = React.useState(true);
   const [isNavigatingMode, setIsNavigatingMode] = React.useState(false);
   const [highlightNodeId, setHighlightNodeId] = React.useState(null);
   
@@ -4701,38 +6877,78 @@ const App = () => {
     };
   }, []);
 
-  // Handle routing for /tutorialia
+  // Synchronize URL permalink on view or filter change and update document title
   React.useEffect(() => {
-    const handlePath = () => {
-      const path = window.location.pathname;
-      const hash = window.location.hash;
-      if (path.includes("/tutorialia") || hash === "#/tutorialia") {
-        setView({ page: "generacion-ia", projectId: null });
-      } else if (path === "/" || path === "" || hash === "#/" || hash === "") {
-        setView({ page: "home", projectId: null });
+    const targetHash = getPermalink(view, filter);
+    const currentHash = window.location.hash || "#/";
+
+    if (currentHash !== targetHash && !(currentHash === "#/" && targetHash === "#/")) {
+      window.history.pushState({ view, filter }, "", targetHash);
+    }
+
+    // Dynamic document.title update
+    try {
+      let pageTitle = "Benito González Quiñones · Portfolio";
+      if (view.page === "project" && view.projectId) {
+        const proj = allProjectsData.find((p) => p.id === view.projectId);
+        if (proj) {
+          pageTitle = `${pt(proj, "title")} · Benito G. Quiñones`;
+        }
+      } else if (view.page === "escrito-detail" && view.escritoId) {
+        const escrito = window.escritosData?.find((e) => e.id === view.escritoId);
+        if (escrito) {
+          pageTitle = `${pt(escrito, "title")} · Benito G. Quiñones`;
+        }
+      } else if (view.page === "escritos-arquitectura") {
+        pageTitle = `Escritos & Publicaciones · Benito G. Quiñones`;
+      } else if (view.page === "photography" || filter === "photography") {
+        pageTitle = `Fotografía (Libretos A5) · Benito G. Quiñones`;
+      } else if (view.page === "architecture" || filter === "architecture") {
+        pageTitle = `Arquitectura · Benito G. Quiñones`;
+      } else if (view.page === "design" || filter === "design") {
+        pageTitle = `Diseño · Benito G. Quiñones`;
+      } else if (view.page === "scenography" || filter === "scenography") {
+        pageTitle = `Escenografías · Benito G. Quiñones`;
+      } else if (view.page === "contact" || filter === "contact") {
+        pageTitle = `Contacto · Benito G. Quiñones`;
+      } else if (view.page === "subcategory" && view.subcategory) {
+        pageTitle = `${view.subcategory} · Benito G. Quiñones`;
+      } else if (view.page === "carteleria") {
+        pageTitle = `Cartelería · Benito G. Quiñones`;
+      } else if (view.page === "generacion-ia") {
+        pageTitle = `Generación IA · Benito G. Quiñones`;
+      } else if (view.page === "web-design") {
+        pageTitle = `Diseño Web · Benito G. Quiñones`;
       }
+      document.title = pageTitle;
+    } catch (_) {}
+  }, [view, filter]);
+
+  // Handle browser Back / Forward buttons and direct hash navigation
+  React.useEffect(() => {
+    const handleUrlChange = () => {
+      const parsed = parseUrlToState();
+      setView((prev) => {
+        if (
+          prev.page === parsed.view.page &&
+          prev.projectId === parsed.view.projectId &&
+          prev.subcategory === parsed.view.subcategory &&
+          prev.escritoId === parsed.view.escritoId
+        ) {
+          return prev;
+        }
+        return parsed.view;
+      });
+      setFilter((prev) => (prev === parsed.filter ? prev : parsed.filter));
     };
 
-    handlePath();
-    window.addEventListener("popstate", handlePath);
-    window.addEventListener("hashchange", handlePath);
+    window.addEventListener("popstate", handleUrlChange);
+    window.addEventListener("hashchange", handleUrlChange);
     return () => {
-      window.removeEventListener("popstate", handlePath);
-      window.removeEventListener("hashchange", handlePath);
+      window.removeEventListener("popstate", handleUrlChange);
+      window.removeEventListener("hashchange", handleUrlChange);
     };
   }, []);
-
-  React.useEffect(() => {
-    if (view.page === "generacion-ia") {
-      if (window.location.hash !== "#/tutorialia") {
-        window.history.pushState(null, "", "#/tutorialia");
-      }
-    } else if (view.page === "home") {
-      if (window.location.hash === "#/tutorialia") {
-        window.history.pushState(null, "", "#/");
-      }
-    }
-  }, [view.page]);
 
   const handleEyeClick = () => {
     setDisruptSignal((c) => c + 1);
@@ -4785,6 +7001,7 @@ const App = () => {
     const body = document.body;
 
     if (
+      !isGalleryMode &&
       ["home", "architecture", "design", "scenography", "subcategory"].includes(
         view.page,
       )
@@ -4801,17 +7018,23 @@ const App = () => {
     let bgColor = "#000"; // default dark
     if (view.page === "design" || filter === "design") {
       bgColor = "#0000ff"; // electric blue
+    } else if (view.page === "photography" || filter === "photography") {
+      bgColor = "#faf8f4"; // minimalist warm white & ochre
     } else if (view.page === "project") {
       const project = allProjectsData.find((p) => p.id === view.projectId);
-      const carouselProjects = [
-        "festa-na-terra",
-        "cronologia-adios",
-        "coleccion-grabados",
-        "territorios-digitales",
-      ];
-      const isCarouselView = carouselProjects.includes(project?.id);
-      if (project && project.id !== "hashima-animal-park" && !isCarouselView) {
-        bgColor = "#fff"; // light for all projects except Hashima and carousel projects
+      if (project && (project.isLibreto || project.category === "photography")) {
+        bgColor = "#faf8f4";
+      } else {
+        const carouselProjects = [
+          "festa-na-terra",
+          "cronologia-adios",
+          "coleccion-grabados",
+          "territorios-digitales",
+        ];
+        const isCarouselView = carouselProjects.includes(project?.id);
+        if (project && project.id !== "hashima-animal-park" && !isCarouselView) {
+          bgColor = "#fff"; // light for all projects except Hashima and carousel projects
+        }
       }
     }
 
@@ -4822,7 +7045,7 @@ const App = () => {
       html.style.overflow = "auto";
       body.style.overflow = "auto";
     };
-  }, [view.page, view.projectId, filter]);
+  }, [view.page, view.projectId, filter, isGalleryMode]);
 
   const handleFilterChange = (newFilterKey) => {
     setHoveredProjectImage(null);
@@ -4830,13 +7053,15 @@ const App = () => {
     const pageMap = {
       architecture: "architecture",
       design: "design",
+      photography: "photography",
+      scenography: "scenography",
       escenografias: "scenography",
       contact: "contact",
     };
 
     const targetPage = pageMap[newFilterKey] ? pageMap[newFilterKey] : "home";
 
-    if (view.page === "home" && targetPage !== "home") {
+    if (view.page === "home" && targetPage !== "home" && !isGalleryMode) {
       setZoomTarget(newFilterKey);
       setTimeout(() => {
         setFilter(newFilterKey);
@@ -4887,7 +7112,7 @@ const App = () => {
               handleProjectSelect(node.projectId, false);
             }
           } else if (
-            ["ARQUITECTURA", "DISEÑO", "ESCENOGRAFÍAS", "CONTACTO"].includes(
+            ["ARQUITECTURA", "DISEÑO", "FOTOGRAFÍA", "ESCENOGRAFÍAS", "CONTACTO"].includes(
               node.id,
             )
           ) {
@@ -4896,9 +7121,11 @@ const App = () => {
                 ? "architecture"
                 : node.id === "DISEÑO"
                   ? "design"
-                  : node.id === "ESCENOGRAFÍAS"
-                    ? "scenography"
-                    : "contact";
+                  : node.id === "FOTOGRAFÍA"
+                    ? "photography"
+                    : node.id === "ESCENOGRAFÍAS"
+                      ? "scenography"
+                      : "contact";
             setFilter(filterKey);
             setView({ page: filterKey, projectId: null });
           } else if (node.isSubcategory) {
@@ -4921,7 +7148,7 @@ const App = () => {
       }
 
       if (
-        ["ARQUITECTURA", "DISEÑO", "ESCENOGRAFÍAS", "CONTACTO"].includes(
+        ["ARQUITECTURA", "DISEÑO", "FOTOGRAFÍA", "ESCENOGRAFÍAS", "CONTACTO"].includes(
           node.id,
         )
       ) {
@@ -4930,9 +7157,11 @@ const App = () => {
             ? "architecture"
             : node.id === "DISEÑO"
               ? "design"
-              : node.id === "ESCENOGRAFÍAS"
-                ? "scenography"
-                : "contact";
+              : node.id === "FOTOGRAFÍA"
+                ? "photography"
+                : node.id === "ESCENOGRAFÍAS"
+                  ? "scenography"
+                  : "contact";
         setFilter(filterKey);
         setView({ page: filterKey, projectId: null });
         return;
@@ -4990,6 +7219,12 @@ const App = () => {
       }
       const project = allProjectsData.find((p) => p.id === view.projectId);
 
+      if (project && (project.category === "photography" || project.isLibreto)) {
+        setFilter("photography");
+        setView({ page: "photography", projectId: null });
+        return;
+      }
+
       if (
         standalonePages.includes(view.page) ||
         (project && project.category === "design")
@@ -5026,7 +7261,7 @@ const App = () => {
       setFilter(category);
       setView({ page: category, projectId: null });
     } else if (
-      ["architecture", "design", "scenography", "contact"].includes(view.page)
+      ["architecture", "design", "photography", "scenography", "contact"].includes(view.page)
     ) {
       handleGoHome();
     }
@@ -5037,8 +7272,21 @@ const App = () => {
   }, []);
 
   const backButtonTheme = React.useMemo(() => {
+    if (view.page === "escritos-arquitectura" || view.page === "escrito-detail") {
+      return "light";
+    }
+    if (view.page === "web-design") {
+      return "design";
+    }
+    if (view.page === "photography") {
+      return "photography";
+    }
     if (view.page === "project") {
       const project = allProjectsData.find((p) => p.id === view.projectId);
+      if (project?.category === "photography" || project?.isLibreto) {
+        return "photography";
+      }
+      if (project?.category === "design") return "design";
       const carouselProjects = [
         "festa-na-terra",
         "cronologia-adios",
@@ -5069,6 +7317,7 @@ const App = () => {
             {!isGalleryMode && (
               <div className="absolute top-0 left-0 w-full h-full z-10">
                 <NetworkGraph
+                  allProjectsData={allProjectsData}
                   onNodeClick={handleNodeClick}
                   filter={filter}
                   disruptSignal={disruptSignal}
@@ -5078,8 +7327,8 @@ const App = () => {
                 <div className="fixed bottom-24 left-4 md:bottom-8 md:left-8 p-2 sm:p-3 bg-black/40 backdrop-blur-md rounded-xl md:rounded-lg border border-white/10 text-white/70 text-[9px] sm:text-[10px] md:text-xs font-mono tracking-wider pointer-events-none opacity-70 text-left whitespace-pre-line z-50 min-w-max">
                   {typeof window !== "undefined" &&
                   ("ontouchstart" in window || navigator.maxTouchPoints > 0)
-                    ? "Arrastra para orbitar\nPellizca para zoom\nToca para explorar"
-                    : "Arrastra: Orbitar\nScroll: Zoom\nClic: Explorar"}
+                    ? (lang === "en" ? "Drag to orbit\nPinch to zoom\nTap to explore" : "Arrastra para orbitar\nPellizca para zoom\nToca para explorar")
+                    : (lang === "en" ? "Drag: Orbit\nScroll: Zoom\nClick: Explore" : "Arrastra: Orbitar\nScroll: Zoom\nClic: Explorar")}
                 </div>
               </div>
             )}
@@ -5135,6 +7384,29 @@ const App = () => {
           <OrbitalPage
             category="design"
             title="DISEÑO"
+            onProjectSelect={handleProjectSelect}
+            onSubcategorySelect={handleSubcategorySelect}
+            onProjectHover={handleProjectHover}
+            showEye={true}
+            highlightNodeId={highlightNodeId}
+          />
+        );
+      case "photography":
+        if (isGalleryMode)
+          return (
+            <div className="absolute top-0 left-0 w-full h-full z-10">
+              <GalleryView
+                filter="photography"
+                onProjectSelect={handleProjectSelect}
+                onSubcategorySelect={handleSubcategorySelect}
+                onFilterChange={handleFilterChange}
+              />
+            </div>
+          );
+        return (
+          <OrbitalPage
+            category="photography"
+            title="FOTOGRAFÍA"
             onProjectSelect={handleProjectSelect}
             onSubcategorySelect={handleSubcategorySelect}
             onProjectHover={handleProjectHover}
@@ -5224,8 +7496,18 @@ const App = () => {
         );
         return <EscritoDetailPage escrito={escrito} onBack={handleBack} />;
       }
-      case "project":
+      case "project": {
         const project = allProjectsData.find((p) => p.id === view.projectId);
+        if (project && (project.isLibreto || project.category === "photography")) {
+          return (
+            <LibretoViewer
+              project={project}
+              allProjectsData={allProjectsData}
+              onProjectSelect={handleProjectSelect}
+              onBack={handleBack}
+            />
+          );
+        }
         return (
           <ProjectDetailPage
             project={project}
@@ -5234,6 +7516,7 @@ const App = () => {
             onBack={handleBack}
           />
         );
+      }
       default:
         return null;
     }
@@ -5243,17 +7526,24 @@ const App = () => {
   if (view.page === "project" && view.projectId) {
     const project = allProjectsData.find((p) => p.id === view.projectId);
     if (project) {
-      const carouselProjects = [
-        "escenografia-grita",
-        "escenografia-bodas",
-        "coleccion-grabados",
-        "territorios-digitales",
-      ];
-      const isCarouselView = carouselProjects.includes(project.id);
-      const isDesignTheme = project.category === "design";
-      const isDarkTheme = project.id === "hashima-animal-park" || isCarouselView || isDesignTheme;
-      currentTheme = isDesignTheme ? "design" : (isDarkTheme ? "dark" : "light");
+      if (project.category === "photography" || project.isLibreto) {
+        currentTheme = "photography";
+      } else if (project.category === "design") {
+        currentTheme = "design";
+      } else {
+        const carouselProjects = [
+          "escenografia-grita",
+          "escenografia-bodas",
+          "coleccion-grabados",
+          "territorios-digitales",
+        ];
+        const isCarouselView = carouselProjects.includes(project.id);
+        const isDarkTheme = project.id === "hashima-animal-park" || isCarouselView;
+        currentTheme = isDarkTheme ? "dark" : "light";
+      }
     }
+  } else if (view.page === "photography" || (view.page === "home" && filter === "photography")) {
+    currentTheme = "photography";
   } else if (view.page === "escritos") {
     currentTheme = "light";
   } else if (view.page === "escritos-react") {
@@ -5300,6 +7590,7 @@ const App = () => {
           "home",
           "architecture",
           "design",
+          "photography",
           "scenography",
           "subcategory",
           "contact",
@@ -5317,6 +7608,7 @@ const App = () => {
           "home",
           "architecture",
           "design",
+          "photography",
           "scenography",
           "subcategory",
         ].includes(view.page) && (
@@ -5331,6 +7623,7 @@ const App = () => {
           "home",
           "architecture",
           "design",
+          "photography",
           "scenography",
           "subcategory",
         ].includes(view.page) && (
@@ -5342,13 +7635,13 @@ const App = () => {
               >{t("Constelación")}</button>
               <button
                 onClick={() => !isNavigatingMode && !isGalleryMode && toggleGalleryMode()}
-                className={`flex-1 sm:flex-none px-2 sm:px-6 py-1.5 rounded-full text-[9px] sm:text-xs font-mono uppercase tracking-widest transition-all duration-300 ${isGalleryMode ? 'bg-gray-800 text-white border border-gray-600 shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-gray-500 hover:text-gray-300'} ${isNavigatingMode ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`flex-1 sm:flex-none px-2 sm:px-6 py-1.5 rounded-full text-[9px] sm:text-xs font-mono uppercase tracking-widest transition-all duration-300 ${isGalleryMode ? 'bg-cyan-900/50 text-cyan-400 border border-cyan-400/30 shadow-[0_0_10px_rgba(0,255,255,0.2)]' : 'text-gray-500 hover:text-gray-300'} ${isNavigatingMode ? 'opacity-50 cursor-not-allowed' : ''}`}
               >{t("Galería")}</button>
             </div>
             <button
               onClick={handleRandomProject}
               className="hidden md:flex absolute bottom-8 right-4 md:right-8 z-30 px-4 py-2 sm:px-5 sm:py-2.5 bg-black bg-opacity-50 rounded-full border border-gray-700 text-gray-400 font-mono text-[10px] sm:text-xs uppercase tracking-wider items-center justify-center hover:bg-white/10 hover:border-gray-500 hover:text-white transition-all duration-300 backdrop-blur-sm"
-              title="Abre un proyecto al azar"
+              title={t("Abre un proyecto al azar")}
             >{t("Probar suerte")}</button>
           </>
         )}
