@@ -24,5 +24,7 @@ window.defaultProjectsData.push({
     "imagenes/gritar-lo-publico-(8).webp",
     "imagenes/gritar-lo-publico-(9).webp"
   ],
-  "pdf": "pdfs/gritar-lo-publico.pdf"
+  "pdf": "pdfs/gritar-lo-publico.pdf",
+  "spotifyUrl": "https://open.spotify.com/track/5ChkMS8Otdzsq2gFLtpsth",
+  "musicUrl": "https://open.spotify.com/track/5ChkMS8Otdzsq2gFLtpsth"
 });

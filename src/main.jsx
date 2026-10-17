@@ -5,6 +5,7 @@ import SpriteText from 'three-spritetext';
 import * as THREE from 'three';
 import * as d3 from 'd3';
 import projectMusic from './projectMusicConfig.js';
+import projectAudioMeta from './projectAudioMeta.js';
 
 // ==========================================
 // PERFORMANCE & MEDIA OPTIMIZATION ENGINE
@@ -857,12 +858,44 @@ const EscritosPage = ({ onEscritoSelect }) => {
   );
 };
 
+/**
+ * Normaliza y formatea textos editoriales y descripciones de proyectos
+ * eliminando saltos de línea huérfanos producidos en editores de código,
+ * preservando párrafos reales (doble salto) y listas con viñetas.
+ */
+const cleanAndFormatParagraphs = (rawText) => {
+  if (!rawText || typeof rawText !== "string") return [];
+  const normalized = rawText.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
+  const rawBlocks = normalized.split(/\n\s*\n+/);
+  const result = [];
+
+  for (const block of rawBlocks) {
+    const lines = block.split(/\n/).map((l) => l.trim()).filter(Boolean);
+    if (lines.length === 0) continue;
+
+    // Detect if lines are a bulleted or numbered list
+    const isBulletList = lines.every((l) => /^[-*•·]|\d+[\.)]/.test(l));
+    if (isBulletList) {
+      lines.forEach((l) => result.push(l));
+    } else {
+      // Normal paragraph: join lines with space, smoothing soft line breaks
+      const joined = lines
+        .join(" ")
+        .replace(/(\w+)-\s+(\w+)/g, "$1$2")
+        .replace(/\s+/g, " ")
+        .trim();
+      if (joined) result.push(joined);
+    }
+  }
+  return result;
+};
+
 const EscritoDetailPage = ({ escrito, onBack }) => {
   const { t, pt, lang } = useTranslation();
   if (!escrito) return null;
 
   const text = pt(escrito, "text");
-  const paragraphs = text ? text.split("\n").filter((p) => p.trim() !== "") : [];
+  const paragraphs = cleanAndFormatParagraphs(text);
 
   return (
     <div className="w-full min-h-screen pt-24 pb-20 bg-[#f5f5f0] text-[#111111] border-x border-dashed border-[#b0b0a8] relative">
@@ -2879,27 +2912,7 @@ const GalleryView = ({
         backgroundSize: isPhotographyMode ? "28px 28px" : "auto",
       }}
     >
-      {/* Photography Minimalist Header */}
-      {isPhotographyMode && (
-        <div className="max-w-7xl mx-auto mb-10 text-center animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#f4ede2] border border-[#d4a359]/40 text-[#8c5822] font-mono text-[9px] sm:text-[10px] tracking-widest uppercase mb-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#c8963e]"></span>
-            {isEn ? "PHOTO BOOKLETS · ISO A5 PROPORTION" : "LIBRETOS FOTOGRÁFICOS · FORMATO ISO A5"}
-          </div>
-          <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#2a2115] tracking-wide mb-3 uppercase">
-            {t("FOTOGRAFÍA")}
-          </h2>
-          <p className="max-w-2xl mx-auto font-serif text-sm sm:text-base text-[#6e5d48] leading-relaxed">
-            {isEn 
-              ? "Photographic booklets conceived as double-page spreads in closed ISO A5 format. Click any booklet to open the interactive reader." 
-              : "Libretos fotográficos concebidos en pliegos a doble página en formato cerrado ISO A5. Haz clic en cualquier libreto para abrir el lector interactivo."}
-          </p>
-          <div className="w-16 h-[1px] bg-[#d4a359]/50 mx-auto mt-4"></div>
-          <div className="mt-4 flex justify-center">
-            <CopyPermalinkButton theme="photography" label={isEn ? "Share Photography Link" : "Compartir categoría"} />
-          </div>
-        </div>
-      )}
+
       {activeFolder && !isFolderMinimized && (() => {
         const activeFolderCat = allProjectsData.find(p => p.subcategory === activeFolder)?.category;
         const isDesignMode = filter === "design" || activeFolderCat === "design";
@@ -3270,10 +3283,12 @@ const CarteleriaPage = ({ project }) => {
           <h2 className="text-3xl font-bold uppercase tracking-wider mb-6 text-white">
             {t("Descripción")}
           </h2>
-          <div className="border-l-2 border-cyan-400 pl-6">
-            <p className="text-gray-400 leading-relaxed">
-              {pt(project, "description")}
-            </p>
+          <div className="border-l-2 border-cyan-400 pl-6 space-y-4">
+            {cleanAndFormatParagraphs(pt(project, "description")).map((p, idx) => (
+              <p key={idx} className="text-gray-300 leading-relaxed text-base sm:text-lg">
+                {p}
+              </p>
+            ))}
           </div>
         </div>
 
@@ -4555,8 +4570,8 @@ const parseMusicUrl = (rawUrl) => {
   if (!rawUrl || typeof rawUrl !== "string") return null;
   const url = rawUrl.trim();
 
-  // Spotify pattern (supports track, album, playlist, episode, and localized paths like intl-es)
-  const spotifyMatch = url.match(/spotify\.com\/(?:[a-zA-Z]{2}(?:-[a-zA-Z]{2,4})?\/)?(track|album|playlist|episode)\/([a-zA-Z0-9]+)/i);
+  // Spotify pattern (supports open.spotify.com with any prefix like /intl-es/, /track/, etc.)
+  const spotifyMatch = url.match(/spotify\.com\/(?:[a-zA-Z0-9_\-\/]+)?(track|album|playlist|episode|artist)\/([a-zA-Z0-9]+)/i);
   if (spotifyMatch) {
     const type = spotifyMatch[1];
     const id = spotifyMatch[2];
@@ -4579,11 +4594,332 @@ const parseMusicUrl = (rawUrl) => {
   }
 
   // Direct Audio file (.mp3, .wav, .ogg, /musica/...)
+  if (url.match(/\.(mp3|wav|ogg|m4a|aac)(\?.*)?$/i) || url.startsWith("/musica/") || url.startsWith("blob:") || url.startsWith("data:audio")) {
+    return {
+      provider: "audio",
+      audioSrc: url,
+      directUrl: url,
+    };
+  }
+
   return {
-    provider: "audio",
-    audioSrc: url,
+    provider: "link",
     directUrl: url,
   };
+};
+
+class SoundtrackController {
+  constructor() {
+    this.audio = typeof Audio !== "undefined" ? new Audio() : null;
+    if (this.audio) {
+      this.audio.loop = true;
+      this.audio.preload = "auto";
+    }
+    this.currentProjectId = null;
+    this.currentTrack = null;
+    this.isPlaying = false;
+    this.isMuted = false;
+    this.volume = 0.85;
+    this.listeners = new Set();
+    this.autoplayBlocked = false;
+
+    // Browser autoplay policy: unlock audio on first user gesture if blocked
+    if (typeof window !== "undefined") {
+      const unlockAudio = () => {
+        if (this.audio && this.autoplayBlocked && this.currentTrack) {
+          this.audio.play().then(() => {
+            this.isPlaying = true;
+            this.autoplayBlocked = false;
+            this.notify();
+          }).catch(() => {});
+        }
+      };
+      window.addEventListener("click", unlockAudio, { passive: true });
+      window.addEventListener("touchstart", unlockAudio, { passive: true });
+      window.addEventListener("keydown", unlockAudio, { passive: true });
+    }
+  }
+
+  subscribe(listener) {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  }
+
+  notify() {
+    this.listeners.forEach((fn) => fn(this.getState()));
+  }
+
+  getState() {
+    return {
+      currentProjectId: this.currentProjectId,
+      currentTrack: this.currentTrack,
+      isPlaying: this.isPlaying,
+      isMuted: this.isMuted,
+      volume: this.volume,
+      autoplayBlocked: this.autoplayBlocked,
+    };
+  }
+
+  playProject(projectId, customUrl = null) {
+    if (!projectId) return;
+
+    // Resolve URL from multiple sources:
+    // 1. Direct customUrl if provided
+    // 2. window.defaultProjectsData project.spotifyUrl / project.musicUrl
+    // 3. projectAudioMeta[projectId]
+    // 4. projectMusic[projectId]
+    // 5. window.projectMusicConfig[projectId]
+    let resolvedUrl = customUrl;
+    let projObj = null;
+    if (typeof window !== "undefined" && window.defaultProjectsData) {
+      projObj = window.defaultProjectsData.find((p) => p.id === projectId);
+      if (!resolvedUrl && projObj) {
+        resolvedUrl = projObj.spotifyUrl || projObj.musicUrl || projObj.audioUrl || projObj.songUrl;
+      }
+    }
+    if (!resolvedUrl) {
+      resolvedUrl = (projectMusic && projectMusic[projectId]) || (window.projectMusicConfig && window.projectMusicConfig[projectId]) || "";
+    }
+
+    const meta = (typeof projectAudioMeta !== "undefined" && projectAudioMeta[projectId]) ? projectAudioMeta[projectId] : null;
+    const musicData = parseMusicUrl(resolvedUrl);
+
+    const trackInfo = {
+      projectId,
+      projectTitle: projObj?.title || projectId,
+      songName: meta?.songName || meta?.title || (musicData?.id ? `Spotify Track · ${musicData.id}` : "Banda Sonora"),
+      artist: meta?.artist || "Benito González Quiñones Collection",
+      thumbnail: meta?.thumbnail || projObj?.coverImage || projObj?.normalImage || null,
+      spotifyUrl: resolvedUrl || meta?.url || "",
+      embedUrl: musicData?.embedUrl || "",
+      previewUrl: meta?.previewUrl || (musicData?.provider === "audio" ? musicData.audioSrc : null),
+      provider: musicData?.provider || (meta?.previewUrl ? "audio" : "spotify"),
+    };
+
+    // If already playing this project, don't restart
+    if (this.currentProjectId === projectId && this.isPlaying) {
+      return;
+    }
+
+    this.currentProjectId = projectId;
+    this.currentTrack = trackInfo;
+
+    if (!this.audio) {
+      this.isPlaying = true;
+      this.notify();
+      return;
+    }
+
+    const audioStream = trackInfo.previewUrl || (musicData?.provider === "audio" ? musicData.audioSrc : null);
+
+    if (audioStream) {
+      if (this.audio.src !== audioStream) {
+        this.audio.src = audioStream;
+        this.audio.currentTime = 0;
+      }
+      this.audio.volume = this.isMuted ? 0 : this.volume;
+      const playPromise = this.audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            this.isPlaying = true;
+            this.autoplayBlocked = false;
+            this.notify();
+          })
+          .catch((err) => {
+            console.warn("Autoplay deferred by browser policy, awaiting interaction:", err);
+            this.isPlaying = false;
+            this.autoplayBlocked = true;
+            this.notify();
+          });
+      }
+    } else {
+      this.isPlaying = true;
+      this.autoplayBlocked = false;
+      this.notify();
+    }
+  }
+
+  togglePlay() {
+    if (!this.audio) return;
+    if (this.isPlaying) {
+      this.audio.pause();
+      this.isPlaying = false;
+      this.notify();
+    } else {
+      if (this.audio.src) {
+        this.audio.play().then(() => {
+          this.isPlaying = true;
+          this.autoplayBlocked = false;
+          this.notify();
+        }).catch(() => {});
+      } else if (this.currentProjectId) {
+        this.playProject(this.currentProjectId);
+      }
+    }
+  }
+
+  toggleMute() {
+    if (!this.audio) return;
+    this.isMuted = !this.isMuted;
+    this.audio.volume = this.isMuted ? 0 : this.volume;
+    this.notify();
+  }
+
+  setVolume(val) {
+    if (!this.audio) return;
+    this.volume = Math.max(0, Math.min(1, val));
+    this.isMuted = false;
+    this.audio.volume = this.volume;
+    this.notify();
+  }
+
+  pause() {
+    if (this.audio) this.audio.pause();
+    this.isPlaying = false;
+    this.notify();
+  }
+}
+
+const globalSoundtrack = new SoundtrackController();
+
+const useSoundtrack = () => {
+  const [state, setState] = React.useState(() => globalSoundtrack.getState());
+  React.useEffect(() => {
+    return globalSoundtrack.subscribe(setState);
+  }, []);
+  return {
+    ...state,
+    playProject: (id, url) => globalSoundtrack.playProject(id, url),
+    togglePlay: () => globalSoundtrack.togglePlay(),
+    toggleMute: () => globalSoundtrack.toggleMute(),
+    setVolume: (v) => globalSoundtrack.setVolume(v),
+    pause: () => globalSoundtrack.pause(),
+  };
+};
+
+const FloatingSoundtrackBar = ({ view }) => {
+  const soundtrack = useSoundtrack();
+  const { lang } = React.useContext(LanguageContext) || { lang: "es" };
+  const isEn = lang === "en";
+
+  const isEligiblePage = [
+    "project",
+    "carteleria",
+    "generacion-ia",
+    "web-design",
+    "escritos-arquitectura",
+    "escrito-detail",
+    "contact",
+  ].includes(view?.page) || Boolean(soundtrack.currentTrack);
+
+  if (!isEligiblePage || !soundtrack.currentTrack) {
+    return null;
+  }
+
+  const { currentTrack, isPlaying, isMuted, autoplayBlocked } = soundtrack;
+
+  return (
+    <aside
+      aria-label="Reproductor de música flotante"
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[120] max-w-[92vw] sm:max-w-md animate-fade-in"
+    >
+      <div className="relative flex items-center gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full bg-[#0a0d12]/95 border border-white/20 shadow-2xl backdrop-blur-md text-white transition-all duration-300 hover:border-[#1DB954]/70">
+        {/* Equalizer animation */}
+        <div
+          onClick={soundtrack.togglePlay}
+          className="flex items-end gap-1 h-6 w-6 p-1 rounded-sm bg-black/40 cursor-pointer shrink-0"
+          title={isPlaying ? (isEn ? "Pause music" : "Pausar música") : (isEn ? "Play music" : "Reproducir música")}
+        >
+          <span className={`w-1 bg-[#1DB954] rounded-full transition-all ${isPlaying ? "h-4 animate-pulse" : "h-1.5 opacity-50"}`}></span>
+          <span className={`w-1 bg-[#1DB954] rounded-full transition-all ${isPlaying ? "h-6 animate-pulse delay-75" : "h-2.5 opacity-50"}`}></span>
+          <span className={`w-1 bg-[#1DB954] rounded-full transition-all ${isPlaying ? "h-3 animate-pulse delay-150" : "h-1 opacity-50"}`}></span>
+          <span className={`w-1 bg-[#1DB954] rounded-full transition-all ${isPlaying ? "h-5 animate-pulse delay-100" : "h-2 opacity-50"}`}></span>
+        </div>
+
+        {/* Track Title and Artist */}
+        <div className="min-w-0 flex-1 pr-1 cursor-pointer" onClick={soundtrack.togglePlay}>
+          <div className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider text-[#1DB954]">
+            <span className={`w-1.5 h-1.5 rounded-full ${isPlaying ? "bg-[#1DB954] animate-ping" : "bg-gray-400"}`}></span>
+            <span className="truncate">
+              {isPlaying 
+                ? (isEn ? "SOUNDTRACK · AUTOPLAY" : "BANDA SONORA · REPRODUCIENDO") 
+                : (isEn ? "SOUNDTRACK · PAUSED" : "BANDA SONORA · PAUSADA")}
+            </span>
+          </div>
+          <div className="font-serif sm:font-mono text-xs sm:text-sm font-bold truncate text-white leading-tight">
+            {currentTrack.songName || currentTrack.projectTitle}
+          </div>
+          {currentTrack.artist && (
+            <div className="font-mono text-[9px] text-gray-400 truncate">
+              {currentTrack.artist}
+            </div>
+          )}
+        </div>
+
+        {/* Play/Pause Button */}
+        <button
+          onClick={soundtrack.togglePlay}
+          className="w-8 h-8 rounded-full bg-[#1DB954] hover:bg-[#1aa34a] text-black flex items-center justify-center shrink-0 transition-transform active:scale-95 shadow-md cursor-pointer"
+          title={isPlaying ? (isEn ? "Pause" : "Pausar") : (isEn ? "Play" : "Reproducir")}
+        >
+          {isPlaying ? (
+            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+          ) : (
+            <svg className="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          )}
+        </button>
+
+        {/* Mute Button */}
+        <button
+          onClick={soundtrack.toggleMute}
+          className="text-gray-400 hover:text-white p-1 rounded-full transition-colors cursor-pointer hidden sm:inline-flex"
+          title={isMuted ? (isEn ? "Unmute" : "Activar sonido") : (isEn ? "Mute" : "Silenciar")}
+        >
+          {isMuted ? (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            </svg>
+          )}
+        </button>
+
+        {/* Spotify direct link */}
+        {currentTrack.spotifyUrl && (
+          <a
+            href={currentTrack.spotifyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#1DB954] hover:text-white p-1 rounded-full transition-colors cursor-pointer hidden sm:inline-flex"
+            title={isEn ? "Open in Spotify" : "Abrir en Spotify"}
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+            </svg>
+          </a>
+        )}
+      </div>
+
+      {/* Autoplay blocked prompt */}
+      {autoplayBlocked && !isPlaying && (
+        <div
+          onClick={soundtrack.togglePlay}
+          className="mt-2 px-3 py-1.5 rounded-full bg-[#1DB954] text-black font-mono text-[10px] font-bold text-center cursor-pointer shadow-lg animate-bounce flex items-center justify-center gap-1.5"
+        >
+          <span>▶</span>
+          <span>{isEn ? "Click anywhere to listen to soundtrack" : "Toca aquí para escuchar la música"}</span>
+        </div>
+      )}
+    </aside>
+  );
 };
 
 const ProjectSoundtrackSection = ({
@@ -4591,182 +4927,121 @@ const ProjectSoundtrackSection = ({
   projectTitle,
   isPhoto = false,
   isDarkTheme = true,
+  project = null,
 }) => {
   const { lang } = React.useContext(LanguageContext) || { lang: "es" };
   const isEn = lang === "en";
-  const songUrl = (projectMusic && projectMusic[projectId]) || (window.projectMusicConfig && window.projectMusicConfig[projectId]) || "";
+  const soundtrack = useSoundtrack();
+
+  const songUrl =
+    project?.spotifyUrl ||
+    project?.musicUrl ||
+    project?.audioUrl ||
+    (projectMusic && projectMusic[projectId]) ||
+    (window.projectMusicConfig && window.projectMusicConfig[projectId]) ||
+    "";
+
+  const meta = (typeof projectAudioMeta !== "undefined" && projectAudioMeta[projectId]) ? projectAudioMeta[projectId] : null;
   const musicData = React.useMemo(() => parseMusicUrl(songUrl), [songUrl]);
-  const audioRef = React.useRef(null);
-  const [isPlaying, setIsPlaying] = React.useState(true);
-  const [copied, setCopied] = React.useState(false);
 
-  // Auto-play trigger when navigating to project / page
+  // Synchronize playback with global soundtrack on mount & page enter
   React.useEffect(() => {
-    setIsPlaying(true);
-
-    if (musicData?.provider === "audio" && audioRef.current) {
-      audioRef.current.currentTime = 0;
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            setIsPlaying(true);
-          })
-          .catch(() => {
-            // Modern browser policy: if blocked before first interaction, listen to any user touch/click/key
-            const handleFirstGesture = () => {
-              if (audioRef.current) {
-                audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
-              }
-              window.removeEventListener("click", handleFirstGesture);
-              window.removeEventListener("touchstart", handleFirstGesture);
-              window.removeEventListener("keydown", handleFirstGesture);
-            };
-            window.addEventListener("click", handleFirstGesture, { once: true });
-            window.addEventListener("touchstart", handleFirstGesture, { once: true });
-            window.addEventListener("keydown", handleFirstGesture, { once: true });
-          });
-      }
+    if (projectId) {
+      soundtrack.playProject(projectId, songUrl);
     }
-  }, [projectId, musicData]);
+    // Also unlock playback on the first touch/click if blocked by browser policy
+    const handleGesture = () => {
+      if (projectId) {
+        soundtrack.playProject(projectId, songUrl);
+      }
+    };
+    window.addEventListener("click", handleGesture, { once: true, passive: true });
+    window.addEventListener("touchstart", handleGesture, { once: true, passive: true });
+    window.addEventListener("keydown", handleGesture, { once: true, passive: true });
+    return () => {
+      window.removeEventListener("click", handleGesture);
+      window.removeEventListener("touchstart", handleGesture);
+      window.removeEventListener("keydown", handleGesture);
+    };
+  }, [projectId, songUrl]);
 
-  const handleCopyLink = () => {
-    if (!songUrl) return;
-    navigator.clipboard.writeText(songUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
-  };
-
-  if (!songUrl && !musicData) {
+  if (!songUrl && !musicData && !meta) {
     return null;
   }
 
+  const trackTitle = meta?.songName 
+    ? `${meta.songName}${meta.artist ? ` · ${meta.artist}` : ""}` 
+    : (projectTitle || projectId);
+
   return (
-    <section
+    <div
       aria-label="Reproductor de música del proyecto"
-      className={`w-full max-w-5xl mx-auto my-10 sm:my-14 p-4 sm:p-7 rounded-2xl border transition-all duration-300 shadow-xl z-20 relative ${
-        isPhoto
-          ? "bg-[#fdfbf7] border-[#d4a359]/60 text-[#2a2115]"
-          : isDarkTheme
-          ? "bg-[#090b0e] border-white/15 text-white shadow-cyan-950/20"
-          : "bg-white border-gray-200 text-gray-900"
-      }`}
+      className="w-full max-w-3xl mx-auto my-4 sm:my-6 px-4 z-20 relative animate-fade-in"
     >
-      {/* Header bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-inherit/20">
-        <div className="flex items-center gap-3">
-          {/* Animated sound equalizer bars */}
-          <div className="flex items-end gap-1 h-6 w-7 p-1 rounded-sm bg-black/20">
-            <span className="w-1 bg-[#1DB954] rounded-full animate-pulse h-4"></span>
-            <span className="w-1 bg-[#1DB954] rounded-full animate-pulse h-6 delay-75"></span>
-            <span className="w-1 bg-[#1DB954] rounded-full animate-pulse h-3 delay-150"></span>
-            <span className="w-1 bg-[#1DB954] rounded-full animate-pulse h-5 delay-100"></span>
-          </div>
-
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase font-bold text-[#1DB954] flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#1DB954] animate-ping"></span>
-                {isEn ? "PROJECT SOUNDTRACK · AUTOPLAY ON" : "BANDA SONORA · REPRODUCCIÓN AUTOMÁTICA"}
-              </span>
-              <span className="text-[10px] opacity-40">|</span>
-              <span className="font-mono text-[9px] uppercase tracking-wider opacity-70">
-                {isPhoto ? "LIBRETO A5" : "PROYECTO"}
-              </span>
-            </div>
-            <h4 className="font-serif sm:font-mono text-sm sm:text-base font-bold uppercase tracking-wide truncate max-w-md mt-0.5">
-              {projectTitle || projectId}
-            </h4>
-          </div>
+      <div
+        className={`w-full flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-2 rounded-xl border backdrop-blur-sm transition-all shadow-sm ${
+          isPhoto
+            ? "bg-[#fdfbf7]/95 border-[#d4a359]/40 text-[#2a2115]"
+            : isDarkTheme
+            ? "bg-black/70 border-white/10 text-white"
+            : "bg-white/80 border-black/10 text-black"
+        }`}
+      >
+        {/* Title and Soundtrack indicator */}
+        <div className="flex items-center gap-2.5 min-w-0 w-full sm:w-auto">
+          <span className="w-2 h-2 rounded-full bg-[#1DB954] animate-pulse shrink-0"></span>
+          <span className="font-mono text-[10px] tracking-widest uppercase opacity-60 shrink-0">
+            {isEn ? "Soundtrack" : "Banda sonora"}
+          </span>
+          <span className="opacity-30">·</span>
+          <span className="font-mono text-xs font-semibold truncate max-w-xs sm:max-w-sm md:max-w-md">
+            {trackTitle}
+          </span>
         </div>
 
-        {/* Action badges: Open in Spotify & Copy Link */}
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          {musicData?.provider === "spotify" && (
-            <a
-              href={musicData.directUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#1DB954] hover:bg-[#1aa34a] text-black font-mono text-[10px] font-bold tracking-wider uppercase transition-all shadow-sm hover:scale-105 cursor-pointer"
-              title={isEn ? "Open track in Spotify" : "Abrir canción en Spotify"}
-            >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-              </svg>
-              <span>Spotify ↗</span>
-            </a>
-          )}
-
-          <button
-            onClick={handleCopyLink}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-mono uppercase tracking-wider transition-all cursor-pointer ${
-              copied
-                ? "bg-green-600 border-green-500 text-white"
-                : isPhoto
-                ? "bg-[#f4ede2] border-[#d4a359]/60 text-[#8c5822] hover:bg-[#ede3d1]"
-                : "bg-white/10 border-white/20 text-gray-300 hover:bg-white/20"
-            }`}
-            title={isEn ? "Copy music link to clipboard" : "Copiar enlace de música"}
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-            </svg>
-            <span>{copied ? (isEn ? "Copied!" : "¡Copiado!") : (isEn ? "Copy Link" : "Copiar Link")}</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Embedded Player Body */}
-      <div className="w-full overflow-hidden rounded-xl bg-black/40 shadow-inner">
-        {musicData?.provider === "spotify" ? (
-          <iframe
-            title={`Spotify player for ${projectTitle || projectId}`}
-            src={musicData.embedUrl}
-            width="100%"
-            height="152"
-            frameBorder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="eager"
-            className="w-full border-0 block rounded-xl"
-          />
-        ) : musicData?.provider === "soundcloud" ? (
-          <iframe
-            title={`SoundCloud player for ${projectTitle || projectId}`}
-            src={musicData.embedUrl}
-            width="100%"
-            height="152"
-            scrolling="no"
-            frameBorder="no"
-            allow="autoplay"
-            className="w-full border-0 block rounded-xl"
-          />
-        ) : (
-          <div className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-black/60 rounded-xl">
-            <audio
-              ref={audioRef}
-              src={musicData?.audioSrc}
-              autoPlay
-              controls
-              playsInline
-              className="w-full"
+        {/* Compact Player Strip with Autoplay */}
+        <div className="w-full sm:w-72 md:w-80 shrink-0">
+          {musicData?.provider === "spotify" ? (
+            <iframe
+              key={musicData.embedUrl}
+              title={`Spotify - ${trackTitle}`}
+              src={musicData.embedUrl}
+              width="100%"
+              height="80"
+              frameBorder="0"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="eager"
+              className="w-full border-0 block rounded-lg overflow-hidden"
             />
-          </div>
-        )}
+          ) : musicData?.provider === "soundcloud" ? (
+            <iframe
+              key={musicData.embedUrl}
+              title={`SoundCloud - ${trackTitle}`}
+              src={musicData.embedUrl}
+              width="100%"
+              height="80"
+              scrolling="no"
+              frameBorder="no"
+              allow="autoplay"
+              loading="eager"
+              className="w-full border-0 block rounded-lg overflow-hidden"
+            />
+          ) : (
+            <div className="flex items-center justify-end gap-2">
+              <button
+                onClick={soundtrack.togglePlay}
+                className="px-3.5 py-1.5 bg-[#1DB954] hover:bg-[#1aa34a] text-black font-mono text-[10px] rounded-full font-bold uppercase transition-colors cursor-pointer"
+              >
+                {soundtrack.isPlaying ? (isEn ? "Pause" : "Pausar") : (isEn ? "Play" : "Reproducir")}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-
-      {/* Footer helper note showing code file location */}
-      <div className="mt-3 pt-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 font-mono text-[9px] opacity-60">
-        <span className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1DB954]"></span>
-          <span>{isEn ? "Configured in:" : "Configurado en:"} <code className="px-1 py-0.5 rounded bg-black/20 font-bold">src/projectMusicConfig.js</code></span>
-        </span>
-        <span className="hidden sm:inline italic">
-          {isEn ? "Paste any Spotify track URL to associate with this project" : "Pega cualquier enlace de Spotify junto al nombre de este proyecto"}
-        </span>
-      </div>
-    </section>
+    </div>
   );
 };
+
 
 const LibretoViewer = ({
   project,
@@ -4870,16 +5145,81 @@ const LibretoViewer = ({
     setIsPanning(false);
   };
 
-  // Reset scroll on project change
+  // Load the project's actual uploaded PDF automatically on mount or project change
   React.useEffect(() => {
+    let isCancelled = false;
     setCurrentSpread(0);
-    setUploadedPdfDoc(null);
-    setUploadedPdfName("");
-    setUploadedTotalPages(0);
+    setIsProcessingPdf(true);
+    setPdfError(null);
+
     if (containerRef.current) {
       containerRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, [project?.id]);
+
+    const loadBookletPdf = async () => {
+      // Candidate URLs for this booklet matching booklet name + .pdf
+      const candidateUrls = [
+        project?.pdfUrl,
+        `/documentos/${project?.id}.pdf`,
+        project?.id === "rapa-das-bestas" ? "/documentos/rapa-das-bestas-2025.pdf" : null,
+        project?.id === "rapa-das-bestas-2025" ? "/documentos/rapa-das-bestas.pdf" : null,
+        project?.id === "cuaderno-de-campo" ? "/documentos/cuaderno-de-campo-2024.pdf" : null,
+        project?.id === "cuaderno-de-campo-2024" ? "/documentos/cuaderno-de-campo.pdf" : null,
+        `/documentos/${project?.id}-2024.pdf`,
+        `/documentos/${project?.id}-2025.pdf`,
+      ].filter(Boolean);
+
+      let loadedDoc = null;
+      let matchedName = "";
+
+      for (const url of candidateUrls) {
+        try {
+          if (!window.pdfjsLib) continue;
+          const loadingTask = window.pdfjsLib.getDocument(url);
+          const doc = await loadingTask.promise;
+          loadedDoc = doc;
+          matchedName = url.split("/").pop();
+          break;
+        } catch (err) {
+          // try next candidate
+        }
+      }
+
+      if (isCancelled) return;
+
+      if (loadedDoc) {
+        setUploadedPdfDoc(loadedDoc);
+        setUploadedPdfName(matchedName || `${project?.id}.pdf`);
+        setUploadedTotalPages(loadedDoc.numPages);
+        setIsProcessingPdf(false);
+      } else {
+        console.warn("Could not load PDF for project:", project?.id);
+        setIsProcessingPdf(false);
+        setPdfError("No se pudo cargar el PDF del libreto");
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      if (window.pdfjsLib) {
+        loadBookletPdf();
+      } else {
+        const timer = setInterval(() => {
+          if (window.pdfjsLib) {
+            clearInterval(timer);
+            loadBookletPdf();
+          }
+        }, 150);
+        return () => {
+          isCancelled = true;
+          clearInterval(timer);
+        };
+      }
+    }
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [project?.id, project?.pdfUrl]);
 
   // Keyboard navigation
   React.useEffect(() => {
@@ -4904,66 +5244,6 @@ const LibretoViewer = ({
     setTimeout(() => setNotification(null), 4000);
   };
 
-  // PDF Upload handler
-  const handleFileUpload = async (file) => {
-    if (!file) return;
-    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
-      notify(isEn ? "Please upload a valid PDF file" : "Por favor sube un archivo PDF válido");
-      return;
-    }
-
-    try {
-      setIsProcessingPdf(true);
-      const arrayBuffer = await file.arrayBuffer();
-
-      if (!window.pdfjsLib) {
-        throw new Error("Motor PDF no disponible");
-      }
-
-      const loadingTask = window.pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
-      const pdf = await loadingTask.promise;
-
-      setUploadedPdfDoc(pdf);
-      setUploadedPdfName(file.name);
-      setUploadedTotalPages(pdf.numPages);
-      setCurrentSpread(0);
-      setIsProcessingPdf(false);
-      notify(
-        isEn
-          ? `PDF "${file.name}" loaded (${pdf.numPages} pages) in double-page spread`
-          : `PDF "${file.name}" cargado (${pdf.numPages} páginas) como libro a doble página`
-      );
-    } catch (err) {
-      console.error("Error loading uploaded PDF:", err);
-      setIsProcessingPdf(false);
-      notify(isEn ? "Failed to parse PDF file" : "Error al procesar el archivo PDF");
-    }
-  };
-
-  const handleRestoreOriginal = () => {
-    setUploadedPdfDoc(null);
-    setUploadedPdfName("");
-    setUploadedTotalPages(0);
-    setCurrentSpread(0);
-    notify(isEn ? "Restored original curated booklet" : "Libreto original restaurado");
-  };
-
-  // Drag and drop handlers
-  const onDragOver = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-  const onDragLeave = () => {
-    setIsDragging(false);
-  };
-  const onDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFileUpload(e.dataTransfer.files[0]);
-    }
-  };
-
   // Fullscreen toggle
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -4973,35 +5253,27 @@ const LibretoViewer = ({
     }
   };
 
-  // Calculate spreads
-  // Using uploaded PDF or built-in pages
-  const builtinPages = project?.pages || [
-    { pageNum: 1, type: "cover", title: pt(project, "title"), image: project?.coverImage || project?.normalImage },
-    { pageNum: 2, type: "colophon", title: "NOTA EDITORIAL", content_es: pt(project, "description"), content_en: pt(project, "description") },
-    { pageNum: 3, type: "photo", title: pt(project, "title"), image: project?.coverImage || project?.normalImage, caption_es: pt(project, "summary") },
-  ];
+  // Calculate spreads: "Primero la portada y luego doble página"
+  const totalPagesCount = uploadedPdfDoc ? uploadedTotalPages : (project?.totalPages || 6);
 
-  const totalPagesCount = uploadedPdfDoc ? uploadedTotalPages : builtinPages.length;
-
-  // In double-page mode:
-  // Spread 0: Left: null (Flyleaf), Right: Page 1 (Cover)
-  // Spread 1: Left: Page 2, Right: Page 3
-  // Spread 2: Left: Page 4, Right: Page 5
-  // ...
-  const totalSpreads = Math.ceil((totalPagesCount + 1) / 2);
+  // Spread 0: Portada (Pág. 1)
+  // Spread 1: Pliego Págs. 2-3
+  // Spread 2: Pliego Págs. 4-5
+  // Spread 3: Pliego Págs. 6-7
+  const totalSpreads = totalPagesCount <= 1 ? 1 : (1 + Math.ceil((totalPagesCount - 1) / 2));
 
   const getSpreadPages = (spreadIdx) => {
     if (spreadIdx === 0) {
-      return { left: null, right: 1 };
+      return { isCover: true, cover: 1, left: null, right: 1 };
     }
     const leftPage = spreadIdx * 2;
     const rightPage = leftPage + 1 <= totalPagesCount ? leftPage + 1 : null;
-    return { left: leftPage, right: rightPage };
+    return { isCover: false, cover: null, left: leftPage, right: rightPage };
   };
 
   const currentPages = viewMode === "spread" 
     ? getSpreadPages(currentSpread) 
-    : { single: currentSpread + 1 };
+    : { isCover: currentSpread === 0, cover: currentSpread === 0 ? 1 : null, single: currentSpread + 1 };
 
   const handleNext = () => {
     if (viewMode === "spread") {
@@ -5023,7 +5295,7 @@ const LibretoViewer = ({
 
   const jumpToPage = (pageNum) => {
     if (viewMode === "spread") {
-      if (pageNum === 1) {
+      if (pageNum <= 1) {
         setCurrentSpread(0);
       } else {
         setCurrentSpread(Math.floor(pageNum / 2));
@@ -5038,237 +5310,54 @@ const LibretoViewer = ({
     (p) => (p.category === "photography" || p.isLibreto) && p.id !== project?.id
   );
 
-  // Render internal page content (built-in)
-  const renderBuiltinPage = (pageNumber, isLeft) => {
-    if (!pageNumber) {
-      // Empty flyleaf / inside front or back cover
+  // Render Left Page (Verso)
+  const renderLeftPage = () => {
+    if (!currentPages.left) {
       return (
-        <div className="w-full h-full bg-[#f6f2e9] flex flex-col justify-between p-8 sm:p-12 text-[#8c5822]/40 select-none">
-          <div className="font-mono text-[9px] uppercase tracking-widest">
-            {pt(project, "title")} · Formato ISO A5
+        <div className="w-full h-full bg-[#f6f2e9] flex flex-col justify-between p-8 text-[#8c5822]/50 font-mono text-xs select-none">
+          <div className="uppercase tracking-widest">{uploadedPdfName || `${project?.id}.pdf`}</div>
+          <div className="text-center my-auto">
+            <p className="text-[10px] uppercase tracking-widest mb-1 text-[#8c5822]">Pliego Interior</p>
+            <p className="text-[8px] text-[#a89680]">Formato ISO A5 · Doble Página</p>
           </div>
-          <div className="text-center my-auto flex flex-col items-center justify-center opacity-60">
-            <div className="w-10 h-10 border border-[#d4a359]/40 rotate-45 mb-4 flex items-center justify-center">
-              <span className="font-serif italic text-xs text-[#8c5822]">B</span>
-            </div>
-            <p className="font-mono text-[10px] tracking-widest text-[#8c5822]/70 uppercase">
-              Archivo Fotográfico Benito G. Quiñones
-            </p>
-          </div>
-          <div className="font-mono text-[8px] text-right tracking-widest text-[#8c5822]/50">
-            {isEn ? "Inside Leaf · 148 × 210 mm" : "Guarda Interior · 148 × 210 mm"}
-          </div>
+          <div className="text-right text-[9px]">— Guarda —</div>
         </div>
       );
     }
-
-    const pageData = builtinPages.find((p) => p.pageNum === pageNumber) || builtinPages[pageNumber - 1];
-    if (!pageData) {
-      return (
-        <div className="w-full h-full bg-[#fdfbf7] flex items-center justify-center font-mono text-xs text-[#8c5822]">
-          Página {pageNumber}
-        </div>
-      );
+    if (uploadedPdfDoc) {
+      return <PdfPageCanvas pdfDoc={uploadedPdfDoc} pageNumber={currentPages.left} />;
     }
-
-    // Cover Page
-    if (pageData.type === "cover" || pageNumber === 1) {
-      return (
-        <div className="w-full h-full bg-[#fdfbf7] flex flex-col justify-between p-6 sm:p-10 relative overflow-hidden select-none">
-          {/* Subtle ochre geometric frame */}
-          <div className="absolute inset-3 sm:inset-5 border border-[#d4a359]/40 pointer-events-none"></div>
-          <div className="absolute inset-4 sm:inset-6 border border-[#d4a359]/20 pointer-events-none"></div>
-
-          {/* Top metadata */}
-          <div className="relative z-10 flex justify-between items-center text-[#8c5822] font-mono text-[9px] sm:text-[10px] tracking-widest uppercase">
-            <span>{pt(project, "subcategory") || "DOCUMENTAL"}</span>
-            <span className="px-2 py-0.5 rounded-full bg-[#f4ede2] border border-[#d4a359]/40">
-              LIBRETO A5
-            </span>
-          </div>
-
-          {/* Center Cover Artwork */}
-          <div className="relative z-10 my-auto py-4 flex flex-col items-center text-center">
-            <div className="w-full max-h-[42vh] aspect-[4/3] mb-6 overflow-hidden rounded-xs border border-[#d4a359]/30 shadow-md bg-[#faf7f2]">
-              {pageData.image || project?.coverImage || project?.normalImage ? (
-                <OptimizedImage
-                  src={pageData.image || project?.coverImage || project?.normalImage}
-                  alt={pt(project, "title")}
-                  className="w-full h-full object-cover"
-                  containerClassName="w-full h-full"
-                  theme="photography"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center font-mono text-xs text-[#8c5822]">
-                  PORTADA A5
-                </div>
-              )}
-            </div>
-
-            <h1 className="font-serif font-bold text-2xl sm:text-3xl md:text-4xl text-[#2a2115] tracking-wide uppercase leading-tight mb-2">
-              {pt(project, "title")}
-            </h1>
-            <p className="font-mono text-xs sm:text-sm text-[#8c5822] tracking-widest uppercase">
-              {project?.year || "2024–2025"}
-            </p>
-          </div>
-
-          {/* Bottom Author Stamp */}
-          <div className="relative z-10 pt-4 border-t border-[#d4a359]/30 flex justify-between items-end text-[#786b59] font-mono text-[9px] sm:text-[10px]">
-            <div>
-              <span className="block font-bold text-[#8c5822] tracking-wider">BENITO GONZÁLEZ QUIÑONES</span>
-              <span className="text-[8px] sm:text-[9px] tracking-widest text-[#a89680]">ARQUITECTO &amp; FOTÓGRAFO</span>
-            </div>
-            <div className="text-right tracking-widest text-[#8c5822]">
-              ISO A5 · MADRID
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    // Colophon / Editorial Note
-    if (pageData.type === "colophon" || pageData.type === "text") {
-      const title = isEn && pageData.title_en ? pageData.title_en : pageData.title;
-      const content = isEn && pageData.content_en ? pageData.content_en : (pageData.content_es || pt(project, "description"));
-      return (
-        <div className="w-full h-full bg-[#fdfbf7] flex flex-col justify-between p-6 sm:p-12 text-[#2c2419] select-text">
-          {/* Header */}
-          <div className="flex justify-between items-center pb-4 border-b border-[#d4a359]/30 font-mono text-[9px] text-[#8c5822] tracking-widest uppercase">
-            <span>{pt(project, "title")}</span>
-            <span>{isLeft ? `PÁG. ${pageNumber}` : `${pageNumber}`}</span>
-          </div>
-
-          {/* Content */}
-          <div className="my-auto max-w-md mx-auto py-6">
-            {title && (
-              <h2 className="font-serif font-bold text-xl sm:text-2xl text-[#2a2115] tracking-wider uppercase mb-6 pb-2 border-b-2 border-[#c8963e]">
-                {title}
-              </h2>
-            )}
-            <div className="space-y-4">
-              {content ? (
-                content.split("\n\n").map((para, i) => (
-                  <p key={i} className="font-serif text-sm sm:text-base leading-relaxed text-[#443829] text-justify">
-                    {i === 0 ? (
-                      <span className="float-left text-3xl sm:text-4xl leading-none font-serif font-bold text-[#8c5822] mr-2">
-                        {para.charAt(0)}
-                      </span>
-                    ) : null}
-                    {i === 0 ? para.slice(1) : para}
-                  </p>
-                ))
-              ) : (
-                <p className="font-serif text-sm sm:text-base leading-relaxed text-[#443829]">
-                  {pt(project, "description")}
-                </p>
-              )}
-            </div>
-
-            {pageData.meta && (
-              <div className="mt-8 pt-4 border-t border-[#d4a359]/20 font-mono text-[9px] sm:text-[10px] text-[#8c5822] tracking-widest uppercase">
-                {pageData.meta}
-              </div>
-            )}
-          </div>
-
-          {/* Footer */}
-          <div className="flex justify-between items-center pt-4 border-t border-[#d4a359]/20 font-mono text-[9px] text-[#8c5822]/70">
-            <span>ISO A5 · 148 × 210 MM</span>
-            <span>— {pageNumber} —</span>
-          </div>
-        </div>
-      );
-    }
-
-    // Photo Page
     return (
-      <div className="w-full h-full bg-[#fdfbf7] flex flex-col justify-between p-4 sm:p-8 select-none">
-        {/* Header */}
-        <div className="flex justify-between items-center pb-2 font-mono text-[8px] sm:text-[9px] text-[#8c5822] tracking-widest uppercase">
-          <span>{pt(project, "title")}</span>
-          <span>{pageData.title || `LÁMINA ${pageNumber}`}</span>
-        </div>
-
-        {/* Photo Container */}
-        <div className="my-auto relative flex-1 flex flex-col items-center justify-center p-2 sm:p-4">
-          <div className="relative w-full h-full max-h-[62vh] overflow-hidden rounded-xs border border-[#d4a359]/30 shadow-sm bg-[#f8f5ee] flex items-center justify-center">
-            {pageData.image || project?.coverImage || project?.normalImage ? (
-              <OptimizedImage
-                src={pageData.image || project?.coverImage || project?.normalImage}
-                alt={pageData.title || pt(project, "title")}
-                className="w-full h-full object-contain"
-                containerClassName="w-full h-full"
-                theme="photography"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center font-mono text-xs text-[#8c5822]">
-                FOTOGRAFÍA A5 · PÁG. {pageNumber}
-              </div>
-            )}
-          </div>
-
-          {/* Photo caption */}
-          {(pageData.caption_es || pageData.caption_en || pageData.title) && (
-            <div className="w-full mt-3 px-1 text-left">
-              <p className="font-mono text-[9px] sm:text-[10px] text-[#5c4a33] tracking-wide leading-relaxed">
-                <span className="font-bold text-[#8c5822] mr-2">
-                  {pageData.title || `0${pageNumber}`}
-                </span>
-                {isEn && pageData.caption_en ? pageData.caption_en : (pageData.caption_es || pageData.title)}
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="flex justify-between items-center pt-2 font-mono text-[8px] sm:text-[9px] text-[#8c5822]/60">
-          <span>{isLeft ? "PÁGINA IZQUIERDA" : "PÁGINA DERECHA"}</span>
-          <span>— {pageNumber} —</span>
-        </div>
+      <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center text-[#8c5822] font-mono text-xs">
+        <div className="w-6 h-6 border-2 border-[#c8963e] border-t-transparent rounded-full animate-spin mb-2"></div>
+        <span>Cargando pág. {currentPages.left}...</span>
       </div>
     );
   };
 
-  // Render Left Page
-  const renderLeftPage = () => {
-    if (uploadedPdfDoc) {
-      if (!currentPages.left) {
-        return (
-          <div className="w-full h-full bg-[#f6f2e9] flex flex-col justify-between p-8 text-[#8c5822]/50 font-mono text-xs select-none">
-            <div className="uppercase tracking-widest">{uploadedPdfName}</div>
-            <div className="text-center my-auto">
-              <p className="text-[10px] uppercase tracking-widest mb-1 text-[#8c5822]">Pliego Interior</p>
-              <p className="text-[8px] text-[#a89680]">Formato ISO A5 · Doble Página</p>
-            </div>
-            <div className="text-right text-[9px]">— Guarda —</div>
-          </div>
-        );
-      }
-      return <PdfPageCanvas pdfDoc={uploadedPdfDoc} pageNumber={currentPages.left} />;
-    }
-
-    return renderBuiltinPage(currentPages.left, true);
-  };
-
-  // Render Right Page
+  // Render Right Page (Recto)
   const renderRightPage = () => {
-    if (uploadedPdfDoc) {
-      if (!currentPages.right) {
-        return (
-          <div className="w-full h-full bg-[#f6f2e9] flex flex-col justify-between p-8 text-[#8c5822]/50 font-mono text-xs select-none">
-            <div className="uppercase tracking-widest">{uploadedPdfName}</div>
-            <div className="text-center my-auto text-[10px] uppercase tracking-widest text-[#8c5822]">
-              Fin del Libreto
-            </div>
-            <div className="text-right text-[9px]">— Contraportada —</div>
+    if (!currentPages.right) {
+      return (
+        <div className="w-full h-full bg-[#f6f2e9] flex flex-col justify-between p-8 text-[#8c5822]/50 font-mono text-xs select-none">
+          <div className="uppercase tracking-widest">{uploadedPdfName || `${project?.id}.pdf`}</div>
+          <div className="text-center my-auto text-[10px] uppercase tracking-widest text-[#8c5822]">
+            <p className="mb-1 font-bold">Fin del Libreto</p>
+            <p className="text-[8px] text-[#a89680]">Archivo Benito G. Quiñones</p>
           </div>
-        );
-      }
+          <div className="text-right text-[9px]">— Contraportada —</div>
+        </div>
+      );
+    }
+    if (uploadedPdfDoc) {
       return <PdfPageCanvas pdfDoc={uploadedPdfDoc} pageNumber={currentPages.right} />;
     }
-
-    return renderBuiltinPage(currentPages.right, false);
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center text-[#8c5822] font-mono text-xs">
+        <div className="w-6 h-6 border-2 border-[#c8963e] border-t-transparent rounded-full animate-spin mb-2"></div>
+        <span>Cargando pág. {currentPages.right}...</span>
+      </div>
+    );
   };
 
   return (
@@ -5450,64 +5539,112 @@ const LibretoViewer = ({
             )}
 
             {viewMode === "spread" ? (
-              /* DOUBLE-PAGE SPREAD CONTAINER (2 x ISO A5) */
-              <div
-                className="relative flex w-full max-w-[1100px] aspect-[296/210] rounded-xs shadow-[0_25px_60px_-15px_rgba(140,88,34,0.22),0_10px_25px_rgba(0,0,0,0.06)] border border-[#d4a359]/40 bg-[#fdfbf7] select-none transition-transform duration-200"
-                style={{
-                  transform: `scale(${zoomLevel}) translate(${panOffset.x / zoomLevel}px, ${panOffset.y / zoomLevel}px)`,
-                  transformOrigin: "center center",
-                  cursor: zoomLevel > 1 ? (isPanning ? "grabbing" : "grab") : "default",
-                  boxShadow:
-                    "0 30px 60px -15px rgba(140,88,34,0.25), 0 0 0 1px rgba(212,163,89,0.3) inset",
-                }}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-              >
-                {/* Book outer edge pages stack illusion */}
-                <div className="absolute -bottom-2 left-3 right-3 h-2 bg-[#ece4d5] rounded-b-sm border-b border-[#d4a359]/40 z-0 opacity-80 pointer-events-none"></div>
-                <div className="absolute -bottom-3.5 left-6 right-6 h-1.5 bg-[#dfd6c4] rounded-b-sm border-b border-[#d4a359]/30 z-0 opacity-60 pointer-events-none"></div>
-
-                {/* LEFT PAGE (Verso) */}
+              currentSpread === 0 ? (
+                /* PORTADA / FRONT COVER (Page 1) */
                 <div
-                  className="relative z-10 w-1/2 h-full cursor-pointer overflow-hidden border-r border-[#d4a359]/20"
-                  onClick={() => {
-                    if (zoomLevel > 1 && (touchStartRef.current.moved || mouseStartRef.current.moved)) {
-                      return;
-                    }
-                    handlePrev();
+                  className="relative flex flex-col items-center justify-center w-full max-w-[520px] aspect-[148/210] rounded-xs shadow-[0_25px_60px_-15px_rgba(140,88,34,0.3)] border border-[#d4a359]/60 bg-[#fdfbf7] select-none transition-transform duration-200 cursor-pointer overflow-hidden group"
+                  style={{
+                    transform: `scale(${zoomLevel}) translate(${panOffset.x / zoomLevel}px, ${panOffset.y / zoomLevel}px)`,
+                    transformOrigin: "center center",
                   }}
-                  title={isEn ? "Click to turn previous" : "Clic para ir al pliego anterior"}
-                >
-                  {/* Spine inner curve shadow on right edge of left page */}
-                  <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-14 bg-gradient-to-l from-black/15 via-black/5 to-transparent pointer-events-none z-30"></div>
-                  {renderLeftPage()}
-                </div>
-
-                {/* CENTRAL GUTTER / BOOK BINDING SEAM */}
-                <div className="relative z-20 w-[4px] bg-gradient-to-r from-black/25 via-black/40 to-black/25 shadow-[0_0_8px_rgba(0,0,0,0.35)] flex flex-col justify-between py-2 items-center">
-                  <div className="w-[1px] h-full bg-[#f4ede2]/40"></div>
-                </div>
-
-                {/* RIGHT PAGE (Recto) */}
-                <div
-                  className="relative z-10 w-1/2 h-full cursor-pointer overflow-hidden border-l border-[#d4a359]/20"
                   onClick={() => {
-                    if (zoomLevel > 1 && (touchStartRef.current.moved || mouseStartRef.current.moved)) {
-                      return;
-                    }
+                    if (zoomLevel > 1 && (touchStartRef.current.moved || mouseStartRef.current.moved)) return;
                     handleNext();
                   }}
-                  title={isEn ? "Click to turn next" : "Clic para ir al pliego siguiente"}
+                  title={isEn ? "Click to open booklet (Page 2-3)" : "Haz clic para abrir el libreto (Páginas 2-3)"}
                 >
-                  {/* Spine inner curve shadow on left edge of right page */}
-                  <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-14 bg-gradient-to-r from-black/15 via-black/5 to-transparent pointer-events-none z-30"></div>
-                  {renderRightPage()}
+                  {/* Booklet outer spine illusion */}
+                  <div className="absolute left-0 top-0 bottom-0 w-3.5 sm:w-4 bg-gradient-to-r from-[#7a4816] via-[#b87d2b] to-[#8c5822] z-30 shadow-[2px_0_8px_rgba(0,0,0,0.25)]"></div>
+
+                  {/* Real Page 1 of the uploaded PDF */}
+                  <div className="w-full h-full pl-3.5 sm:pl-4">
+                    {uploadedPdfDoc ? (
+                      <PdfPageCanvas pdfDoc={uploadedPdfDoc} pageNumber={1} />
+                    ) : isProcessingPdf ? (
+                      <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center text-[#8c5822]">
+                        <div className="w-8 h-8 border-2 border-[#c8963e] border-t-transparent rounded-full animate-spin mb-3"></div>
+                        <span className="font-mono text-xs uppercase tracking-widest">{isEn ? "Loading PDF..." : "Cargando PDF..."}</span>
+                      </div>
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center text-[#8c5822]">
+                        <span className="font-serif text-lg font-bold">{pt(project, "title")}</span>
+                        <span className="font-mono text-xs mt-2">{uploadedPdfName || `${project?.id}.pdf`}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Bottom indicator overlay */}
+                  <div className="absolute bottom-3 left-6 right-3 z-30 flex items-center justify-between px-3 py-1.5 rounded-full bg-[#1b140b]/85 text-[#f4ede2] border border-[#d4a359]/50 backdrop-blur-xs font-mono text-[10px] tracking-wider uppercase opacity-90 group-hover:opacity-100 transition-opacity">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#d4a359]"></span>
+                      <span>{isEn ? "Cover · Page 1" : "Portada · Pág. 1"}</span>
+                    </span>
+                    <span className="font-bold text-[#f2cb80] flex items-center gap-1">
+                      <span>{isEn ? "Open booklet" : "Abrir libreto"}</span>
+                      <span>→</span>
+                    </span>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                /* DOUBLE-PAGE SPREAD CONTAINER (Pages 2 & 3, 4 & 5, ...) */
+                <div
+                  className="relative flex w-full max-w-[1100px] aspect-[296/210] rounded-xs shadow-[0_25px_60px_-15px_rgba(140,88,34,0.22),0_10px_25px_rgba(0,0,0,0.06)] border border-[#d4a359]/40 bg-[#fdfbf7] select-none transition-transform duration-200"
+                  style={{
+                    transform: `scale(${zoomLevel}) translate(${panOffset.x / zoomLevel}px, ${panOffset.y / zoomLevel}px)`,
+                    transformOrigin: "center center",
+                    cursor: zoomLevel > 1 ? (isPanning ? "grabbing" : "grab") : "default",
+                    boxShadow:
+                      "0 30px 60px -15px rgba(140,88,34,0.25), 0 0 0 1px rgba(212,163,89,0.3) inset",
+                  }}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                >
+                  {/* Book outer edge pages stack illusion */}
+                  <div className="absolute -bottom-2 left-3 right-3 h-2 bg-[#ece4d5] rounded-b-sm border-b border-[#d4a359]/40 z-0 opacity-80 pointer-events-none"></div>
+                  <div className="absolute -bottom-3.5 left-6 right-6 h-1.5 bg-[#dfd6c4] rounded-b-sm border-b border-[#d4a359]/30 z-0 opacity-60 pointer-events-none"></div>
+
+                  {/* LEFT PAGE (Verso) */}
+                  <div
+                    className="relative z-10 w-1/2 h-full cursor-pointer overflow-hidden border-r border-[#d4a359]/20"
+                    onClick={() => {
+                      if (zoomLevel > 1 && (touchStartRef.current.moved || mouseStartRef.current.moved)) {
+                        return;
+                      }
+                      handlePrev();
+                    }}
+                    title={isEn ? "Click to turn previous" : "Clic para ir al pliego anterior"}
+                  >
+                    {/* Spine inner curve shadow on right edge of left page */}
+                    <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-14 bg-gradient-to-l from-black/15 via-black/5 to-transparent pointer-events-none z-30"></div>
+                    {renderLeftPage()}
+                  </div>
+
+                  {/* CENTRAL GUTTER / BOOK BINDING SEAM */}
+                  <div className="relative z-20 w-[4px] bg-gradient-to-r from-black/25 via-black/40 to-black/25 shadow-[0_0_8px_rgba(0,0,0,0.35)] flex flex-col justify-between py-2 items-center">
+                    <div className="w-[1px] h-full bg-[#f4ede2]/40"></div>
+                  </div>
+
+                  {/* RIGHT PAGE (Recto) */}
+                  <div
+                    className="relative z-10 w-1/2 h-full cursor-pointer overflow-hidden border-l border-[#d4a359]/20"
+                    onClick={() => {
+                      if (zoomLevel > 1 && (touchStartRef.current.moved || mouseStartRef.current.moved)) {
+                        return;
+                      }
+                      handleNext();
+                    }}
+                    title={isEn ? "Click to turn next" : "Clic para ir al pliego siguiente"}
+                  >
+                    {/* Spine inner curve shadow on left edge of right page */}
+                    <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-14 bg-gradient-to-r from-black/15 via-black/5 to-transparent pointer-events-none z-30"></div>
+                    {renderRightPage()}
+                  </div>
+                </div>
+              )
             ) : (
               /* SINGLE PAGE CONTAINER (ISO A5) */
               <div
@@ -5519,7 +5656,10 @@ const LibretoViewer = ({
                   {uploadedPdfDoc ? (
                     <PdfPageCanvas pdfDoc={uploadedPdfDoc} pageNumber={currentSpread + 1} />
                   ) : (
-                    renderBuiltinPage(currentSpread + 1, false)
+                    <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center text-[#8c5822] font-mono text-xs">
+                      <div className="w-6 h-6 border-2 border-[#c8963e] border-t-transparent rounded-full animate-spin mb-2"></div>
+                      <span>Cargando pág. {currentSpread + 1}...</span>
+                    </div>
                   )}
                 </div>
               </div>
@@ -5549,7 +5689,7 @@ const LibretoViewer = ({
             <span className="font-bold">
               {viewMode === "spread"
                 ? currentSpread === 0
-                  ? isEn ? "Cover · Spread 1 of " + totalSpreads : "Portada · Pliego 1 de " + totalSpreads
+                  ? isEn ? `Cover · Page 1 of ${totalPagesCount}` : `Portada · Pág. 1 de ${totalPagesCount}`
                   : isEn
                   ? `Pages ${currentPages.left || ""}-${currentPages.right || ""} of ${totalPagesCount}`
                   : `Páginas ${currentPages.left || ""}-${currentPages.right || ""} de ${totalPagesCount}`
@@ -5607,13 +5747,21 @@ const LibretoViewer = ({
                     }`}
                   >
                     <div className="flex-1 flex gap-0.5 overflow-hidden">
-                      <div className="w-1/2 h-full bg-[#f6f2e9] flex items-center justify-center font-mono text-[8px] text-[#8c5822]">
-                        {spreadPages.left ? spreadPages.left : "—"}
-                      </div>
-                      <div className="w-[1px] h-full bg-[#d4a359]/40"></div>
-                      <div className="w-1/2 h-full bg-[#fdfbf7] flex items-center justify-center font-mono text-[8px] text-[#8c5822] font-bold">
-                        {spreadPages.right ? spreadPages.right : "—"}
-                      </div>
+                      {idx === 0 ? (
+                        <div className="w-full h-full bg-[#fdfbf7] flex items-center justify-center font-mono text-[8px] text-[#8c5822] font-bold border-l-2 border-[#8c5822]">
+                          Portada · 1
+                        </div>
+                      ) : (
+                        <>
+                          <div className="w-1/2 h-full bg-[#f6f2e9] flex items-center justify-center font-mono text-[8px] text-[#8c5822]">
+                            {spreadPages.left ? `P. ${spreadPages.left}` : "—"}
+                          </div>
+                          <div className="w-[1px] h-full bg-[#d4a359]/40"></div>
+                          <div className="w-1/2 h-full bg-[#fdfbf7] flex items-center justify-center font-mono text-[8px] text-[#8c5822] font-bold">
+                            {spreadPages.right ? `P. ${spreadPages.right}` : "—"}
+                          </div>
+                        </>
+                      )}
                     </div>
                     <div className="text-center font-mono text-[8px] text-[#8c5822] mt-1 uppercase">
                       {idx === 0 ? (isEn ? "Cover" : "Portada") : `P. ${spreadPages.left}-${spreadPages.right || ""}`}
@@ -5683,6 +5831,7 @@ const LibretoViewer = ({
             projectId={project?.id}
             projectTitle={pt(project, "title")}
             isPhoto={true}
+            project={project}
           />
 
           <div className="mt-8 flex justify-center">
@@ -5718,7 +5867,15 @@ const ProjectDetailPage = ({
   onBack,
 }) => {
   const { t, pt, lang } = useTranslation();
+  const isEn = lang === "en";
   const containerRef = React.useRef(null);
+
+  // Lightbox state for high-resolution interactive plate viewing
+  const [lightboxIndex, setLightboxIndex] = React.useState(null);
+  const [lightboxZoom, setLightboxZoom] = React.useState(1);
+  const [lightboxPan, setLightboxPan] = React.useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = React.useState(false);
+  const panStartRef = React.useRef({ x: 0, y: 0, panX: 0, panY: 0, moved: false });
 
   React.useEffect(() => {
     if (containerRef.current) {
@@ -5728,16 +5885,8 @@ const ProjectDetailPage = ({
 
   if (!project) return null;
 
-  const carouselProjects = [
-    "festa-na-terra",
-    "cronologia-adios",
-    "coleccion-grabados",
-    "territorios-digitales",
-  ];
-  const isCarouselView = carouselProjects.includes(project.id);
-
   const isDesignTheme = project.category === "design";
-  const isDarkTheme = project.id === "hashima-animal-park" || isCarouselView || isDesignTheme;
+  const isDarkTheme = project.id === "hashima-animal-park" || isDesignTheme;
   const theme = isDesignTheme ? "design" : (isDarkTheme ? "dark" : "light");
 
   const relatedProjects = allProjectsData.filter(
@@ -5751,227 +5900,367 @@ const ProjectDetailPage = ({
       ? relatedProjects[currentIndex + 1]
       : null;
 
-  const descriptionToUse = pt(project, "description");
-  const paragraphs = descriptionToUse
-    ? descriptionToUse.split("\n").filter((p) => p.trim() !== "")
-    : [];
-  const allMedia = [
-    ...(project.videos || []).map((src) => ({ type: "video", src })),
-    ...(project.gifs || []).map((src) => ({ type: "gif", src })),
-    ...(project.images || []).map((src) => ({ type: "image", src })),
-  ];
+  // Clean description paragraphs without awkward line jumps (saltos raros)
+  const rawDescription = pt(project, "description");
+  const paragraphs = cleanAndFormatParagraphs(rawDescription);
 
-  const renderEditorialContent = () => {
-    const blocks = [];
-    let pIdx = 0;
-    let mIdx = 0;
+  // Clean summary/prologue statement
+  const rawSummary = pt(project, "summary");
+  const summaryParagraphs = cleanAndFormatParagraphs(rawSummary);
+  const summaryText = summaryParagraphs.length > 0 ? summaryParagraphs[0] : "";
+  const isSummaryRedundant = paragraphs.length > 0 && summaryText && (
+    paragraphs[0].toLowerCase().startsWith(summaryText.toLowerCase().slice(0, 40)) ||
+    summaryText.toLowerCase().startsWith(paragraphs[0].toLowerCase().slice(0, 40))
+  );
 
-    const getNextMediaLayout = () => {
-      if (mIdx >= allMedia.length) return null;
-      const layoutType = [1, 2, 1, 1, 2][mIdx % 5];
-      if (layoutType === 2 && mIdx + 1 < allMedia.length) {
-        const items = [allMedia[mIdx], allMedia[mIdx + 1]];
-        mIdx += 2;
-        return { type: "media-group", items, layout: "half" };
-      } else {
-        const items = [allMedia[mIdx]];
-        mIdx += 1;
-        return { type: "media-group", items, layout: "full" };
+  // Gather all unique media in continuous cascade order
+  const allMedia = React.useMemo(() => {
+    const list = [];
+    const seen = new Set();
+
+    const addMedia = (item) => {
+      if (!item || !item.src) return;
+      if (!seen.has(item.src)) {
+        seen.add(item.src);
+        list.push(item);
       }
     };
 
-    while (pIdx < paragraphs.length || mIdx < allMedia.length) {
-      const mediaGroup = getNextMediaLayout();
-      if (mediaGroup) blocks.push(mediaGroup);
-
-      if (pIdx < paragraphs.length) {
-        blocks.push({ type: "text", content: paragraphs[pIdx] });
-        pIdx++;
-      }
+    // First: normalImage if defined (Hero Plate)
+    if (project.normalImage) {
+      addMedia({ type: "image", src: project.normalImage, isHero: true });
     }
 
-    return blocks.map((block, i) => {
-      if (block.type === "text") {
-        return (
-          <div
-            key={`txt-${i}`}
-            className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12 my-12 md:my-16"
-          >
-            <p
-              className={`text-base md:text-xl font-light leading-relaxed tracking-wide ${isDarkTheme ? "text-gray-300" : "text-gray-700"}`}
-            >
-              {block.content}
-            </p>
-          </div>
-        );
-      }
+    // Videos
+    (project.videos || []).forEach((src) => addMedia({ type: "video", src }));
+    // Gifs
+    (project.gifs || []).forEach((src) => addMedia({ type: "gif", src }));
+    // Images
+    (project.images || []).forEach((src) => addMedia({ type: "image", src }));
 
-      if (block.type === "media-group") {
-        if (block.layout === "half") {
-          return (
-            <div key={`media-${i}`} className="w-full my-8">
-              <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 md:grid md:grid-cols-2 md:gap-8 max-w-7xl mx-auto px-4 sm:px-8">
-                {block.items.map((m, j) => (
-                  <div
-                    key={j}
-                    className={`w-[85vw] md:w-full flex-shrink-0 snap-center rounded-sm overflow-hidden flex items-center justify-center ${isDarkTheme ? "bg-transparent border-white/10" : "bg-transparent border-black/10"} border`}
-                  >
-                    {m.type === "video" ? (
-                      <video
-                        src={m.src}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="max-h-[70vh] w-full object-contain"
-                      />
-                    ) : (
-                      <OptimizedImage
-                        src={m.src}
-                        loading="lazy"
-                        alt=""
-                        className="max-h-[70vh] w-full object-contain hover:scale-105 transition-transform duration-700"
-                        theme={isDarkTheme ? "dark" : isDesignTheme ? "design" : "light"}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        } else {
-          return (
-            <div
-              key={`media-${i}`}
-              className="w-full my-12 max-w-7xl mx-auto px-4 sm:px-8"
-            >
-              <div
-                className={`w-full rounded-sm overflow-hidden flex items-center justify-center ${isDarkTheme ? "bg-transparent border-white/10" : "bg-transparent border-black/10"} border`}
-              >
-                {block.items[0].type === "video" ? (
-                  <video
-                    src={block.items[0].src}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="max-h-[85vh] w-full object-contain"
-                  />
-                ) : (
-                  <OptimizedImage
-                    src={block.items[0].src}
-                    loading="lazy"
-                    alt=""
-                    className="max-h-[85vh] w-full object-contain"
-                    theme={isDarkTheme ? "dark" : isDesignTheme ? "design" : "light"}
-                  />
-                )}
-              </div>
-            </div>
-          );
-        }
+    return list;
+  }, [project]);
+
+  // Lightbox keyboard controls
+  React.useEffect(() => {
+    if (lightboxIndex === null) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        closeLightbox();
+      } else if (e.key === "ArrowRight") {
+        setLightboxIndex((prev) => (prev < allMedia.length - 1 ? prev + 1 : 0));
+        setLightboxZoom(1);
+        setLightboxPan({ x: 0, y: 0 });
+      } else if (e.key === "ArrowLeft") {
+        setLightboxIndex((prev) => (prev > 0 ? prev - 1 : allMedia.length - 1));
+        setLightboxZoom(1);
+        setLightboxPan({ x: 0, y: 0 });
+      } else if (e.key === "+" || e.key === "=") {
+        setLightboxZoom((z) => Math.min(3, z + 0.5));
+      } else if (e.key === "-") {
+        setLightboxZoom((z) => {
+          const next = Math.max(1, z - 0.5);
+          if (next === 1) setLightboxPan({ x: 0, y: 0 });
+          return next;
+        });
       }
-      return null;
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxIndex, allMedia.length]);
+
+  const openLightbox = (index) => {
+    setLightboxIndex(index);
+    setLightboxZoom(1);
+    setLightboxPan({ x: 0, y: 0 });
+  };
+
+  const closeLightbox = () => {
+    setLightboxIndex(null);
+    setLightboxZoom(1);
+    setLightboxPan({ x: 0, y: 0 });
+  };
+
+  const handlePanMouseDown = (e) => {
+    if (lightboxZoom <= 1) return;
+    setIsPanning(true);
+    panStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      panX: lightboxPan.x,
+      panY: lightboxPan.y,
+      moved: false,
+    };
+  };
+
+  const handlePanMouseMove = (e) => {
+    if (!isPanning || lightboxZoom <= 1) return;
+    const dx = e.clientX - panStartRef.current.x;
+    const dy = e.clientY - panStartRef.current.y;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+      panStartRef.current.moved = true;
+    }
+    setLightboxPan({
+      x: panStartRef.current.panX + dx,
+      y: panStartRef.current.panY + dy,
     });
   };
+
+  const handlePanMouseUp = () => {
+    setIsPanning(false);
+  };
+
+  const heroPlate = allMedia.length > 0 ? allMedia[0] : null;
+  const cascadePlates = allMedia.length > 1 ? allMedia.slice(1) : [];
 
   return (
     <div
       ref={containerRef}
       className={`w-full min-h-screen ${
-        isDesignTheme ? "bg-[#001aff] text-white" : isDarkTheme ? "bg-black text-gray-300" : "bg-white text-black"
-      } animate-fade-in overflow-y-auto relative`}
+        isDesignTheme ? "bg-[#001aff] text-white" : isDarkTheme ? "bg-[#0c0d10] text-gray-200" : "bg-[#fcfbf9] text-[#111111]"
+      } animate-fade-in overflow-y-auto relative selection:bg-cyan-500 selection:text-black`}
     >
       <InteractiveGridBackground theme={theme} />
 
-      <main className={`relative z-10 w-full pt-32 pb-24`}>
-        <header className="mb-12 md:mb-20 text-center max-w-5xl mx-auto px-4">
+      <main className="relative z-10 w-full pt-28 sm:pt-36 pb-20">
+        {/* Editorial Publication Header */}
+        <header className="mb-12 sm:mb-20 text-center max-w-5xl mx-auto px-4 sm:px-6">
+          {/* Category kicker */}
+          <div className="flex items-center justify-center gap-2 text-xs font-mono tracking-widest uppercase mb-4 opacity-60">
+            <span>{t(project.category)}</span>
+            {project.subcategory && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>{t(project.subcategory)}</span>
+              </>
+            )}
+          </div>
+
+          {/* Monumental Project Title */}
           <h1
-            className={`text-4xl sm:text-6xl md:text-7xl font-bold font-mono uppercase tracking-widest ${isDarkTheme ? "text-white" : "text-black"}`}
+            className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-mono uppercase tracking-tight leading-tight sm:leading-none mb-6 ${
+              isDarkTheme ? "text-white" : "text-[#111111]"
+            }`}
           >
-            {pt(project, 'title')}
+            {pt(project, "title")}
           </h1>
-          <div className="mt-4 flex justify-center">
+
+          {/* Clean metadata strip */}
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs font-mono uppercase tracking-wider mb-6 opacity-60">
+            <span>
+              {allMedia.length} {isEn ? "Plates" : "Láminas"}
+            </span>
+            {project.pdf && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>{isEn ? "Technical PDF Dossier" : "Dossier técnico PDF"}</span>
+              </>
+            )}
+            <span aria-hidden="true">·</span>
             <CopyPermalinkButton theme={theme} />
           </div>
+
+          {/* Project Summary / Lead Thesis (if not redundant) */}
+          {summaryText && !isSummaryRedundant && (
+            <div className="max-w-3xl mx-auto px-4 my-8 text-center border-l-2 sm:border-l-0 sm:border-y border-current/20 py-4 sm:py-6">
+              <p
+                className={`font-serif italic text-lg sm:text-xl md:text-2xl leading-relaxed ${
+                  isDarkTheme ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
+                "{summaryText}"
+              </p>
+            </div>
+          )}
         </header>
 
-        <div className="w-full">
-          {isCarouselView ? (
-            <>
-              <div className="max-w-4xl mx-auto px-4 sm:px-8 mb-8">
-                {paragraphs.map((p, i) => (
-                  <p
-                    key={`top-p-${i}`}
-                    className={`text-base md:text-lg leading-relaxed mb-6 font-sans ${isDarkTheme ? "text-gray-400" : "text-gray-600"}`}
-                  >
-                    {p}
-                  </p>
-                ))}
-              </div>
-              <HorizontalImageCarousel
-                media={allMedia}
-                isDarkTheme={isDarkTheme}
-              />
-            </>
-          ) : (
-            renderEditorialContent()
-          )}
-        </div>
-
-        {project.pdf && (
-          <div className="mt-24 mb-8 max-w-6xl mx-auto px-4 md:px-8">
-            <h2
-              className={`text-2xl sm:text-3xl font-bold font-mono uppercase tracking-wider mb-8 text-center ${isDarkTheme ? "text-gray-400" : "text-gray-600"}`}
-            >
-              {t("Documentación Adjunta")}
-            </h2>
+        {/* Hero Plate 01 (Monumental presence) */}
+        {heroPlate && (
+          <section className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 sm:mb-24">
             <div
-              className={`w-full h-[80vh] min-h-[600px] rounded-sm overflow-hidden shadow-2xl border ${isDarkTheme ? "border-gray-800 bg-gray-900" : "border-gray-200 bg-gray-50"}`}
+              onClick={() => openLightbox(0)}
+              className={`group relative w-full rounded-xs overflow-hidden border cursor-zoom-in transition-all duration-300 shadow-2xl ${
+                isDarkTheme ? "bg-black/40 border-white/10 hover:border-white/30" : "bg-white border-black/10 hover:border-black/30"
+              }`}
             >
+              {/* Plate Index Badge */}
+              <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex items-center gap-2 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-white font-mono text-[10px] tracking-widest uppercase border border-white/15">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1DB954]"></span>
+                <span>{isEn ? "Plate 01" : "Pliego 01"} · {String(allMedia.length).padStart(2, "0")}</span>
+              </div>
+
+              {/* Expand Hint */}
+              <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 hidden group-hover:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-white font-mono text-[10px] tracking-wider uppercase border border-white/20">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+                <span>{isEn ? "Zoom" : "Ampliar"}</span>
+              </div>
+
+              {heroPlate.type === "video" ? (
+                <video
+                  src={heroPlate.src}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full max-h-[85vh] object-contain mx-auto block"
+                />
+              ) : (
+                <OptimizedImage
+                  src={heroPlate.src}
+                  loading="eager"
+                  alt={pt(project, "title")}
+                  className="w-full max-h-[85vh] object-contain mx-auto block group-hover:scale-[1.01] transition-transform duration-500"
+                  theme={theme}
+                />
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Architectural Narrative (Fluent paragraphs without saltos raros) */}
+        {paragraphs.length > 0 && (
+          <section className="max-w-3xl mx-auto px-6 sm:px-8 my-16 sm:my-24">
+            <div className="space-y-6 sm:space-y-8">
+              {paragraphs.map((para, pIdx) => (
+                <p
+                  key={`p-${pIdx}`}
+                  className={`text-base sm:text-lg md:text-xl font-light leading-relaxed tracking-wide ${
+                    isDarkTheme ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
+                  {para}
+                </p>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Cascading Media Waterfall (Plates 02, 03, 04...) */}
+        {cascadePlates.length > 0 && (
+          <section className="w-full space-y-16 sm:space-y-24 md:space-y-32 my-16 sm:my-24">
+            {cascadePlates.map((item, idx) => {
+              const realIndex = idx + 1;
+              const plateNum = String(realIndex + 1).padStart(2, "0");
+              const totalNum = String(allMedia.length).padStart(2, "0");
+
+              return (
+                <div
+                  key={`cascade-${realIndex}`}
+                  className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+                >
+                  <div
+                    onClick={() => openLightbox(realIndex)}
+                    className={`group relative w-full rounded-xs overflow-hidden border cursor-zoom-in transition-all duration-300 shadow-xl ${
+                      isDarkTheme ? "bg-black/40 border-white/10 hover:border-white/30" : "bg-white border-black/10 hover:border-black/30"
+                    }`}
+                  >
+                    {/* Top Plate Bar */}
+                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex items-center gap-2 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-white font-mono text-[10px] tracking-widest uppercase border border-white/15">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                      <span>{isEn ? "Plate" : "Pliego"} {plateNum} · {totalNum}</span>
+                    </div>
+
+                    <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 hidden group-hover:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-white font-mono text-[10px] tracking-wider uppercase border border-white/20">
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                      </svg>
+                      <span>{isEn ? "Zoom" : "Ampliar"}</span>
+                    </div>
+
+                    {item.type === "video" ? (
+                      <video
+                        src={item.src}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full max-h-[85vh] object-contain mx-auto block"
+                      />
+                    ) : (
+                      <OptimizedImage
+                        src={item.src}
+                        loading="lazy"
+                        alt={`${pt(project, "title")} - ${plateNum}`}
+                        className="w-full max-h-[85vh] object-contain mx-auto block group-hover:scale-[1.01] transition-transform duration-500"
+                        theme={theme}
+                      />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </section>
+        )}
+
+        {/* Technical Documentation PDF Section */}
+        {project.pdf && (
+          <section className="mt-24 mb-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row items-center justify-between pb-4 border-b border-current/20 mb-8 gap-4">
+              <div>
+                <span className="text-xs font-mono tracking-widest uppercase opacity-60">
+                  {isEn ? "TECHNICAL DOCUMENTATION" : "DOCUMENTACIÓN TÉCNICA"}
+                </span>
+                <h2 className={`text-2xl sm:text-3xl font-bold font-mono uppercase tracking-wider ${isDarkTheme ? "text-white" : "text-[#111111]"}`}>
+                  {isEn ? "Drawings & Dossier" : "Planos y Memoria"}
+                </h2>
+              </div>
+              <a
+                href={project.pdf}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-mono text-xs uppercase tracking-widest border transition-all duration-200 cursor-pointer ${
+                  isDarkTheme 
+                    ? "bg-white/10 hover:bg-white text-white hover:text-black border-white/20" 
+                    : "bg-black/5 hover:bg-black text-black hover:text-white border-black/20"
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>{isEn ? "Download PDF" : "Descargar PDF"}</span>
+              </a>
+            </div>
+
+            <div className={`w-full h-[75vh] min-h-[550px] rounded-xs overflow-hidden shadow-2xl border ${isDarkTheme ? "border-white/10 bg-black/40" : "border-black/10 bg-white"}`}>
               <object
                 data={`${project.pdf}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`}
                 type="application/pdf"
                 className="w-full h-full border-0"
               >
-                <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-gray-100 dark:bg-gray-800">
-                  <svg
-                    className={`w-16 h-16 mb-4 ${isDarkTheme ? "text-gray-400" : "text-gray-500"}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  <p
-                    className={`mb-6 font-mono text-sm ${isDarkTheme ? "text-gray-400" : "text-gray-600"}`}
-                  >
-                    {t("El archivo PDF no se ha encontrado o tu navegador no soporta la previsualización.")}
+                <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+                  <p className="mb-4 font-mono text-sm opacity-70">
+                    {isEn ? "Open the technical PDF dossier directly:" : "Abrir dossier técnico PDF directamente:"}
                   </p>
                   <a
                     href={project.pdf}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`inline-block px-8 py-4 border ${isDarkTheme ? "border-gray-600 text-white hover:bg-white hover:text-black" : "border-gray-400 text-black hover:bg-black hover:text-white"} rounded-full font-mono text-sm uppercase tracking-widest transition-colors`}
+                    className="px-6 py-3 border border-current rounded-full font-mono text-xs uppercase tracking-widest"
                   >
-                    {t("Descargar o Abrir PDF")}
+                    {isEn ? "Open PDF" : "Abrir PDF"}
                   </a>
                 </div>
               </object>
             </div>
-          </div>
+          </section>
         )}
       </main>
 
+      {/* Thin Soundtrack Strip */}
+      <ProjectSoundtrackSection
+        projectId={project?.id}
+        projectTitle={pt(project, "title")}
+        isDarkTheme={isDarkTheme}
+        project={project}
+      />
+
+      {/* Next / Previous Project Navigation */}
       {(prevProject || nextProject) && (
         <nav
-          className={`w-full mt-12 md:mt-24 border-t border-dashed ${isDarkTheme ? "border-gray-700" : "border-gray-300"} z-10 relative flex flex-col sm:flex-row`}
+          className={`w-full mt-12 md:mt-24 border-t border-dashed ${isDarkTheme ? "border-gray-800" : "border-gray-300"} z-10 relative flex flex-col sm:flex-row`}
         >
           {prevProject ? (
             <button
@@ -5979,22 +6268,17 @@ const ProjectDetailPage = ({
                 window.scrollTo({ top: 0, behavior: "smooth" });
                 onProjectSelect(prevProject.id);
               }}
-              className={`group flex-1 p-8 sm:p-16 text-left transition-all duration-500 ${isDarkTheme ? "hover:bg-gray-900/50" : "hover:bg-gray-100/50"} ${nextProject ? (isDarkTheme ? "border-b border-dashed sm:border-b-0 sm:border-r border-gray-700" : "border-b border-dashed sm:border-b-0 sm:border-r border-gray-300") : ""}`}
+              className={`group flex-1 p-8 sm:p-14 text-left transition-all duration-300 cursor-pointer ${
+                isDarkTheme ? "hover:bg-white/5" : "hover:bg-black/5"
+              } ${nextProject ? (isDarkTheme ? "border-b border-dashed sm:border-b-0 sm:border-r border-gray-800" : "border-b border-dashed sm:border-b-0 sm:border-r border-gray-300") : ""}`}
             >
-              <div className="flex items-center space-x-4 mb-4">
-                <div
-                  className={`w-8 h-[1px] ${isDarkTheme ? "bg-red-500" : "bg-red-600"} transition-all duration-500 group-hover:w-16`}
-                ></div>
-                <span
-                  className={`block text-xs font-mono uppercase tracking-widest ${isDarkTheme ? "text-gray-500" : "text-gray-400"}`}
-                >
-                  {t("Prev")}
+              <div className="flex items-center space-x-3 mb-3">
+                <span className="text-xs font-mono uppercase tracking-widest opacity-50">
+                  ← {t("Prev")}
                 </span>
               </div>
-              <p
-                className={`text-2xl sm:text-4xl font-light font-mono uppercase tracking-wider ${isDarkTheme ? "text-white" : "text-gray-900"}`}
-              >
-                {pt(prevProject, 'title')}
+              <p className={`text-xl sm:text-3xl font-light font-mono uppercase tracking-wider ${isDarkTheme ? "text-white" : "text-black"}`}>
+                {pt(prevProject, "title")}
               </p>
             </button>
           ) : (
@@ -6007,22 +6291,17 @@ const ProjectDetailPage = ({
                 window.scrollTo({ top: 0, behavior: "smooth" });
                 onProjectSelect(nextProject.id);
               }}
-              className={`group flex-1 p-8 sm:p-16 text-right transition-all duration-500 ${isDarkTheme ? "hover:bg-gray-900/50" : "hover:bg-gray-100/50"}`}
+              className={`group flex-1 p-8 sm:p-14 text-right transition-all duration-300 cursor-pointer ${
+                isDarkTheme ? "hover:bg-white/5" : "hover:bg-black/5"
+              }`}
             >
-              <div className="flex items-center justify-end space-x-4 mb-4">
-                <span
-                  className={`block text-xs font-mono uppercase tracking-widest ${isDarkTheme ? "text-gray-500" : "text-gray-400"}`}
-                >
-                  {t("Next")}
+              <div className="flex items-center justify-end space-x-3 mb-3">
+                <span className="text-xs font-mono uppercase tracking-widest opacity-50">
+                  {t("Next")} →
                 </span>
-                <div
-                  className={`w-8 h-[1px] ${isDarkTheme ? "bg-red-500" : "bg-red-600"} transition-all duration-500 group-hover:w-16`}
-                ></div>
               </div>
-              <p
-                className={`text-2xl sm:text-4xl font-light font-mono uppercase tracking-wider ${isDarkTheme ? "text-white" : "text-gray-900"}`}
-              >
-                {pt(nextProject, 'title')}
+              <p className={`text-xl sm:text-3xl font-light font-mono uppercase tracking-wider ${isDarkTheme ? "text-white" : "text-black"}`}>
+                {pt(nextProject, "title")}
               </p>
             </button>
           ) : (
@@ -6031,14 +6310,8 @@ const ProjectDetailPage = ({
         </nav>
       )}
 
-      {/* SoundTrack Player at the end of the project page */}
-      <ProjectSoundtrackSection
-        projectId={project?.id}
-        projectTitle={pt(project, "title")}
-        isDarkTheme={isDarkTheme}
-      />
-
-      <div className="w-full py-8 flex justify-center border-t border-dashed border-gray-800 z-10 relative">
+      {/* Instagram footer link */}
+      <div className="w-full py-8 flex justify-center border-t border-dashed border-current/15 z-10 relative">
         <a
           href="https://www.instagram.com/arquitecturabenito/"
           target="_blank"
@@ -6056,13 +6329,189 @@ const ProjectDetailPage = ({
       </div>
 
       <footer
-        className={`${isDarkTheme ? "bg-black text-gray-600" : "bg-gray-50 text-gray-600"} text-center p-6 mt-0 z-10 relative`}
+        className={`${isDarkTheme ? "bg-black/80 text-gray-500" : "bg-black/5 text-gray-600"} text-center p-6 mt-0 z-10 relative`}
       >
-        <p className="text-xs">
-          © 2024 Benito González Quiñones - {t("Todos los derechos reservados")} -
-          arquitecturabenito@gmail.com
+        <p className="text-xs font-mono">
+          © {new Date().getFullYear()} Benito González Quiñones · {t("Todos los derechos reservados")} · arquitecturabenito@gmail.com
         </p>
       </footer>
+
+      {/* Interactive High-Resolution Lightbox Modal */}
+      {lightboxIndex !== null && allMedia[lightboxIndex] && (
+        <div
+          className="fixed inset-0 z-[250] bg-black/95 backdrop-blur-md flex flex-col justify-between animate-fade-in select-none"
+          onClick={closeLightbox}
+        >
+          {/* Top Bar */}
+          <div
+            className="flex items-center justify-between px-4 sm:px-8 py-4 border-b border-white/10 z-30 shrink-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-xs uppercase tracking-widest text-[#1DB954] font-bold">
+                {isEn ? "Plate" : "Pliego"} {String(lightboxIndex + 1).padStart(2, "0")} / {String(allMedia.length).padStart(2, "0")}
+              </span>
+              <span className="text-white/40 hidden sm:inline">|</span>
+              <span className="font-mono text-xs text-white/80 hidden sm:inline truncate max-w-md">
+                {pt(project, "title")}
+              </span>
+            </div>
+
+            {/* Controls: Zoom In / Out / Reset & Close */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button
+                onClick={() => {
+                  setLightboxZoom((z) => {
+                    const next = Math.max(1, z - 0.5);
+                    if (next === 1) setLightboxPan({ x: 0, y: 0 });
+                    return next;
+                  });
+                }}
+                disabled={lightboxZoom <= 1}
+                className="w-8 h-8 rounded-full border border-white/20 text-white hover:bg-white/10 flex items-center justify-center font-bold text-sm disabled:opacity-30 cursor-pointer"
+                title={isEn ? "Zoom Out (-)" : "Reducir zoom (-)"}
+              >
+                -
+              </button>
+              <button
+                onClick={() => {
+                  setLightboxZoom(1);
+                  setLightboxPan({ x: 0, y: 0 });
+                }}
+                className="px-2.5 py-1 rounded-full border border-white/20 text-white font-mono text-[11px] hover:bg-white/10 cursor-pointer"
+                title={isEn ? "Reset Zoom" : "Restablecer zoom"}
+              >
+                {Math.round(lightboxZoom * 100)}%
+              </button>
+              <button
+                onClick={() => setLightboxZoom((z) => Math.min(3, z + 0.5))}
+                disabled={lightboxZoom >= 3}
+                className="w-8 h-8 rounded-full border border-white/20 text-white hover:bg-white/10 flex items-center justify-center font-bold text-sm disabled:opacity-30 cursor-pointer"
+                title={isEn ? "Zoom In (+)" : "Ampliar zoom (+)"}
+              >
+                +
+              </button>
+              <button
+                onClick={closeLightbox}
+                className="w-8 h-8 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center text-lg font-bold ml-2 cursor-pointer"
+                title={isEn ? "Close (Esc)" : "Cerrar (Esc)"}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+
+          {/* Central Plate Display Stage */}
+          <div
+            className="flex-1 relative flex items-center justify-center p-4 sm:p-8 overflow-hidden"
+            onMouseDown={handlePanMouseDown}
+            onMouseMove={handlePanMouseMove}
+            onMouseUp={handlePanMouseUp}
+            style={{
+              cursor: lightboxZoom > 1 ? (isPanning ? "grabbing" : "grab") : "default",
+            }}
+          >
+            {/* Prev Arrow */}
+            {allMedia.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIndex((prev) => (prev > 0 ? prev - 1 : allMedia.length - 1));
+                  setLightboxZoom(1);
+                  setLightboxPan({ x: 0, y: 0 });
+                }}
+                className="absolute left-3 sm:left-6 z-40 w-11 h-11 rounded-full bg-black/60 hover:bg-black border border-white/20 text-white flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
+                aria-label={isEn ? "Previous plate" : "Lámina anterior"}
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+            )}
+
+            {/* Media element with scale and pan */}
+            <div
+              className="max-w-full max-h-full flex items-center justify-center transition-transform duration-100"
+              style={{
+                transform: `scale(${lightboxZoom}) translate(${lightboxPan.x / lightboxZoom}px, ${lightboxPan.y / lightboxZoom}px)`,
+                transformOrigin: "center center",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {allMedia[lightboxIndex].type === "video" ? (
+                <video
+                  src={allMedia[lightboxIndex].src}
+                  controls
+                  autoPlay
+                  className="max-h-[82vh] max-w-[90vw] object-contain shadow-2xl rounded-xs"
+                />
+              ) : (
+                <img
+                  src={allMedia[lightboxIndex].src}
+                  alt={`${pt(project, "title")} - ${lightboxIndex + 1}`}
+                  className="max-h-[82vh] max-w-[90vw] object-contain shadow-2xl rounded-xs"
+                />
+              )}
+            </div>
+
+            {/* Next Arrow */}
+            {allMedia.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIndex((prev) => (prev < allMedia.length - 1 ? prev + 1 : 0));
+                  setLightboxZoom(1);
+                  setLightboxPan({ x: 0, y: 0 });
+                }}
+                className="absolute right-3 sm:right-6 z-40 w-11 h-11 rounded-full bg-black/60 hover:bg-black border border-white/20 text-white flex items-center justify-center transition-all hover:scale-105 cursor-pointer"
+                aria-label={isEn ? "Next plate" : "Lámina siguiente"}
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            )}
+          </div>
+
+          {/* Bottom Thumbnails Scrubber */}
+          {allMedia.length > 1 && (
+            <div
+              className="px-4 py-3 border-t border-white/10 z-30 shrink-0 bg-black/60 overflow-x-auto hide-scrollbar"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-center gap-2 min-w-max mx-auto">
+                {allMedia.map((m, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setLightboxIndex(idx);
+                      setLightboxZoom(1);
+                      setLightboxPan({ x: 0, y: 0 });
+                    }}
+                    className={`w-14 h-10 sm:w-16 sm:h-11 rounded-xs overflow-hidden border transition-all cursor-pointer relative ${
+                      lightboxIndex === idx
+                        ? "border-[#1DB954] scale-105 shadow-md shadow-[#1DB954]/20"
+                        : "border-white/20 opacity-50 hover:opacity-100"
+                    }`}
+                  >
+                    {m.type === "video" ? (
+                      <div className="w-full h-full bg-gray-800 flex items-center justify-center text-[8px] font-mono text-white">
+                        VID
+                      </div>
+                    ) : (
+                      <img
+                        src={m.src}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
@@ -7074,6 +7523,22 @@ const App = () => {
     }
   };
 
+  // Ensure that soundtrack is initialized upon navigating to individual project pages
+  React.useEffect(() => {
+    if (view.page === "project" && view.projectId) {
+      const project = allProjectsData.find((p) => p.id === view.projectId);
+      const songUrl =
+        project?.spotifyUrl ||
+        project?.musicUrl ||
+        (projectMusic && (projectMusic[view.projectId] || (view.projectId === "rapa-das-bestas" && projectMusic["rapa-das-bestas-2025"]) || (view.projectId === "cuaderno-de-campo" && projectMusic["cuaderno-de-campo-2024"]))) ||
+        (window.projectMusicConfig && (window.projectMusicConfig[view.projectId] || (view.projectId === "rapa-das-bestas" && window.projectMusicConfig["rapa-das-bestas-2025"]) || (view.projectId === "cuaderno-de-campo" && window.projectMusicConfig["cuaderno-de-campo-2024"]))) ||
+        "";
+      if (songUrl) {
+        globalSoundtrack.playProject(view.projectId, songUrl);
+      }
+    }
+  }, [view.page, view.projectId, allProjectsData]);
+
   const handleProjectSelect = React.useCallback((projectId, isPage = false) => {
     const project = allProjectsData.find((p) => p.id === projectId);
     if (project?.isPage && project.targetPage) {
@@ -7089,12 +7554,26 @@ const App = () => {
       setView({ page: projectId, projectId: null });
       return;
     }
+
+    // Trigger audio initialization immediately inside user gesture click
+    try {
+      const songUrl =
+        project?.spotifyUrl ||
+        project?.musicUrl ||
+        (projectMusic && (projectMusic[projectId] || (projectId === "rapa-das-bestas" && projectMusic["rapa-das-bestas-2025"]) || (projectId === "cuaderno-de-campo" && projectMusic["cuaderno-de-campo-2024"]))) ||
+        (window.projectMusicConfig && (window.projectMusicConfig[projectId] || (projectId === "rapa-das-bestas" && window.projectMusicConfig["rapa-das-bestas-2025"]) || (projectId === "cuaderno-de-campo" && window.projectMusicConfig["cuaderno-de-campo-2024"]))) ||
+        "";
+      if (songUrl) {
+        globalSoundtrack.playProject(projectId, songUrl);
+      }
+    } catch (_) {}
+
     if (project && project.id === "carteleria") {
       setView({ page: "carteleria", projectId });
     } else {
       setView({ page: "project", projectId });
     }
-  }, []);
+  }, [allProjectsData]);
 
   const handleNodeClick = React.useCallback(
     (node) => {

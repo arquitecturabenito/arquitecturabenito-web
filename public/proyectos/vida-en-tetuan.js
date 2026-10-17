@@ -108,5 +108,7 @@ window.defaultProjectsData.push({
       subtitle: "Tirada editorial 50 ejemplares · Madrid, 2025",
       isbn: "ISBN 978-84-09-54812-1"
     }
-  ]
+  ],
+  "spotifyUrl": "https://open.spotify.com/intl-es/track/3gjPEWOgxZRZQ9WKWLhKrW?si=dc5369934d0647af",
+  "musicUrl": "https://open.spotify.com/intl-es/track/3gjPEWOgxZRZQ9WKWLhKrW?si=dc5369934d0647af"
 });

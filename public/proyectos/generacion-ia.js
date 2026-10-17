@@ -10,5 +10,7 @@ window.defaultProjectsData.push({
   "summary_en": "Research and tutorials on generative Artificial Intelligence workflows for architectural design and visualization.",
   "description": "Guías, metodologías y experimentos con herramientas de IA generativa (Fooocus, ComfyUI, Stable Diffusion) aplicadas a la conceptualización espacial y el renderizado.",
   "description_es": "Guías, metodologías y experimentos con herramientas de IA generativa (Fooocus, ComfyUI, Stable Diffusion) aplicadas a la conceptualización espacial y el renderizado.",
-  "description_en": "Guides, methodologies, and experiments with generative AI tools (Fooocus, ComfyUI, Stable Diffusion) applied to spatial conceptualization and architectural rendering."
+  "description_en": "Guides, methodologies, and experiments with generative AI tools (Fooocus, ComfyUI, Stable Diffusion) applied to spatial conceptualization and architectural rendering.",
+  "spotifyUrl": "https://open.spotify.com/track/6rqhFgbbKwnb9MLmUQDhG6",
+  "musicUrl": "https://open.spotify.com/track/6rqhFgbbKwnb9MLmUQDhG6"
 });

@@ -20,5 +20,7 @@ window.defaultProjectsData.push({
     "imagenes/arbolesytelas-4.webp",
     "imagenes/arbolesytelas-5.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/1dEa24jG2P3h8C6U3jL3jK",
+  "musicUrl": "https://open.spotify.com/track/1dEa24jG2P3h8C6U3jL3jK"
 });

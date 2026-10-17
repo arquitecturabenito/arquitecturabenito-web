@@ -108,5 +108,7 @@ window.defaultProjectsData.push({
       subtitle: "Libreto A5 impreso sobre papel verjurado 140g",
       isbn: "ISBN 978-84-09-54814-5"
     }
-  ]
+  ],
+  "spotifyUrl": "https://open.spotify.com/intl-es/track/68PEuXNjodWFts3Ph4BPVv?si=25180713e0ef4060",
+  "musicUrl": "https://open.spotify.com/intl-es/track/68PEuXNjodWFts3Ph4BPVv?si=25180713e0ef4060"
 });

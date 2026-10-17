@@ -17,5 +17,7 @@ window.defaultProjectsData.push({
     "imagenes/proto-tab-main.gif"
   ],
   "images": [],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC",
+  "musicUrl": "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC"
 });

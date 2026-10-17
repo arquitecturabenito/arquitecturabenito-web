@@ -108,5 +108,7 @@ window.defaultProjectsData.push({
       subtitle: "ARCHIVO FOTOGRÁFICO A5 · EDICIÓN CERRADA",
       meta: "© Benito González Quiñones · abrazos.pdf · A5 cerrada"
     }
-  ]
+  ],
+  "spotifyUrl": "https://open.spotify.com/track/11D5Yv7G2w7gVnfc0rR9f8",
+  "musicUrl": "https://open.spotify.com/track/11D5Yv7G2w7gVnfc0rR9f8"
 });

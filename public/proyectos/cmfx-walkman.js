@@ -17,5 +17,7 @@ window.defaultProjectsData.push({
     "imagenes/cmfx-walkman-1.webp",
     "imagenes/cmfx-walkman-2.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/3USxtqRwSYz57Ewm6w4MpE",
+  "musicUrl": "https://open.spotify.com/track/3USxtqRwSYz57Ewm6w4MpE"
 });

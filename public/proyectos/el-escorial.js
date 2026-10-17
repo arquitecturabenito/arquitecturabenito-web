@@ -26,5 +26,7 @@ window.defaultProjectsData.push({
     "imagenes/elescorial-10.webp",
     "imagenes/elescorial-11.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/11D5Yv7G2w7gVnfc0rR9f8",
+  "musicUrl": "https://open.spotify.com/track/11D5Yv7G2w7gVnfc0rR9f8"
 });

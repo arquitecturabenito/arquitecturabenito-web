@@ -20,5 +20,7 @@ window.defaultProjectsData.push({
     "videos/porta-vinilos.mp4"
   ],
   "images": [],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/7ouMYWpwJ422jRcDASZB7P",
+  "musicUrl": "https://open.spotify.com/track/7ouMYWpwJ422jRcDASZB7P"
 });

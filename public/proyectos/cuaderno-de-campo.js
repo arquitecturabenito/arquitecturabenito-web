@@ -105,5 +105,7 @@ window.defaultProjectsData.push({
       subtitle: "Autoedición A5 · Madrid, 2024",
       isbn: "ISBN 978-84-09-54815-2"
     }
-  ]
+  ],
+  "spotifyUrl": "https://open.spotify.com/track/6pWgRkpqVfxnj3WuUNMu7Z",
+  "musicUrl": "https://open.spotify.com/track/6pWgRkpqVfxnj3WuUNMu7Z"
 });

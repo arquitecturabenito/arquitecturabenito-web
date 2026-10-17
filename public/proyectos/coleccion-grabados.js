@@ -20,5 +20,7 @@ window.defaultProjectsData.push({
     "imagenes/grabados-4.webp",
     "imagenes/grabados-5.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/1ZHYJ2W9XZep2USRIHN2Ag",
+  "musicUrl": "https://open.spotify.com/track/1ZHYJ2W9XZep2USRIHN2Ag"
 });

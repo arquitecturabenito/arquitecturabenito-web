@@ -21,5 +21,7 @@ window.defaultProjectsData.push({
     "imagenes/oneiros-5.webp",
     "imagenes/oneiros-6.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/intl-es/track/6da7GpIxrd2kTPq14fuJup?si=6a8d680a73a34262",
+  "musicUrl": "https://open.spotify.com/intl-es/track/6da7GpIxrd2kTPq14fuJup?si=6a8d680a73a34262"
 });

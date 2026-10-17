@@ -19,5 +19,7 @@ window.defaultProjectsData.push({
     "imagenes/iarender-3.webp",
     "imagenes/iarender-4.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/7iN1NedaiHGQIVAmWi8Bg2",
+  "musicUrl": "https://open.spotify.com/track/7iN1NedaiHGQIVAmWi8Bg2"
 });

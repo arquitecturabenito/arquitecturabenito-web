@@ -40,5 +40,7 @@ window.defaultProjectsData.push({
     "imagenes/carteles/carteleria-10.webp",
     "imagenes/carteles/carteleria-11.webp",
     "imagenes/carteles/carteleria-12.webp"
-  ]
+  ],
+  "spotifyUrl": "https://open.spotify.com/track/3UmaczJpikHgJFywhioRAL",
+  "musicUrl": "https://open.spotify.com/track/3UmaczJpikHgJFywhioRAL"
 });

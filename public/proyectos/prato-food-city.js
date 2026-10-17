@@ -23,5 +23,7 @@ window.defaultProjectsData.push({
     "imagenes/prato-7.webp",
     "imagenes/prato-8.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/3n3Ppam7vgaVa1iaRUc9Lp",
+  "musicUrl": "https://open.spotify.com/track/3n3Ppam7vgaVa1iaRUc9Lp"
 });

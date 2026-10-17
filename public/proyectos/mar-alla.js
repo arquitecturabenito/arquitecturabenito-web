@@ -108,5 +108,7 @@ window.defaultProjectsData.push({
       subtitle: "ARCHIVO FOTOGRÁFICO A5 · EDICIÓN CERRADA",
       meta: "© Benito González Quiñones · mar-alla.pdf · A5 cerrada"
     }
-  ]
+  ],
+  "spotifyUrl": "https://open.spotify.com/track/5k7pPj1v3BvW4a6f2c3d1E",
+  "musicUrl": "https://open.spotify.com/track/5k7pPj1v3BvW4a6f2c3d1E"
 });

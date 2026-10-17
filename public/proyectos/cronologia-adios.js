@@ -29,5 +29,7 @@ window.defaultProjectsData.push({
     "imagenes/cronologia(14).webp",
     "imagenes/cronologia(15).webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/intl-es/track/6UIi779Srkw3xYvMmfoKeM?si=5b6f4d75ff574e9b",
+  "musicUrl": "https://open.spotify.com/intl-es/track/6UIi779Srkw3xYvMmfoKeM?si=5b6f4d75ff574e9b"
 });

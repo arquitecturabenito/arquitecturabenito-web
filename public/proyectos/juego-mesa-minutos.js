@@ -18,5 +18,7 @@ window.defaultProjectsData.push({
     "imagenes/minutos-2.webp",
     "imagenes/minutos-3.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/0ofHAoxe9vBkTCp2UQIavz",
+  "musicUrl": "https://open.spotify.com/track/0ofHAoxe9vBkTCp2UQIavz"
 });

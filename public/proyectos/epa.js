@@ -108,5 +108,7 @@ window.defaultProjectsData.push({
       subtitle: "ARCHIVO FOTOGRÁFICO A5 · EDICIÓN CERRADA",
       meta: "© Benito González Quiñones · epa.pdf · A5 cerrada"
     }
-  ]
+  ],
+  "spotifyUrl": "https://open.spotify.com/track/3USxtqRwSYz57Ewm6w4MpE",
+  "musicUrl": "https://open.spotify.com/track/3USxtqRwSYz57Ewm6w4MpE"
 });

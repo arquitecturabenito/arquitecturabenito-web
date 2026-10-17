@@ -19,5 +19,7 @@ window.defaultProjectsData.push({
     "imagenes/paseodehesa-3.webp",
     "imagenes/paseodehesa-4.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/6pWgRkpqVfxnj3WuUNMu7Z",
+  "musicUrl": "https://open.spotify.com/track/6pWgRkpqVfxnj3WuUNMu7Z"
 });

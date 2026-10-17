@@ -35,5 +35,7 @@ window.defaultProjectsData.push({
     "imagenes/hashima-(19).webp",
     "imagenes/hashima-(20).webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/intl-es/track/6da7GpIxrd2kTPq14fuJup?si=6a8d680a73a34262",
+  "musicUrl": "https://open.spotify.com/intl-es/track/6da7GpIxrd2kTPq14fuJup?si=6a8d680a73a34262"
 });

@@ -19,5 +19,7 @@ window.defaultProjectsData.push({
     "imagenes/estuche-3.webp",
     "imagenes/estuche-4.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/5QDLhrAO47lsd697qX2q4H",
+  "musicUrl": "https://open.spotify.com/track/5QDLhrAO47lsd697qX2q4H"
 });

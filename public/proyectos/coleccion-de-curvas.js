@@ -25,5 +25,7 @@ window.defaultProjectsData.push({
     "imagenes/colecciondecurvas-9.webp",
     "imagenes/colecciondecurvas-10.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/4ptpT6L3X8FmBf6Bw8hK2U",
+  "musicUrl": "https://open.spotify.com/track/4ptpT6L3X8FmBf6Bw8hK2U"
 });

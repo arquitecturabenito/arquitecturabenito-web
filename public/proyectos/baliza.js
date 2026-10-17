@@ -108,5 +108,7 @@ window.defaultProjectsData.push({
       subtitle: "ARCHIVO FOTOGRÁFICO A5 · EDICIÓN LIMITADA",
       meta: "© Benito González Quiñones · baliza.pdf · A5 cerrada"
     }
-  ]
+  ],
+  "spotifyUrl": "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT",
+  "musicUrl": "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT"
 });

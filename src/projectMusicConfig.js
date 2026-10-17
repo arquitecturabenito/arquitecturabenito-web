@@ -57,8 +57,10 @@ export const projectMusic = {
   // ---------------------------------------------------------------------
   "vida-en-tetuan": "https://open.spotify.com/intl-es/track/3gjPEWOgxZRZQ9WKWLhKrW?si=dc5369934d0647af",      // VidA eN TetuÁn 20   23 (vida-en-tetuan.pdf)  si
   "rapa-das-bestas-2025": "https://open.spotify.com/track/2tpWsVSb9UEmDRxAl1zhFR",// RAPA DAS BESTAS 2025 (rapa-das-bestas-2025.pdf)
+  "rapa-das-bestas": "https://open.spotify.com/track/2tpWsVSb9UEmDRxAl1zhFR",     // RAPA DAS BESTAS (rapa-das-bestas.pdf)
   "cartagena-2023": "https://open.spotify.com/intl-es/track/68PEuXNjodWFts3Ph4BPVv?si=25180713e0ef4060",      // CArTagena 2023 (cartagena-2023.pdf) si
   "cuaderno-de-campo-2024": "https://open.spotify.com/track/6pWgRkpqVfxnj3WuUNMu7Z", // CUADERNO DE CAMPO 2024 (cuaderno-de-campo-2024.pdf)
+  "cuaderno-de-campo": "https://open.spotify.com/track/6pWgRkpqVfxnj3WuUNMu7Z",      // CUADERNO DE CAMPO (cuaderno-de-campo.pdf)
   "baliza": "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT",              // Baliza (baliza.pdf)
   "mar-alla": "https://open.spotify.com/track/5k7pPj1v3BvW4a6f2c3d1E",            // Mar allá (mar-alla.pdf)
   "abrazos": "https://open.spotify.com/track/11D5Yv7G2w7gVnfc0rR9f8",             // AbrAzoS (abrazos.pdf)

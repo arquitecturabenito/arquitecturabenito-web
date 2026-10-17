@@ -16,5 +16,7 @@ window.defaultProjectsData.push({
   "images": [
     "imagenes/natural-1.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/7lPN2DXiMsVn7XUKtOW1CS",
+  "musicUrl": "https://open.spotify.com/track/7lPN2DXiMsVn7XUKtOW1CS"
 });

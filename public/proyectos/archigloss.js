@@ -17,5 +17,7 @@ window.defaultProjectsData.push({
     "videos/archigloss.mp4"
   ],
   "images": [],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/1QEElyuhgg1qUBvNuZz0pW",
+  "musicUrl": "https://open.spotify.com/track/1QEElyuhgg1qUBvNuZz0pW"
 });

@@ -105,5 +105,7 @@ window.defaultProjectsData.push({
       subtitle: "Edición A5 para coleccionistas · Tirada 100 copias",
       isbn: "ISBN 978-84-09-54813-8"
     }
-  ]
+  ],
+  "spotifyUrl": "https://open.spotify.com/track/2tpWsVSb9UEmDRxAl1zhFR",
+  "musicUrl": "https://open.spotify.com/track/2tpWsVSb9UEmDRxAl1zhFR"
 });

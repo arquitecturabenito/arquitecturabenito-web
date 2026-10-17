@@ -22,5 +22,7 @@ window.defaultProjectsData.push({
     "imagenes/anexo-aemet-6.webp",
     "imagenes/anexo-aemet-7.webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/track/0VjIjW4GlULA756sLMAaoA",
+  "musicUrl": "https://open.spotify.com/track/0VjIjW4GlULA756sLMAaoA"
 });

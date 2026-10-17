@@ -11,5 +11,7 @@ window.defaultProjectsData.push({
   "summary_en": "Interactive portfolios and digital web experiences.",
   "description": "Desarrollo y diseño de interfaces web contemporáneas, experiencias interactivas y arquitectura de información digital.",
   "description_es": "Desarrollo y diseño de interfaces web contemporáneas, experiencias interactivas y arquitectura de información digital.",
-  "description_en": "Design and development of contemporary web interfaces, interactive digital experiences, and digital information architecture."
+  "description_en": "Design and development of contemporary web interfaces, interactive digital experiences, and digital information architecture.",
+  "spotifyUrl": "https://open.spotify.com/track/2d8hnT72eecjU6wNfIeBfN",
+  "musicUrl": "https://open.spotify.com/track/2d8hnT72eecjU6wNfIeBfN"
 });

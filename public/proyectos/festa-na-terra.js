@@ -29,5 +29,7 @@ window.defaultProjectsData.push({
     "imagenes/festa(14).webp",
     "imagenes/festa(15).webp"
   ],
-  "pdf": null
+  "pdf": null,
+  "spotifyUrl": "https://open.spotify.com/intl-es/track/3qgcNeTUVH7BTHLD7tn0DT?si=ccfea8173a0b4590",
+  "musicUrl": "https://open.spotify.com/intl-es/track/3qgcNeTUVH7BTHLD7tn0DT?si=ccfea8173a0b4590"
 });
